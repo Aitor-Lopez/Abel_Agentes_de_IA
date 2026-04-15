@@ -1,0 +1,13 @@
+version: '3.8'
+
+services:
+  audit-system:
+    build: .
+    volumes:
+      - ./evidencias:/app/evidencias
+      - ./db:/app/db
+    env_file:
+      - .env
+    # Esto es vital para que Docker vea a tu Windows
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
