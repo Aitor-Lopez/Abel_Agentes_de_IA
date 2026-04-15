@@ -7,13 +7,21 @@ from crewai_tools import DirectoryReadTool, FileReadTool
 load_dotenv()
 
 # Conexión al titán 120B Cloud
+
+evidencias_dir = '/app/evidencias'
+archivos = os.listdir(evidencias_dir) if os.path.exists(evidencias_dir) else []
+
+if not archivos:
+    print("⚠️ ERROR: No hay archivos en la carpeta de evidencias.")
+    print("⚠️ Deteniendo ejecución para evitar alucinaciones.")
+    exit()
+
 llm = LLM(
     model=os.getenv("MODEL_NAME"), # Aquí ya irá con "ollama/..."
     base_url=os.getenv("OLLAMA_BASE_URL"),
     temperature=0.1
 )
-evidencias_dir = '/app/evidencias'
-archivos = os.listdir(evidencias_dir) if os.path.exists(evidencias_dir) else []
+
 docs_tool = DirectoryReadTool(directory='/app/evidencias')
 file_tool = FileReadTool()
 
@@ -38,19 +46,22 @@ especialistas = [
 ]
 
 # Tareas de los especialistas
-tareas_audit = [
-    Task(
+tareas_audit = []
+for agent in especialistas:
+    # Extraemos el nombre de la norma del rol del agente
+    norma_nombre = agent.role.replace("Auditor Senior ", "")
+    
+    task = Task(
         description=f"""
-        1. Usa DirectoryReadTool para listar archivos en '/app/evidencias'.
-        2. Usa FileReadTool para leer SOLO los archivos que existan realmente.
+        1. Usa DirectoryReadTool para ver qué hay en '{evidencias_dir}'.
+        2. Usa FileReadTool para leer el contenido de los archivos encontrados.
         3. SI NO HAY ARCHIVOS, reporta 'Sin evidencias para auditar'.
-        4. NO inventes nombres de archivos ni contenidos.
-        5. Analiza evidencias reales para la normativa {agent.role.split()[-1]}.
+        4. Analiza las evidencias reales para la normativa {norma_nombre}.
         """,
-        expected_output="Informe detallado de incumplimientos basado ÚNICAMENTE en archivos existentes.",
+        expected_output="Informe detallado de incumplimientos reales.",
         agent=agent
-    ) for agent in especialistas
-]
+    )
+    tareas_audit.append(task)
 
 # Capa 2: Clasificador
 clasificador = Agent(
@@ -91,11 +102,7 @@ crew = Crew(
     process=Process.sequential
 )
 
-if not archivos:
-    print("⚠️ ERROR: No hay archivos en la carpeta de evidencias.")
-    print("⚠️ Deteniendo ejecución para evitar alucinaciones.")
-    exit()
-    
+
 if __name__ == "__main__":
     result = crew.kickoff()
     with open("/app/db/informe_final.md", "w") as f:
