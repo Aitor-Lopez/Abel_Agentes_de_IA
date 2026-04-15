@@ -12,7 +12,8 @@ llm = LLM(
     base_url=os.getenv("OLLAMA_BASE_URL"),
     temperature=0.1
 )
-
+evidencias_dir = '/app/evidencias'
+archivos = os.listdir(evidencias_dir) if os.path.exists(evidencias_dir) else []
 docs_tool = DirectoryReadTool(directory='/app/evidencias')
 file_tool = FileReadTool()
 
@@ -39,8 +40,14 @@ especialistas = [
 # Tareas de los especialistas
 tareas_audit = [
     Task(
-        description=f"Analiza evidencias para la normativa {agent.role.split()[-1]}.",
-        expected_output="Informe detallado de incumplimientos.",
+        description=f"""
+        1. Usa DirectoryReadTool para listar archivos en '/app/evidencias'.
+        2. Usa FileReadTool para leer SOLO los archivos que existan realmente.
+        3. SI NO HAY ARCHIVOS, reporta 'Sin evidencias para auditar'.
+        4. NO inventes nombres de archivos ni contenidos.
+        5. Analiza evidencias reales para la normativa {agent.role.split()[-1]}.
+        """,
+        expected_output="Informe detallado de incumplimientos basado ÚNICAMENTE en archivos existentes.",
         agent=agent
     ) for agent in especialistas
 ]
@@ -84,6 +91,11 @@ crew = Crew(
     process=Process.sequential
 )
 
+if not archivos:
+    print("⚠️ ERROR: No hay archivos en la carpeta de evidencias.")
+    print("⚠️ Deteniendo ejecución para evitar alucinaciones.")
+    exit()
+    
 if __name__ == "__main__":
     result = crew.kickoff()
     with open("/app/db/informe_final.md", "w") as f:
