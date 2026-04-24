@@ -1,0 +1,6 @@
+[2026-04-24T10:15:01Z] INFO  [AuthService] - Inicio de sesión exitoso. Usuario: jsmith, IP: 192.168.1.45, Acción: LOGIN_SUCCESS
+[2026-04-24T10:17:22Z] WARN  [AuthService] - Intento de inicio de sesión fallido. Usuario: admin_root, IP: 203.0.113.88, Razón: INVALID_CREDENTIALS
+[2026-04-24T10:17:25Z] WARN  [AuthService] - Intento de inicio de sesión fallido. Usuario: admin_root, IP: 203.0.113.88, Razón: INVALID_CREDENTIALS
+[2026-04-24T10:17:28Z] ERROR [AuthService] - Cuenta bloqueada por múltiples intentos fallidos. Usuario: admin_root, IP: 203.0.113.88, Acción: ACCOUNT_LOCKOUT
+[2026-04-24T10:45:12Z] INFO  [ConfigManager] - Cambio en la configuración del firewall. Usuario: sysadmin_01, Modificación: REGLA_ACTUALIZADA (Port 443 TCP allow)
+[2026-04-24T11:02:55Z] INFO  [DataExport] - Exportación de base de datos de clientes completada. Usuario: dba_lead, Tamaño: 450MB, Acción: EXPORT_SUCCESS

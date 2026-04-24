@@ -1,0 +1,27 @@
+{
+  "registro_tratamiento": [
+    {
+      "id_actividad": "RT-001",
+      "nombre_actividad": "Gestión de Nóminas y Recursos Humanos",
+      "responsable": "Departamento de RRHH",
+      "finalidad": "Gestión del pago de nóminas, cotizaciones sociales y retenciones fiscales de los empleados.",
+      "bases_legales": [
+        "Art. 6.1.b GDPR - Ejecución de un contrato",
+        "Art. 6.1.c GDPR - Cumplimiento de una obligación legal"
+      ],
+      "categorias_interesados": ["Empleados", "Becarios"],
+      "categorias_datos": [
+        "Datos identificativos (Nombre, DNI, Dirección)",
+        "Datos financieros (Cuenta bancaria)",
+        "Datos de características personales (Estado civil)"
+      ],
+      "destinatarios": [
+        "Agencia Tributaria",
+        "Seguridad Social",
+        "Entidad Bancaria"
+      ],
+      "transferencias_internacionales": false,
+      "plazo_conservacion": "5 años tras la finalización de la relación laboral"
+    }
+  ]
+}

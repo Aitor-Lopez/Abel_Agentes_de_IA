@@ -104,224 +104,612 @@
     </div>
   </div>
   <p>**</p>
-<h1 id="reporte-ejecutivo-de-riesgos-de-seguridad">📄 Reporte Ejecutivo de Riesgos de Seguridad</h1>
-<p><strong>Destinatarios:</strong> CISO, DPO y Dirección General<br />
-<strong>Fecha:</strong> 24 abril 2026  </p>
+<h1 id="reporte-ejecutivo-de-riesgos-de-ciberseguridad">📊 Reporte Ejecutivo de Riesgos de Ciberseguridad</h1>
+<p><em>Destinatarios: CISO, DPO y Dirección General</em><br />
+<em>Fecha: 24‑04‑2026</em>  </p>
 <hr />
 <h2 id="1-resumen-ejecutivo">1️⃣ Resumen Ejecutivo</h2>
-<p>Durante la última auditoría de seguridad (abril 2026) se identificaron ocho riesgos críticos para la confidencialidad, integridad y disponibilidad de la Cardholder Data Environment (CDE) y de los sistemas operacionales (OT). La evaluación se realizó contra los requisitos de <strong>NIS2</strong> y <strong>PCI‑DSS</strong>.  </p>
-<ul>
-<li><strong>Riesgos críticos (2):</strong> Vulnerabilidad sin parchear en el firewall (CVE‑2023‑XXXXX) y ausencia total de política de seguridad de la información.  </li>
-<li><strong>Riesgos altos (3):</strong> Uso de TLS 1.0, falta de segmentación OT‑IT y ausencia de IDS/IPS.  </li>
-<li><strong>Riesgos medios (3):</strong> Deficiencias en notificación de incidentes, registro insuficiente de incidentes y logs de auditoría incompletos.  </li>
-</ul>
-<p>Los riesgos críticos deben ser mitigados <strong>inmediatamente (&lt; 7 días)</strong>; los de alta prioridad en <strong>≤ 30 días</strong> y los de nivel medio en <strong>≤ 90 días</strong>. El plan de acción está estructurado en tres ventanas temporales (0‑30 d, 30‑90 d, 90‑180 d) con responsables, entregables y KPIs de seguimiento.</p>
-<hr />
-<h2 id="2-tabla-consolidada-de-riesgos-y-criticidad">2️⃣ Tabla Consolidada de Riesgos y Criticidad</h2>
+<p>Durante la fase de auditoría se identificaron <strong>24 hallazgos</strong> distribuidos en cuatro niveles de criticidad (Crítico, Alto, Medio, Bajo). Los riesgos críticos (1‑7) comprometen la <strong>confidencialidad, integridad y disponibilidad</strong> de datos sensibles y generan incumplimientos directos con los marcos regulatorios <strong>ENS, GDPR, PCI‑DSS y NIS2</strong>.  </p>
+<p>Los hallazgos críticos se centran en:  </p>
 <table>
 <thead>
 <tr>
 <th>#</th>
-<th>Riesgo (descripción)</th>
-<th>Evidencia (archivo y hallazgo)</th>
-<th>Requisito NIS2 / PCI‑DSS asociado</th>
+<th>Área afectada</th>
+<th>Impacto principal</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>Política de contraseñas</td>
+<td>Accesos no controlados → violación de GDPR Art. 32 y ENS P5.x</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Gestión de incidentes</td>
+<td>Falta de notificación → sanciones NIS2 Art. 10‑12 y GDPR Art. 33‑34</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Proceso de gestión de riesgos</td>
+<td>Ausencia de marco de riesgo → incumplimiento NIS2 Art. 4‑5</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Política de seguridad integral</td>
+<td>Vacíos en hardening, segmentación, cifrado → PCI‑DSS 12.1</td>
+</tr>
+<tr>
+<td>5</td>
+<td>Monitorización y detección</td>
+<td>No hay SIEM → imposibilidad de detección temprana (NIS2 Art. 22‑23)</td>
+</tr>
+<tr>
+<td>6</td>
+<td>Protección de datos de tarjetas y personales</td>
+<td>Cifrado solo en tránsito → incumplimiento PCI‑DSS 3, GDPR Art. 32</td>
+</tr>
+<tr>
+<td>7</td>
+<td>Auditoría y rendición de cuentas</td>
+<td>Evidencias incompletas → incumplimiento ENS P9.1 y NIS2 Art. 19‑20</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Conclusión rápida:</strong> Si no se mitigan en los próximos 30 días, la organización está expuesta a <strong>multas regulatorias</strong> (hasta 20 M € bajo GDPR), <strong>pérdida de confianza</strong> de clientes y <strong>riesgo de interrupción operativa</strong>.  </p>
+<hr />
+<h2 id="2-tabla-consolidada-de-riesgos">2️⃣ Tabla Consolidada de Riesgos</h2>
+<table>
+<thead>
+<tr>
+<th>Nº</th>
+<th>Riesgo</th>
+<th>Descripción del Incumplimiento</th>
+<th>Evidencia</th>
+<th>Marco(s) de Referencia</th>
 <th>Criticidad</th>
-<th>Justificación de la criticidad</th>
-<th>Acción recomendada (prioridad)</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td><strong>1</strong></td>
-<td><strong>Vulnerabilidad crítica sin parchear en el firewall</strong> (CVE‑2023‑XXXXX)</td>
-<td><code>network_report.txt – Finding 1</code> – “Unpatched vulnerability CVE‑2023‑XXXXX on firewall (risk: high)”</td>
-<td>NIS2 Art. 14 – Gestión de riesgos y medidas técnicas adecuadas  <br>PCI‑DSS Req 1.1.1 – Configuración segura del firewall</td>
+<td><strong>Política de contraseñas insuficiente</strong></td>
+<td>Longitud mínima 6 c, sin complejidad, caducidad 365 d, sin historial.</td>
+<td><code>politica contraseñas.md</code> v1.0 + logs de cambio</td>
+<td>ENS P5.x, GDPR Art. 25/32, PCI‑DSS 8, NIS2 Art. 6‑7</td>
 <td><strong><span class="badge critico">Crítico</span></strong></td>
-<td>Permite acceso no autorizado a la red, comprometiendo disponibilidad, integridad y confidencialidad de la CDE. Un exploit puede afectar toda la zona de datos de tarjetas.</td>
-<td>Aplicar el parche inmediatamente y establecer proceso de gestión de vulnerabilidades (Req 6.1).</td>
 </tr>
 <tr>
 <td><strong>2</strong></td>
-<td><strong>Uso de cifrado obsoleto (TLS 1.0) en conexiones externas</strong></td>
-<td><code>network_report.txt – Finding 2</code> – “Weak encryption (TLS 1.0) on external connections”</td>
-<td>NIS2 Art. 14 – Uso de protocolos seguros  <br>PCI‑DSS Req 4.1 – Cifrado fuerte (TLS 1.2 o superior)</td>
-<td><strong><span class="badge alto">Alto</span></strong></td>
-<td>TLS 1.0 vulnerable a ataques de downgrade y descifrado; exposición de datos de tarjetas en tránsito.</td>
-<td>Desactivar TLS 1.0, habilitar TLS 1.2+ en todos los servicios externos y validar con escaneos de seguridad.</td>
+<td><strong>Gestión de incidentes inexistente</strong></td>
+<td>No hay registro ni notificación de intento sospechoso (24 h).</td>
+<td><code>logs_registro.txt</code> (intento sospechoso) + ausencia de proceso</td>
+<td>ENS P6.1, GDPR Art. 33‑34, NIS2 Art. 10‑12</td>
+<td><strong><span class="badge critico">Crítico</span></strong></td>
 </tr>
 <tr>
 <td><strong>3</strong></td>
-<td><strong>Falta de segmentación entre redes OT e IT</strong></td>
-<td><code>network_report.txt – Finding 3</code> – “No segmentation between OT and IT networks”</td>
-<td>NIS2 Art. 14 – Segmentación de redes críticas  <br>PCI‑DSS Req 1.2.1 – Aislamiento de la CDE</td>
-<td><strong><span class="badge alto">Alto</span></strong></td>
-<td>Un compromiso en OT puede propagarse a IT y a la CDE, ampliando la superficie de ataque.</td>
-<td>Diseñar e implementar arquitectura de segmentación (firewalls internos, VLANs, Zero‑Trust).</td>
+<td><strong>Ausencia de proceso de gestión de riesgos</strong></td>
+<td>No existe metodología ni matriz de riesgos.</td>
+<td>No hay documento de política o matriz</td>
+<td>NIS2 Art. 4‑5</td>
+<td><strong><span class="badge critico">Crítico</span></strong></td>
 </tr>
 <tr>
 <td><strong>4</strong></td>
-<td><strong>Ausencia de sistema de detección/previsión de intrusiones (IDS/IPS)</strong></td>
-<td><code>network_report.txt – Finding 4</code> – “Lack of intrusion detection system (IDS) monitoring”</td>
-<td>NIS2 Art. 14 – Detección y respuesta a incidentes  <br>PCI‑DSS Req 11.4 – Implementar IDS/IPS</td>
-<td><strong><span class="badge alto">Alto</span></strong></td>
-<td>Impide detección temprana de actividades maliciosas, aumentando tiempo de exposición y daño potencial.</td>
-<td>Desplegar solución IDS/IPS con correlación de eventos, integrar con SIEM.</td>
+<td><strong>Falta de política de seguridad de la información integral</strong></td>
+<td>Sólo política de contraseñas; falta hardening, segmentación, cifrado, etc.</td>
+<td><code>politica contraseñas.md</code> + ausencia de otras políticas</td>
+<td>PCI‑DSS 12.1, NIS2 Art. 6‑7</td>
+<td><strong><span class="badge critico">Crítico</span></strong></td>
 </tr>
 <tr>
 <td><strong>5</strong></td>
-<td><strong>Deficiencia en la notificación de incidentes a la autoridad competente</strong></td>
-<td><code>incident_log.json – INC001</code> y <code>INC002</code> – No se evidencia registro de notificación a la autoridad ni cumplimiento del plazo de 24 h</td>
-<td>NIS2 Art. 16 – Notificación de incidentes dentro de 24 h  <br>PCI‑DSS Req 12.10 – Notificación a entidades adquirentes y bancos</td>
-<td><strong><span class="badge medio">Medio</span></strong></td>
-<td>Incumple obligación legal y dificulta coordinación sectorial.</td>
-<td>Formalizar proceso de notificación, entrenar personal y probar flujo dentro de 24 h.</td>
+<td><strong>Monitorización y detección insuficientes</strong></td>
+<td>No hay SIEM, correlación ni alertas automáticas; logs limitados.</td>
+<td><code>logs_registro.txt</code> (solo autenticación)</td>
+<td>NIS2 Art. 22‑23, PCI‑DSS 10.5</td>
+<td><strong><span class="badge critico">Crítico</span></strong></td>
 </tr>
 <tr>
 <td><strong>6</strong></td>
-<td><strong>Registro de incidentes insuficiente (falta de análisis de causa raíz y lecciones aprendidas)</strong></td>
-<td><code>incident_log.json – INC002</code> – “response: Isolated affected system, restored from backup” (sin RCA ni plan de mejora)</td>
-<td>NIS2 Art. 16 – Registro y lecciones aprendidas  <br>PCI‑DSS Req 12.10 – Documentación de lecciones aprendidas</td>
-<td><strong><span class="badge medio">Medio</span></strong></td>
-<td>Sin RCA ni plan de mejora, se repite la misma vulnerabilidad.</td>
-<td>Ampliar registros para incluir RCA, acciones correctivas y seguimiento.</td>
+<td><strong>Protección de datos de tarjetas y personales insuficiente</strong></td>
+<td>Cifrado solo en tránsito; falta cifrado en reposo y segmentación.</td>
+<td><code>registro tratamiento.json</code> (cifrado en tránsito)</td>
+<td>PCI‑DSS 3,7; ENS P7.x; GDPR Art. 32; NIS2</td>
+<td><strong><span class="badge critico">Crítico</span></strong></td>
 </tr>
 <tr>
 <td><strong>7</strong></td>
-<td><strong>Política de seguridad de la información inexistente o insuficiente</strong></td>
-<td><code>policy_doc.pdf</code> – Contenido solo “Policy Document” sin detalle de políticas, roles, procedimientos ni planes de continuidad</td>
-<td>NIS2 Art. 13 – Existencia de políticas de seguridad  <br>PCI‑DSS Req 12.1 – Política de seguridad de la información</td>
+<td><strong>Auditoría y rendición de cuentas incompletas</strong></td>
+<td>Informe ISO 27001 sin hallazgos ni plan de acción.</td>
+<td><code>informe_evidencias_auditoria_iso27001.pdf</code></td>
+<td>ENS P9.1, NIS2 Art. 19‑20, PCI‑DSS 12.1</td>
 <td><strong><span class="badge critico">Crítico</span></strong></td>
-<td>Impide demostrar cumplimiento, asignar responsabilidades y guiar la implementación de controles.</td>
-<td>Redactar y publicar política completa, aprobar por alta dirección y difundir.</td>
 </tr>
 <tr>
 <td><strong>8</strong></td>
-<td><strong>Registros de auditoría y monitoreo de accesos a la CDE insuficientes</strong></td>
-<td><code>incident_log.json</code> – No se muestra registro de accesos a la CDE ni de logs de eventos de seguridad</td>
-<td>PCI‑DSS Req 10.2 – Registro y monitoreo de accesos a datos de tarjetas  <br>PCI‑DSS Req 10.5 – Retención de logs 12 meses</td>
+<td>Control de accesos y segregación de privilegios deficientes</td>
+<td>Acceso denegado a recurso confidencial por “guest”; sin revisión periódica.</td>
+<td><code>logs_registro.txt</code></td>
+<td>NIS2 Art. 8‑9, PCI‑DSS 8</td>
+<td><strong><span class="badge alto">Alto</span></strong></td>
+</tr>
+<tr>
+<td><strong>9</strong></td>
+<td>Gestión de vulnerabilidades y pruebas de penetración ausentes</td>
+<td>No hay escaneos, pruebas ni proceso de parcheo.</td>
+<td>No hay evidencia documental</td>
+<td>PCI‑DSS 11, NIS2 Art. 7</td>
+<td><strong><span class="badge alto">Alto</span></strong></td>
+</tr>
+<tr>
+<td><strong>10</strong></td>
+<td>Protección contra malware inexistente</td>
+<td>No hay solución anti‑malware ni actualizaciones de firmas.</td>
+<td>No hay evidencia</td>
+<td>PCI‑DSS 5</td>
+<td><strong><span class="badge alto">Alto</span></strong></td>
+</tr>
+<tr>
+<td><strong>11</strong></td>
+<td>Seguridad física no documentada</td>
+<td>Falta de registro de acceso físico a salas de servidores.</td>
+<td>No hay evidencia</td>
+<td>PCI‑DSS 9</td>
+<td><strong><span class="badge alto">Alto</span></strong></td>
+</tr>
+<tr>
+<td><strong>12</strong></td>
+<td>Cadena de suministro sin controles</td>
+<td>No hay evaluaciones de proveedores ni cláusulas de seguridad.</td>
+<td>No hay evidencia</td>
+<td>NIS2 Art. 13‑14</td>
+<td><strong><span class="badge alto">Alto</span></strong></td>
+</tr>
+<tr>
+<td><strong>13</strong></td>
+<td>Consentimiento y bases legales poco claras</td>
+<td>Base legal genérica “RGPD” sin Art. 6.x; sin registro de consentimiento.</td>
+<td><code>registro tratamiento.json</code></td>
+<td>GDPR Art. 6, 7</td>
+<td><strong><span class="badge alto">Alto</span></strong></td>
+</tr>
+<tr>
+<td><strong>14</strong></td>
+<td>Derechos de los interesados no gestionados</td>
+<td>No hay procesos para SAR, rectificación, supresión.</td>
+<td><code>registro tratamiento.json</code> sin procedimiento</td>
+<td>GDPR Art. 15‑22</td>
+<td><strong><span class="badge alto">Alto</span></strong></td>
+</tr>
+<tr>
+<td><strong>15</strong></td>
+<td>Notificación de brechas de seguridad ausente</td>
+<td>No se evidencia notificación a autoridad ni a interesados.</td>
+<td><code>logs_registro.txt</code></td>
+<td>GDPR Art. 33‑34, NIS2 Art. 10‑12</td>
+<td><strong><span class="badge alto">Alto</span></strong></td>
+</tr>
+<tr>
+<td><strong>16</strong></td>
+<td>Retención y actualización de registros de tratamiento obsoleta</td>
+<td>Última revisión 2022‑12‑01 (&gt;12 meses).</td>
+<td><code>registro tratamiento.json</code></td>
+<td>GDPR Art. 30, ENS P7.x</td>
+<td><strong><span class="badge alto">Alto</span></strong></td>
+</tr>
+<tr>
+<td><strong>17</strong></td>
+<td>Pruebas de restauración de backups inexistentes</td>
+<td>Backup diario, sin pruebas de restauración ni retención segura.</td>
+<td><code>logs_registro.txt</code></td>
+<td>ENS P8.1, PCI‑DSS 9, NIS2 Art. 15‑16</td>
+<td><strong><span class="badge alto">Alto</span></strong></td>
+</tr>
+<tr>
+<td><strong>18</strong></td>
+<td>Formación y concienciación en ciberseguridad inexistente</td>
+<td>No hay programa de capacitación.</td>
+<td>No hay evidencia</td>
+<td>NIS2 Art. 21</td>
 <td><strong><span class="badge medio">Medio</span></strong></td>
-<td>Sin logs detallados no se puede demostrar trazabilidad ni detección de actividades sospechosas.</td>
-<td>Configurar logging completo, centralizar en SIEM, retener ≥12 meses y revisar periódicamente.</td>
+</tr>
+<tr>
+<td><strong>19</strong></td>
+<td>Transferencias internacionales no documentadas</td>
+<td>Falta de evaluaciones o cláusulas para transferencias fuera del EEE.</td>
+<td>No hay evidencia</td>
+<td>GDPR Art. 44‑50</td>
+<td><strong><span class="badge medio">Medio</span></strong></td>
+</tr>
+<tr>
+<td><strong>20</strong></td>
+<td>Política de retención de logs insuficiente</td>
+<td>Logs no inmutables ni con retención mínima de 1 año.</td>
+<td><code>logs_registro.txt</code></td>
+<td>PCI‑DSS 10.5, ENS P10</td>
+<td><strong><span class="badge medio">Medio</span></strong></td>
+</tr>
+<tr>
+<td><strong>21</strong></td>
+<td>Procedimientos de gestión de cambios no formalizados</td>
+<td>Cambio de firewall registrado sin proceso de aprobación.</td>
+<td><code>logs_registro.txt</code></td>
+<td>NIS2 Art. 7</td>
+<td><strong><span class="badge medio">Medio</span></strong></td>
+</tr>
+<tr>
+<td><strong>22</strong></td>
+<td>Documentación de auditoría ISO 27001 incompleta (sub‑riesgo)</td>
+<td>Falta evidencia de auditorías internas/externas completas.</td>
+<td><code>informe_evidencias_auditoria_iso27001.pdf</code></td>
+<td>ENS, NIS2</td>
+<td><strong><span class="badge medio">Medio</span></strong></td>
+</tr>
+<tr>
+<td><strong>23</strong></td>
+<td>Ausencia de registro de credenciales predeterminadas</td>
+<td>No se evidencia eliminación de credenciales por defecto.</td>
+<td>No hay evidencia</td>
+<td>PCI‑DSS 2</td>
+<td><strong><span class="badge bajo">Bajo</span></strong></td>
+</tr>
+<tr>
+<td><strong>24</strong></td>
+<td>Política de backup sin cifrado</td>
+<td>Backup diario sin indicación de cifrado.</td>
+<td><code>logs_registro.txt</code></td>
+<td>PCI‑DSS 9, ENS P8</td>
+<td><strong><span class="badge bajo">Bajo</span></strong></td>
 </tr>
 </tbody>
 </table>
 <hr />
 <h2 id="3-plan-de-accion-priorizado">3️⃣ Plan de Acción Priorizado</h2>
+<h3 id="030-dias-respuesta-inmediata-critico">⏱️ 0‑30 Días (Respuesta Inmediata – <strong><span class="badge critico">Crítico</span></strong>)</h3>
 <table>
 <thead>
 <tr>
-<th>Horizonte Temporal</th>
-<th>Riesgo(s)</th>
-<th>Acción concreta</th>
+<th>Nº</th>
+<th>Acción</th>
 <th>Responsable</th>
 <th>Entregable</th>
-<th>KPI de cumplimiento</th>
+<th>KPI de Verificación</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td><strong>0‑30 d</strong> (Urgente)</td>
-<td>1, 7</td>
-<td>• Aplicar parche CVE‑2023‑XXXXX al firewall (verificar con escaneo posterior).<br>• Redactar Política de Seguridad de la Información (alcance, roles, procesos, continuidad).<br>• Aprobar política por Comité de Dirección y publicar en intranet.</td>
-<td>CISO / Equipo de Infraestructura <br> CISO / Legal &amp; Compliance</td>
-<td>- Parche aplicado y validado.<br>- Política firmada y disponible.</td>
-<td>- % de parches críticos aplicados (objetivo 100%).<br>- Política publicada y firmada (objetivo 100%).</td>
+<td>1</td>
+<td><strong>Revisar y actualizar la política de contraseñas</strong> (mínimo 12 c, complejidad, caducidad 90 d, historial 12)</td>
+<td>CISO</td>
+<td>Política v2.0 + comunicación a usuarios</td>
+<td>% de usuarios con contraseñas conformes (objetivo ≥ 95 %)</td>
 </tr>
 <tr>
-<td><strong>30‑90 d</strong> (Rápido)</td>
-<td>2, 3, 4, 5, 6, 8</td>
-<td>• Desactivar TLS 1.0 y habilitar TLS 1.2+ en todos los servidores externos.<br>• Diseñar arquitectura de segmentación OT‑IT (firewalls internos, VLANs, ACLs).<br>• Implementar IDS/IPS (ej. Snort, Suricata) y conectar al SIEM.<br>• Formalizar proceso de notificación a autoridad (plantilla, flujo, pruebas de tiempo &lt;24 h).<br>• Extender registro de incidentes con RCA y plan de mejora.<br>• Configurar logging completo de accesos a la CDE, centralizar en SIEM, retener 12 meses.</td>
-<td>Arquitectura de Seguridad <br>Equipo OT/IT <br>Equipo SOC <br>Compliance Officer <br>Incident Response Lead <br>Equipo de Logging</td>
-<td>- Configuración TLS verificada por escáner SSL Labs.<br>- Diagrama de segmentación aprobado y firewalls configurados.<br>- IDS/IPS en producción, alertas en SIEM.<br>- Procedimiento de notificación probado (simulación).<br>- Plantilla RCA completada en al menos 2 incidentes.<br>- Logs de CDE almacenados 12 meses en SIEM.</td>
-<td>- % de servicios con TLS 1.2+ (objetivo 100%).<br>- Tiempo medio de detección de intrusión (MTTD) &lt; 5 min.<br>- Tiempo de notificación a autoridad &lt; 24 h en pruebas.<br>- % de incidentes con RCA documentada (objetivo 100%).</td>
+<td>2</td>
+<td><strong>Implementar proceso de gestión de incidentes</strong> (registro, clasificación, notificación 24 h)</td>
+<td>DPO + CSIRT</td>
+<td>Playbook de incidentes + herramienta ticketing</td>
+<td>Tiempo medio de detección → respuesta ≤ 4 h</td>
 </tr>
 <tr>
-<td><strong>90‑180 d</strong> (Optimización)</td>
-<td>Ninguno nuevo, pero se revisan los riesgos medios para <strong>cierre</strong> y <strong>mejora continua</strong></td>
-<td>• Realizar auditoría interna de cumplimiento NIS2/PCI‑DSS (ciclo trimestral).<br>• Ejecutar pruebas de penetración externas para validar mitigaciones.<br>• Implementar programa de concienciación y entrenamiento continuo (phishing, manejo de datos).</td>
-<td>Auditoría Interna <br>Equipo Red Team <br>HR &amp; Seguridad</td>
-<td>- Informe de auditoría con hallazgos &lt; 5 % residual.<br>- Reporte de pentest con vulnerabilidades críticas &lt; 0.<br>- 90 % de empleados completaron entrenamiento.</td>
-<td>- % de hallazgos críticos remediados (objetivo 100%).<br>- Índice de participación en entrenamiento (&gt;90%).</td>
+<td>3</td>
+<td><strong>Definir y aprobar proceso de gestión de riesgos</strong> (ISO 27005)</td>
+<td>CISO</td>
+<td>Metodología + Matriz de riesgos inicial</td>
+<td>% de activos críticos evaluados (objetivo 100 %)</td>
+</tr>
+<tr>
+<td>4</td>
+<td><strong>Crear política de seguridad de la información integral</strong> (cobertura de hardening, segmentación, cifrado, control de accesos)</td>
+<td>CISO</td>
+<td>Documento v1.0 + difusión</td>
+<td>Cobertura de controles críticos ≥ 90 %</td>
+</tr>
+<tr>
+<td>5</td>
+<td><strong>Instalar y configurar un SIEM básico</strong> (log collection, correlación, alertas)</td>
+<td>Equipo de SOC</td>
+<td>SIEM en producción (ej. Elastic, Splunk)</td>
+<td>Número de alertas críticas generadas → ≥ 1/semana</td>
+</tr>
+<tr>
+<td>6</td>
+<td><strong>Cifrar datos en reposo</strong> (AES‑256) para bases de datos de tarjetas y PII; segmentación de red de datos de pago</td>
+<td>Arquitectura de Seguridad</td>
+<td>Configuración de cifrado + segmentación VLAN</td>
+<td>% de bases cifradas ≥ 100 %</td>
+</tr>
+<tr>
+<td>7</td>
+<td><strong>Completar informe de auditoría ISO 27001</strong> (hallazgos, plan de acción)</td>
+<td>Auditor interno</td>
+<td>Informe final con evidencias</td>
+<td>Evidencias de auditoría completadas (100 %)</td>
 </tr>
 </tbody>
 </table>
-<blockquote>
-<p><strong>Nota:</strong> Cada acción incluye una <strong>fecha límite</strong> y un <strong>owner</strong> claramente definido para asegurar rendición de cuentas.</p>
-</blockquote>
+<h3 id="3090-dias-mitigacion-alto">⏱️ 30‑90 Días (Mitigación – <strong><span class="badge alto">Alto</span></strong>)</h3>
+<table>
+<thead>
+<tr>
+<th>Nº</th>
+<th>Acción</th>
+<th>Responsable</th>
+<th>Entregable</th>
+<th>KPI</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>8</td>
+<td>Revisar y reforzar control de accesos y segregación de privilegios (principio de menor privilegio)</td>
+<td>IAM Lead</td>
+<td>Matriz de roles + revisión trimestral</td>
+<td>% de cuentas con privilegios excesivos ≤ 5 %</td>
+</tr>
+<tr>
+<td>9</td>
+<td>Implementar programa de gestión de vulnerabilidades (escaneo trimestral, parcheo 30 d)</td>
+<td>Equipo de Infraestructura</td>
+<td>Herramienta de escaneo (Nessus) + reporte mensual</td>
+<td>Tiempo medio de remediación ≤ 15 d</td>
+</tr>
+<tr>
+<td>10</td>
+<td>Desplegar solución anti‑malware corporativa y actualizar firmas diariamente</td>
+<td>SOC</td>
+<td>Antivirus empresarial + reporte de detección</td>
+<td>% de endpoints protegidos ≥ 100 %</td>
+</tr>
+<tr>
+<td>11</td>
+<td>Documentar y aplicar controles de seguridad física (registro de acceso a salas)</td>
+<td>Facilities Manager</td>
+<td>Política física + registro digital</td>
+<td>Incidentes físicos registrados = 0</td>
+</tr>
+<tr>
+<td>12</td>
+<td>Evaluar proveedores críticos (cuestionario de seguridad) y añadir cláusulas contractuales</td>
+<td>Procurement + DPO</td>
+<td>Matriz de riesgos de terceros</td>
+<td>% de proveedores críticos evaluados ≥ 80 %</td>
+</tr>
+<tr>
+<td>13</td>
+<td>Formalizar bases legales y registro de consentimientos (GDPR Art. 6)</td>
+<td>DPO</td>
+<td>Registro de consentimientos actualizado</td>
+<td>% de contactos con consentimiento válido ≥ 95 %</td>
+</tr>
+<tr>
+<td>14</td>
+<td>Implementar proceso de gestión de derechos de los interesados (SAR)</td>
+<td>DPO</td>
+<td>Workflow de solicitudes + SLA 30 d</td>
+<td>% de solicitudes atendidas dentro del SLA ≥ 100 %</td>
+</tr>
+<tr>
+<td>15</td>
+<td>Definir proceso de notificación de brechas (autoridad y afectados)</td>
+<td>DPO + CSIRT</td>
+<td>Plantilla de notificación + pruebas de simulación</td>
+<td>Tiempo de notificación ≤ 24 h en pruebas</td>
+</tr>
+<tr>
+<td>16</td>
+<td>Actualizar registro de tratamientos (revisión anual)</td>
+<td>DPO</td>
+<td>Registro actualizado 2026</td>
+<td>Última revisión ≤ 30 d</td>
+</tr>
+<tr>
+<td>17</td>
+<td>Realizar pruebas de restauración de backups (mensual)</td>
+<td>Backup Lead</td>
+<td>Informe de pruebas de restauración</td>
+<td>% de backups restaurados con éxito ≥ 95 %</td>
+</tr>
+<tr>
+<td>18</td>
+<td>Lanzar programa de concienciación (phishing, buenas prácticas)</td>
+<td>HR + SOC</td>
+<td>Curso e‑learning + simulaciones</td>
+<td>% de empleados completando curso ≥ 90 %</td>
+</tr>
+<tr>
+<td>19</td>
+<td>Documentar transferencias internacionales de datos (DPA, cláusulas)</td>
+<td>DPO</td>
+<td>Registro de transferencias + acuerdos</td>
+<td>% de transferencias con DPA ≥ 100 %</td>
+</tr>
+<tr>
+<td>20</td>
+<td>Definir política de retención de logs (inmutabilidad 1 año)</td>
+<td>SOC</td>
+<td>Configuración de almacenamiento inmutable</td>
+<td>% de logs retenidos ≥ 100 %</td>
+</tr>
+<tr>
+<td>21</td>
+<td>Formalizar proceso de gestión de cambios (CAB)</td>
+<td>Change Manager</td>
+<td>Procedimiento + registro de cambios aprobados</td>
+<td>% de cambios con aprobación formal ≥ 100 %</td>
+</tr>
+<tr>
+<td>22</td>
+<td>Completar documentación de auditoría ISO 27001 (sub‑riesgo)</td>
+<td>Auditor interno</td>
+<td>Evidencias de auditorías internas/externas</td>
+<td>Evidencias completas = 100 %</td>
+</tr>
+</tbody>
+</table>
+<h3 id="90180-dias-optimizacion-medio-bajo">⏱️ 90‑180 Días (Optimización – <strong>Medio &amp; Bajo</strong>)</h3>
+<table>
+<thead>
+<tr>
+<th>Nº</th>
+<th>Acción</th>
+<th>Responsable</th>
+<th>Entregable</th>
+<th>KPI</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>23</td>
+<td>Eliminar credenciales predeterminadas y registrar proceso</td>
+<td>Infra Lead</td>
+<td>Inventario de credenciales + certificación</td>
+<td>% de credenciales predeterminadas eliminadas = 100 %</td>
+</tr>
+<tr>
+<td>24</td>
+<td>Implementar cifrado de backups (AES‑256) y validar</td>
+<td>Backup Lead</td>
+<td>Backups cifrados + pruebas de integridad</td>
+<td>% de backups cifrados ≥ 100 %</td>
+</tr>
+<tr>
+<td>25</td>
+<td>Revisar y actualizar política de seguridad física (acceso biométrico)</td>
+<td>Facilities</td>
+<td>Política revisada + controles instalados</td>
+<td>Incidentes físicos = 0</td>
+</tr>
+<tr>
+<td>26</td>
+<td>Mejorar integración SIEM con herramientas de ticketing y SOAR</td>
+<td>SOC</td>
+<td>Playbooks automáticos</td>
+<td>Reducción del MTTR en un 30 %</td>
+</tr>
+<tr>
+<td>27</td>
+<td>Realizar auditoría externa de cumplimiento (ENS, GDPR, PCI‑DSS)</td>
+<td>Auditor externo</td>
+<td>Informe de cumplimiento</td>
+<td>Nº de hallazgos críticos = 0</td>
+</tr>
+</tbody>
+</table>
 <hr />
 <h2 id="4-indicadores-clave-de-rendimiento-kpis">4️⃣ Indicadores Clave de Rendimiento (KPIs)</h2>
 <table>
 <thead>
 <tr>
+<th>Área</th>
 <th>KPI</th>
 <th>Fórmula / Métrica</th>
-<th>Frecuencia de Medición</th>
 <th>Umbral objetivo</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td><strong>% de parches críticos aplicados</strong></td>
-<td>(Parche críticos aplicados / Total parches críticos) × 100</td>
-<td>Semanal</td>
-<td>≥ 100 % en 7 d</td>
-</tr>
-<tr>
-<td><strong>Tiempo medio de notificación a autoridad (MTTN)</strong></td>
-<td>Σ (tiempo real - tiempo de incidente) / Nº incidentes notificados</td>
-<td>Mensual</td>
-<td>≤ 24 h</td>
-</tr>
-<tr>
-<td><strong>% de servicios con TLS 1.2+</strong></td>
-<td>(Servicios con TLS 1.2+ / Total servicios externos) × 100</td>
-<td>Mensual</td>
-<td>100 %</td>
-</tr>
-<tr>
-<td><strong>MTTD (Mean Time To Detect) IDS/IPS</strong></td>
-<td>Σ (tiempo detección - tiempo ataque) / Nº alertas válidas</td>
-<td>Diario</td>
-<td>≤ 5 min</td>
-</tr>
-<tr>
-<td><strong>% de incidentes con RCA documentada</strong></td>
-<td>(Incidentes con RCA / Total incidentes) × 100</td>
-<td>Trimestral</td>
-<td>100 %</td>
-</tr>
-<tr>
-<td><strong>Retención de logs CDE (meses)</strong></td>
-<td>Meses de logs almacenados en SIEM</td>
-<td>Mensual</td>
-<td>≥ 12 meses</td>
-</tr>
-<tr>
-<td><strong>Índice de cumplimiento NIS2/PCI‑DSS</strong></td>
-<td>(Controles implementados / Controles requeridos) × 100</td>
-<td>Trimestral</td>
+<td><strong>Gestión de contraseñas</strong></td>
+<td>% de contraseñas conformes</td>
+<td>(Contraseñas que cumplen requisitos / Total usuarios) ×100</td>
 <td>≥ 95 %</td>
 </tr>
 <tr>
-<td><strong>Participación en entrenamiento de seguridad</strong></td>
-<td>(Empleados entrenados / Total empleados) × 100</td>
-<td>Trimestral</td>
+<td><strong>Incidentes</strong></td>
+<td>Tiempo medio de detección (MTTD)</td>
+<td>Σ(Tiempo detección) / Nº incidentes</td>
+<td>≤ 4 h</td>
+</tr>
+<tr>
+<td><strong>Incidentes</strong></td>
+<td>Tiempo medio de respuesta (MTTR)</td>
+<td>Σ(Tiempo resolución) / Nº incidentes</td>
+<td>≤ 24 h</td>
+</tr>
+<tr>
+<td><strong>Cifrado</strong></td>
+<td>% de datos críticos cifrados en reposo</td>
+<td>(Datos cifrados / Total datos críticos) ×100</td>
+<td>100 %</td>
+</tr>
+<tr>
+<td><strong>Vulnerabilidades</strong></td>
+<td>Tiempo medio de remediación (TMR)</td>
+<td>Σ(Días de parcheo) / Nº vulnerabilidades</td>
+<td>≤ 15 d</td>
+</tr>
+<tr>
+<td><strong>Formación</strong></td>
+<td>% de empleados capacitados</td>
+<td>(Empleados completados / Total empleados) ×100</td>
 <td>≥ 90 %</td>
+</tr>
+<tr>
+<td><strong>Backups</strong></td>
+<td>% de backups restaurados con éxito</td>
+<td>(Restauraciones exitosas / Total pruebas) ×100</td>
+<td>≥ 95 %</td>
+</tr>
+<tr>
+<td><strong>Logs</strong></td>
+<td>Retención inmutable de logs</td>
+<td>Días de retención inmutable</td>
+<td>≥ 365 d</td>
+</tr>
+<tr>
+<td><strong>Gestión de cambios</strong></td>
+<td>% de cambios con aprobación formal</td>
+<td>(Cambios aprobados / Total cambios) ×100</td>
+<td>100 %</td>
+</tr>
+<tr>
+<td><strong>Auditoría ISO 27001</strong></td>
+<td>Cobertura de evidencias</td>
+<td>(Evidencias entregadas / Evidencias requeridas) ×100</td>
+<td>100 %</td>
 </tr>
 </tbody>
 </table>
 <hr />
-<h2 id="5-conclusiones-y-recomendaciones-ejecutivas">5️⃣ Conclusiones y Recomendaciones Ejecutivas</h2>
+<h2 id="5-conclusiones-y-recomendaciones-estrategicas">5️⃣ Conclusiones y Recomendaciones Estratégicas</h2>
 <ol>
-<li><strong>Riesgos críticos (1 y 7) requieren acción inmediata</strong> – la falta de parche y de política de seguridad son brechas que pueden generar sanciones regulatorias y pérdidas financieras significativas.  </li>
-<li><strong>Los riesgos altos (2‑4) son vulnerabilidades explotables que deben ser mitigadas antes de que se materialicen ataques dirigidos</strong>; la segmentación OT‑IT y la detección de intrusiones son pilares de una arquitectura resiliente.  </li>
-<li><strong>Los riesgos medios (5‑8) impactan la capacidad de respuesta y la evidencia de cumplimiento</strong>; su remediación fortalecerá la gobernanza y la auditoría continua.  </li>
-<li><strong>El plan de acción está alineado con los plazos de NIS2 (notificación 24 h) y PCI‑DSS (retención de logs 12 meses, gestión de vulnerabilidades, política de seguridad)</strong>, garantizando que la organización cumpla con ambas normativas.  </li>
-<li><strong>Se recomienda establecer un Comité de Seguridad (CISO, DPO, CTO, Legal) que supervise la ejecución del plan, revise los KPIs y autorice recursos adicionales</strong>.  </li>
+<li>
+<p><strong>Prioridad absoluta a los riesgos críticos (0‑30 d).</strong> La falta de políticas básicas (contraseñas, gestión de incidentes, SIEM) expone a la organización a sanciones regulatorias y a pérdidas de datos que pueden afectar la continuidad del negocio.  </p>
+</li>
+<li>
+<p><strong>Asignación de recursos:</strong>  </p>
+</li>
+<li><strong>Equipo de Seguridad (CISO, SOC, CSIRT)</strong> debe recibir presupuesto inmediato para SIEM, cifrado y herramientas de gestión de vulnerabilidades.  </li>
+<li>
+<p><strong>DPO</strong> liderará la formalización de procesos de notificación, consentimiento y derechos de los interesados.  </p>
+</li>
+<li>
+<p><strong>Gobernanza:</strong> Establecer un <strong>Comité de Ciberseguridad</strong> con representación del CISO, DPO, CTO y Dirección para seguimiento semanal de los KPIs y revisión de los hitos del plan de acción.  </p>
+</li>
+<li>
+<p><strong>Cultura de seguridad:</strong> Implementar un programa continuo de concienciación y simulaciones de phishing (mínimo trimestral) para reducir el factor humano, que sigue siendo la mayor superficie de ataque.  </p>
+</li>
+<li>
+<p><strong>Monitoreo y reporte:</strong> Publicar un <strong>Dashboard ejecutivo</strong> con los KPIs críticos (MTTD, MTTR, % de cumplimiento de políticas) actualizado cada 2 semanas para la alta dirección.  </p>
+</li>
+<li>
+<p><strong>Revisión legal y contractual:</strong> Actualizar los contratos con proveedores críticos incorporando cláusulas de seguridad y auditorías de terceros, tal como exige NIS2 Art. 13‑14.  </p>
+</li>
+<li>
+<p><strong>Roadmap a 12 meses:</strong> Tras la fase de 0‑180 días, ejecutar una auditoría externa de cumplimiento (ENS, GDPR, PCI‑DSS) para validar la eliminación de hallazgos críticos y obtener la certificación de conformidad.  </p>
+</li>
 </ol>
-<blockquote>
-<p><strong>Próximo paso:</strong> El CISO presentará este reporte en la reunión de la Junta Directiva el <strong>30 abril 2026</strong> para validar los recursos y la asignación de responsables.  </p>
-</blockquote>
+<hr />
+<p><strong>Próximos pasos inmediatos (próxima semana):</strong>  </p>
+<ul>
+<li>Convocar reunión de arranque del <strong>Comité de Ciberseguridad</strong>.  </li>
+<li>Designar responsables para los 7 riesgos críticos y definir fechas de entrega de evidencias.  </li>
+<li>Aprobar presupuesto para adquisición de SIEM y solución de cifrado de datos en reposo.  </li>
+</ul>
+<p>Con la ejecución disciplinada de este plan, la organización no solo alcanzará el cumplimiento regulatorio, sino que fortalecerá su resiliencia frente a amenazas emergentes, protegiendo la confianza de clientes, socios y reguladores.  </p>
 <hr />
 <p><em>Fin del reporte.</em></p>
 </div>
