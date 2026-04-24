@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Informe Ejecutivo de Ciberseguridad</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0d1117; --bg2: #161b22; --bg3: #21262d;
+    --accent: #00e5a0; --danger: #ff4757; --warn: #ffa502;
+    --info: #5b9fff; --success: #00e5a0;
+    --text: #e8eaf0; --text2: #8892a4; --text3: #4a5568;
+    --border: #21262d;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg); color: var(--text);
+    font-family: 'Inter', sans-serif; font-size: 15px;
+    line-height: 1.75; padding: 0;
+  }
+  .page-wrap { max-width: 960px; margin: 0 auto; padding: 60px 40px 100px; }
+  h1 { font-family: 'Syne', sans-serif; font-size: 40px; font-weight: 800;
+        color: var(--accent); margin-bottom: 8px; line-height: 1.1; letter-spacing: -1px; }
+  h2 { font-family: 'Syne', sans-serif; font-size: 22px; font-weight: 700;
+        color: #fff; margin: 48px 0 16px; padding-bottom: 10px;
+        border-bottom: 1px solid var(--border); }
+  h3 { font-family: 'Syne', sans-serif; font-size: 16px; font-weight: 700;
+        color: var(--info); margin: 28px 0 10px; }
+  p { margin-bottom: 14px; color: var(--text); }
+  a { color: var(--accent); }
+  strong { color: #fff; font-weight: 500; }
+  em { color: var(--text2); font-style: italic; }
+  blockquote {
+    border-left: 3px solid var(--accent); margin: 20px 0;
+    padding: 12px 20px; background: rgba(0,229,160,0.05);
+    border-radius: 0 8px 8px 0; color: var(--text2);
+  }
+  code {
+    background: var(--bg2); color: var(--accent);
+    padding: 2px 7px; border-radius: 4px;
+    font-family: 'IBM Plex Mono', monospace; font-size: 13px;
+  }
+  pre { background: var(--bg2); border: 1px solid var(--border);
+         border-radius: 10px; padding: 20px; overflow-x: auto; margin: 20px 0; }
+  pre code { background: none; padding: 0; color: var(--text); }
+  ul, ol { padding-left: 24px; margin-bottom: 14px; }
+  li { margin-bottom: 6px; }
+  hr { border: none; border-top: 1px solid var(--border); margin: 40px 0; }
+
+  /* TABLES */
+  .table-wrap { overflow-x: auto; margin: 20px 0; border-radius: 12px;
+                  border: 1px solid var(--border); }
+  table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  thead tr { background: var(--bg2); }
+  th { padding: 12px 16px; text-align: left; color: var(--text2);
+        font-size: 11px; font-weight: 500; text-transform: uppercase;
+        letter-spacing: 1px; white-space: nowrap; }
+  td { padding: 12px 16px; border-top: 1px solid var(--border);
+        vertical-align: top; }
+  tbody tr:hover { background: rgba(255,255,255,0.02); }
+
+  /* BADGES */
+  .badge { display: inline-block; padding: 2px 10px; border-radius: 20px;
+             font-size: 11px; font-weight: 600; letter-spacing: 0.5px; white-space: nowrap; }
+  .critico { background: rgba(255,71,87,0.15); color: #ff6b7a;
+               border: 1px solid rgba(255,71,87,0.3); }
+  .alto    { background: rgba(255,165,2,0.15); color: #ffc04d;
+               border: 1px solid rgba(255,165,2,0.3); }
+  .medio   { background: rgba(255,215,0,0.12); color: #ffd700;
+               border: 1px solid rgba(255,215,0,0.25); }
+  .bajo    { background: rgba(0,229,160,0.12); color: #00e5a0;
+               border: 1px solid rgba(0,229,160,0.25); }
+
+  /* HEADER REPORT */
+  .report-header {
+    background: var(--bg2); border: 1px solid var(--border);
+    border-radius: 16px; padding: 36px 40px; margin-bottom: 48px;
+  }
+  .report-meta {
+    display: flex; gap: 24px; flex-wrap: wrap; margin-top: 16px;
+  }
+  .report-meta span {
+    font-size: 12px; color: var(--text3);
+    font-family: monospace; letter-spacing: 0.5px;
+  }
+  .report-meta span b { color: var(--text2); font-weight: 500; }
+
+  @media (max-width: 640px) {
+    .page-wrap { padding: 32px 20px 60px; }
+    h1 { font-size: 28px; }
+    h2 { font-size: 18px; }
+  }
+</style>
+</head>
+<body>
+<div class="page-wrap">
+  <div class="report-header">
+    <h1>Informe Ejecutivo de Ciberseguridad</h1>
+    <div class="report-meta">
+      <span><b>Generado por:</b> AuditAI Multi-Agente</span>
+      <span><b>Normativas:</b> ISO 27001 · ENS · GDPR · NIS2 · PCI-DSS</span>
+      <span><b>Motor:</b> CrewAI + Ollama</span>
+    </div>
+  </div>
+  <p>**</p>
+<h1 id="reporte-ejecutivo-de-riesgos-de-seguridad">📄 Reporte Ejecutivo de Riesgos de Seguridad</h1>
+<p><strong>Destinatarios:</strong> CISO, DPO y Dirección General<br />
+<strong>Fecha:</strong> 24 abril 2026  </p>
+<hr />
+<h2 id="1-resumen-ejecutivo">1️⃣ Resumen Ejecutivo</h2>
+<p>Durante la última auditoría de seguridad (abril 2026) se identificaron ocho riesgos críticos para la confidencialidad, integridad y disponibilidad de la Cardholder Data Environment (CDE) y de los sistemas operacionales (OT). La evaluación se realizó contra los requisitos de <strong>NIS2</strong> y <strong>PCI‑DSS</strong>.  </p>
+<ul>
+<li><strong>Riesgos críticos (2):</strong> Vulnerabilidad sin parchear en el firewall (CVE‑2023‑XXXXX) y ausencia total de política de seguridad de la información.  </li>
+<li><strong>Riesgos altos (3):</strong> Uso de TLS 1.0, falta de segmentación OT‑IT y ausencia de IDS/IPS.  </li>
+<li><strong>Riesgos medios (3):</strong> Deficiencias en notificación de incidentes, registro insuficiente de incidentes y logs de auditoría incompletos.  </li>
+</ul>
+<p>Los riesgos críticos deben ser mitigados <strong>inmediatamente (&lt; 7 días)</strong>; los de alta prioridad en <strong>≤ 30 días</strong> y los de nivel medio en <strong>≤ 90 días</strong>. El plan de acción está estructurado en tres ventanas temporales (0‑30 d, 30‑90 d, 90‑180 d) con responsables, entregables y KPIs de seguimiento.</p>
+<hr />
+<h2 id="2-tabla-consolidada-de-riesgos-y-criticidad">2️⃣ Tabla Consolidada de Riesgos y Criticidad</h2>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Riesgo (descripción)</th>
+<th>Evidencia (archivo y hallazgo)</th>
+<th>Requisito NIS2 / PCI‑DSS asociado</th>
+<th>Criticidad</th>
+<th>Justificación de la criticidad</th>
+<th>Acción recomendada (prioridad)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>1</strong></td>
+<td><strong>Vulnerabilidad crítica sin parchear en el firewall</strong> (CVE‑2023‑XXXXX)</td>
+<td><code>network_report.txt – Finding 1</code> – “Unpatched vulnerability CVE‑2023‑XXXXX on firewall (risk: high)”</td>
+<td>NIS2 Art. 14 – Gestión de riesgos y medidas técnicas adecuadas  <br>PCI‑DSS Req 1.1.1 – Configuración segura del firewall</td>
+<td><strong><span class="badge critico">Crítico</span></strong></td>
+<td>Permite acceso no autorizado a la red, comprometiendo disponibilidad, integridad y confidencialidad de la CDE. Un exploit puede afectar toda la zona de datos de tarjetas.</td>
+<td>Aplicar el parche inmediatamente y establecer proceso de gestión de vulnerabilidades (Req 6.1).</td>
+</tr>
+<tr>
+<td><strong>2</strong></td>
+<td><strong>Uso de cifrado obsoleto (TLS 1.0) en conexiones externas</strong></td>
+<td><code>network_report.txt – Finding 2</code> – “Weak encryption (TLS 1.0) on external connections”</td>
+<td>NIS2 Art. 14 – Uso de protocolos seguros  <br>PCI‑DSS Req 4.1 – Cifrado fuerte (TLS 1.2 o superior)</td>
+<td><strong><span class="badge alto">Alto</span></strong></td>
+<td>TLS 1.0 vulnerable a ataques de downgrade y descifrado; exposición de datos de tarjetas en tránsito.</td>
+<td>Desactivar TLS 1.0, habilitar TLS 1.2+ en todos los servicios externos y validar con escaneos de seguridad.</td>
+</tr>
+<tr>
+<td><strong>3</strong></td>
+<td><strong>Falta de segmentación entre redes OT e IT</strong></td>
+<td><code>network_report.txt – Finding 3</code> – “No segmentation between OT and IT networks”</td>
+<td>NIS2 Art. 14 – Segmentación de redes críticas  <br>PCI‑DSS Req 1.2.1 – Aislamiento de la CDE</td>
+<td><strong><span class="badge alto">Alto</span></strong></td>
+<td>Un compromiso en OT puede propagarse a IT y a la CDE, ampliando la superficie de ataque.</td>
+<td>Diseñar e implementar arquitectura de segmentación (firewalls internos, VLANs, Zero‑Trust).</td>
+</tr>
+<tr>
+<td><strong>4</strong></td>
+<td><strong>Ausencia de sistema de detección/previsión de intrusiones (IDS/IPS)</strong></td>
+<td><code>network_report.txt – Finding 4</code> – “Lack of intrusion detection system (IDS) monitoring”</td>
+<td>NIS2 Art. 14 – Detección y respuesta a incidentes  <br>PCI‑DSS Req 11.4 – Implementar IDS/IPS</td>
+<td><strong><span class="badge alto">Alto</span></strong></td>
+<td>Impide detección temprana de actividades maliciosas, aumentando tiempo de exposición y daño potencial.</td>
+<td>Desplegar solución IDS/IPS con correlación de eventos, integrar con SIEM.</td>
+</tr>
+<tr>
+<td><strong>5</strong></td>
+<td><strong>Deficiencia en la notificación de incidentes a la autoridad competente</strong></td>
+<td><code>incident_log.json – INC001</code> y <code>INC002</code> – No se evidencia registro de notificación a la autoridad ni cumplimiento del plazo de 24 h</td>
+<td>NIS2 Art. 16 – Notificación de incidentes dentro de 24 h  <br>PCI‑DSS Req 12.10 – Notificación a entidades adquirentes y bancos</td>
+<td><strong><span class="badge medio">Medio</span></strong></td>
+<td>Incumple obligación legal y dificulta coordinación sectorial.</td>
+<td>Formalizar proceso de notificación, entrenar personal y probar flujo dentro de 24 h.</td>
+</tr>
+<tr>
+<td><strong>6</strong></td>
+<td><strong>Registro de incidentes insuficiente (falta de análisis de causa raíz y lecciones aprendidas)</strong></td>
+<td><code>incident_log.json – INC002</code> – “response: Isolated affected system, restored from backup” (sin RCA ni plan de mejora)</td>
+<td>NIS2 Art. 16 – Registro y lecciones aprendidas  <br>PCI‑DSS Req 12.10 – Documentación de lecciones aprendidas</td>
+<td><strong><span class="badge medio">Medio</span></strong></td>
+<td>Sin RCA ni plan de mejora, se repite la misma vulnerabilidad.</td>
+<td>Ampliar registros para incluir RCA, acciones correctivas y seguimiento.</td>
+</tr>
+<tr>
+<td><strong>7</strong></td>
+<td><strong>Política de seguridad de la información inexistente o insuficiente</strong></td>
+<td><code>policy_doc.pdf</code> – Contenido solo “Policy Document” sin detalle de políticas, roles, procedimientos ni planes de continuidad</td>
+<td>NIS2 Art. 13 – Existencia de políticas de seguridad  <br>PCI‑DSS Req 12.1 – Política de seguridad de la información</td>
+<td><strong><span class="badge critico">Crítico</span></strong></td>
+<td>Impide demostrar cumplimiento, asignar responsabilidades y guiar la implementación de controles.</td>
+<td>Redactar y publicar política completa, aprobar por alta dirección y difundir.</td>
+</tr>
+<tr>
+<td><strong>8</strong></td>
+<td><strong>Registros de auditoría y monitoreo de accesos a la CDE insuficientes</strong></td>
+<td><code>incident_log.json</code> – No se muestra registro de accesos a la CDE ni de logs de eventos de seguridad</td>
+<td>PCI‑DSS Req 10.2 – Registro y monitoreo de accesos a datos de tarjetas  <br>PCI‑DSS Req 10.5 – Retención de logs 12 meses</td>
+<td><strong><span class="badge medio">Medio</span></strong></td>
+<td>Sin logs detallados no se puede demostrar trazabilidad ni detección de actividades sospechosas.</td>
+<td>Configurar logging completo, centralizar en SIEM, retener ≥12 meses y revisar periódicamente.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="3-plan-de-accion-priorizado">3️⃣ Plan de Acción Priorizado</h2>
+<table>
+<thead>
+<tr>
+<th>Horizonte Temporal</th>
+<th>Riesgo(s)</th>
+<th>Acción concreta</th>
+<th>Responsable</th>
+<th>Entregable</th>
+<th>KPI de cumplimiento</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>0‑30 d</strong> (Urgente)</td>
+<td>1, 7</td>
+<td>• Aplicar parche CVE‑2023‑XXXXX al firewall (verificar con escaneo posterior).<br>• Redactar Política de Seguridad de la Información (alcance, roles, procesos, continuidad).<br>• Aprobar política por Comité de Dirección y publicar en intranet.</td>
+<td>CISO / Equipo de Infraestructura <br> CISO / Legal &amp; Compliance</td>
+<td>- Parche aplicado y validado.<br>- Política firmada y disponible.</td>
+<td>- % de parches críticos aplicados (objetivo 100%).<br>- Política publicada y firmada (objetivo 100%).</td>
+</tr>
+<tr>
+<td><strong>30‑90 d</strong> (Rápido)</td>
+<td>2, 3, 4, 5, 6, 8</td>
+<td>• Desactivar TLS 1.0 y habilitar TLS 1.2+ en todos los servidores externos.<br>• Diseñar arquitectura de segmentación OT‑IT (firewalls internos, VLANs, ACLs).<br>• Implementar IDS/IPS (ej. Snort, Suricata) y conectar al SIEM.<br>• Formalizar proceso de notificación a autoridad (plantilla, flujo, pruebas de tiempo &lt;24 h).<br>• Extender registro de incidentes con RCA y plan de mejora.<br>• Configurar logging completo de accesos a la CDE, centralizar en SIEM, retener 12 meses.</td>
+<td>Arquitectura de Seguridad <br>Equipo OT/IT <br>Equipo SOC <br>Compliance Officer <br>Incident Response Lead <br>Equipo de Logging</td>
+<td>- Configuración TLS verificada por escáner SSL Labs.<br>- Diagrama de segmentación aprobado y firewalls configurados.<br>- IDS/IPS en producción, alertas en SIEM.<br>- Procedimiento de notificación probado (simulación).<br>- Plantilla RCA completada en al menos 2 incidentes.<br>- Logs de CDE almacenados 12 meses en SIEM.</td>
+<td>- % de servicios con TLS 1.2+ (objetivo 100%).<br>- Tiempo medio de detección de intrusión (MTTD) &lt; 5 min.<br>- Tiempo de notificación a autoridad &lt; 24 h en pruebas.<br>- % de incidentes con RCA documentada (objetivo 100%).</td>
+</tr>
+<tr>
+<td><strong>90‑180 d</strong> (Optimización)</td>
+<td>Ninguno nuevo, pero se revisan los riesgos medios para <strong>cierre</strong> y <strong>mejora continua</strong></td>
+<td>• Realizar auditoría interna de cumplimiento NIS2/PCI‑DSS (ciclo trimestral).<br>• Ejecutar pruebas de penetración externas para validar mitigaciones.<br>• Implementar programa de concienciación y entrenamiento continuo (phishing, manejo de datos).</td>
+<td>Auditoría Interna <br>Equipo Red Team <br>HR &amp; Seguridad</td>
+<td>- Informe de auditoría con hallazgos &lt; 5 % residual.<br>- Reporte de pentest con vulnerabilidades críticas &lt; 0.<br>- 90 % de empleados completaron entrenamiento.</td>
+<td>- % de hallazgos críticos remediados (objetivo 100%).<br>- Índice de participación en entrenamiento (&gt;90%).</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>Nota:</strong> Cada acción incluye una <strong>fecha límite</strong> y un <strong>owner</strong> claramente definido para asegurar rendición de cuentas.</p>
+</blockquote>
+<hr />
+<h2 id="4-indicadores-clave-de-rendimiento-kpis">4️⃣ Indicadores Clave de Rendimiento (KPIs)</h2>
+<table>
+<thead>
+<tr>
+<th>KPI</th>
+<th>Fórmula / Métrica</th>
+<th>Frecuencia de Medición</th>
+<th>Umbral objetivo</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>% de parches críticos aplicados</strong></td>
+<td>(Parche críticos aplicados / Total parches críticos) × 100</td>
+<td>Semanal</td>
+<td>≥ 100 % en 7 d</td>
+</tr>
+<tr>
+<td><strong>Tiempo medio de notificación a autoridad (MTTN)</strong></td>
+<td>Σ (tiempo real - tiempo de incidente) / Nº incidentes notificados</td>
+<td>Mensual</td>
+<td>≤ 24 h</td>
+</tr>
+<tr>
+<td><strong>% de servicios con TLS 1.2+</strong></td>
+<td>(Servicios con TLS 1.2+ / Total servicios externos) × 100</td>
+<td>Mensual</td>
+<td>100 %</td>
+</tr>
+<tr>
+<td><strong>MTTD (Mean Time To Detect) IDS/IPS</strong></td>
+<td>Σ (tiempo detección - tiempo ataque) / Nº alertas válidas</td>
+<td>Diario</td>
+<td>≤ 5 min</td>
+</tr>
+<tr>
+<td><strong>% de incidentes con RCA documentada</strong></td>
+<td>(Incidentes con RCA / Total incidentes) × 100</td>
+<td>Trimestral</td>
+<td>100 %</td>
+</tr>
+<tr>
+<td><strong>Retención de logs CDE (meses)</strong></td>
+<td>Meses de logs almacenados en SIEM</td>
+<td>Mensual</td>
+<td>≥ 12 meses</td>
+</tr>
+<tr>
+<td><strong>Índice de cumplimiento NIS2/PCI‑DSS</strong></td>
+<td>(Controles implementados / Controles requeridos) × 100</td>
+<td>Trimestral</td>
+<td>≥ 95 %</td>
+</tr>
+<tr>
+<td><strong>Participación en entrenamiento de seguridad</strong></td>
+<td>(Empleados entrenados / Total empleados) × 100</td>
+<td>Trimestral</td>
+<td>≥ 90 %</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="5-conclusiones-y-recomendaciones-ejecutivas">5️⃣ Conclusiones y Recomendaciones Ejecutivas</h2>
+<ol>
+<li><strong>Riesgos críticos (1 y 7) requieren acción inmediata</strong> – la falta de parche y de política de seguridad son brechas que pueden generar sanciones regulatorias y pérdidas financieras significativas.  </li>
+<li><strong>Los riesgos altos (2‑4) son vulnerabilidades explotables que deben ser mitigadas antes de que se materialicen ataques dirigidos</strong>; la segmentación OT‑IT y la detección de intrusiones son pilares de una arquitectura resiliente.  </li>
+<li><strong>Los riesgos medios (5‑8) impactan la capacidad de respuesta y la evidencia de cumplimiento</strong>; su remediación fortalecerá la gobernanza y la auditoría continua.  </li>
+<li><strong>El plan de acción está alineado con los plazos de NIS2 (notificación 24 h) y PCI‑DSS (retención de logs 12 meses, gestión de vulnerabilidades, política de seguridad)</strong>, garantizando que la organización cumpla con ambas normativas.  </li>
+<li><strong>Se recomienda establecer un Comité de Seguridad (CISO, DPO, CTO, Legal) que supervise la ejecución del plan, revise los KPIs y autorice recursos adicionales</strong>.  </li>
+</ol>
+<blockquote>
+<p><strong>Próximo paso:</strong> El CISO presentará este reporte en la reunión de la Junta Directiva el <strong>30 abril 2026</strong> para validar los recursos y la asignación de responsables.  </p>
+</blockquote>
+<hr />
+<p><em>Fin del reporte.</em></p>
+</div>
+<script>
+  // Wrap tables for horizontal scroll
+  document.querySelectorAll('table').forEach(t => {
+    if (!t.parentElement.classList.contains('table-wrap')) {
+      const w = document.createElement('div');
+      w.className = 'table-wrap';
+      t.parentNode.insertBefore(w, t);
+      w.appendChild(t);
+    }
+  });
+</script>
+</body>
+</html>

@@ -5,3 +5,4 @@ Análisis: Cada especialista revisa los archivos bajo su propia norma (ISO, GDPR
 Consolidación: El "Analista de Riesgos" toma todos esos informes parciales, los junta y decide cuáles son críticos.
 Redacción: El "Estratega" toma la lista priorizada y escribe un informe bonito y ejecutivo en Markdown.
 Fin: El informe se guarda en informe_final.md.
+docker-compose up --build
