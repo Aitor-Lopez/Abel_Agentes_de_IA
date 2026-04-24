@@ -3,11 +3,14 @@ version: '3.8'
 services:
   audit-system:
     build: .
+    ports:
+      - "8000:8000"              # http://localhost:8000  ← abrir en el navegador
     volumes:
-      - ./evidencias:/app/evidencias
-      - ./db:/app/db
+      - ./evidencias:/app/evidencias   # evidencias en disco ↔ contenedor
+      - ./db:/app/db                   # informes generados
+      - ./static:/app/static           # frontend HTML (hot-reload sin rebuild)
     env_file:
       - .env
-    # Esto es vital para que Docker vea a tu Windows
+    # Para que Docker vea a Ollama corriendo en tu Windows/Mac
     extra_hosts:
       - "host.docker.internal:host-gateway"
