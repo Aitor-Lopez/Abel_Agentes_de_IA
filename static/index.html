@@ -175,6 +175,22 @@
   }
   .last-report-btn:hover { background: rgba(91,159,255,0.07); }
 
+  /* ── REPORT TABS ── */
+  .report-tabs-bar {
+    display: flex; gap: 6px; margin-bottom: 14px; flex-wrap: wrap;
+  }
+  .report-tab {
+    font-family: var(--font-mono); font-size: 12px; padding: 8px 18px;
+    background: var(--card); color: var(--text2);
+    border: 1px solid var(--border); border-radius: 8px;
+    cursor: pointer; transition: all 0.2s; white-space: nowrap;
+  }
+  .report-tab:hover { border-color: var(--border2); color: var(--text); }
+  .report-tab.active {
+    background: rgba(0,229,160,0.1); color: var(--accent);
+    border-color: rgba(0,229,160,0.4);
+  }
+
   @media (max-width: 900px) {
     .layout { grid-template-columns: 1fr; }
     .sidebar { border-right: none; border-bottom: 1px solid var(--border); }
@@ -276,7 +292,7 @@
     <div id="report-panel">
       <div class="report-toolbar">
         <div>
-          <h2>Informe ejecutivo</h2>
+          <h2>Informes de auditoría</h2>
           <p id="report-meta"></p>
         </div>
         <button class="btn-dl" id="dl-btn">
@@ -284,9 +300,8 @@
           Descargar HTML
         </button>
       </div>
-      <div class="report-frame-wrap">
-        <iframe id="report-frame" sandbox="allow-scripts allow-same-origin"></iframe>
-      </div>
+      <div class="report-tabs-bar" id="report-tabs"></div>
+      <div id="report-frames"></div>
     </div>
 
   </main>
@@ -296,18 +311,19 @@
 const API = ''; // mismo origen — FastAPI corre en el mismo contenedor
 
 const AGENTS = [
-  { id:'iso',  name:'Auditor Senior ISO 27001', norm:'ISO 27001' },
-  { id:'ens',  name:'Auditor Senior ENS',       norm:'ENS' },
-  { id:'gdpr', name:'Auditor Senior GDPR',      norm:'GDPR' },
-  { id:'nis2', name:'Auditor Senior NIS2',      norm:'NIS2' },
-  { id:'pci',  name:'Auditor Senior PCI-DSS',   norm:'PCI-DSS' },
-  { id:'risk', name:'Analista de Riesgos',       norm:'Consolidación' },
-  { id:'ciso', name:'Estratega Ciberseguridad',  norm:'Informe Final' },
+  { id:'iso',     name:'Auditor Senior ISO 27001', norm:'ISO 27001' },
+  { id:'ens',     name:'Auditor Senior ENS',        norm:'ENS' },
+  { id:'gdpr',    name:'Auditor Senior GDPR',       norm:'GDPR' },
+  { id:'nis2',    name:'Auditor Senior NIS2',       norm:'NIS2' },
+  { id:'pci',     name:'Auditor Senior PCI-DSS',    norm:'PCI-DSS' },
+  { id:'risk',    name:'Analista de Riesgos',        norm:'Consolidación' },
+  { id:'ciso',    name:'Redactor Informe CISO',      norm:'Técnico' },
+  { id:'ceo',     name:'Redactor Informe CEO',       norm:'Ejecutivo' },
+  { id:'general', name:'Redactor Cumplimiento',      norm:'DPO / Compliance' },
 ];
 
 let currentJobId = null;
 let pollInterval = null;
-let lastReportHtml = null;
 
 // ── Helpers ──
 function fmt(bytes) {
@@ -335,9 +351,15 @@ async function loadFiles() {
     const r = await fetch(`${API}/api/evidencias`);
     const data = await r.json();
     renderFiles(data.archivos || []);
-    // Check if last report exists
-    const rr = await fetch(`${API}/api/informe/ultimo/html`).catch(() => null);
-    document.getElementById('last-report-btn').style.display = (rr && rr.ok) ? 'block' : 'none';
+    // Comprobar si hay informes guardados en disco
+    const rr = await fetch(`${API}/api/informes/disponibles`).catch(() => null);
+    if (rr && rr.ok) {
+      const info = await rr.json();
+      const hayInformes = Object.values(info).some(v => v.html);
+      document.getElementById('last-report-btn').style.display = hayInformes ? 'block' : 'none';
+    } else {
+      document.getElementById('last-report-btn').style.display = 'none';
+    }
   } catch {
     document.getElementById('server-files').innerHTML = '<div class="empty-hint">No se pudo conectar con el servidor</div>';
   }
@@ -488,39 +510,83 @@ function handleJobState(data) {
 }
 
 async function loadReport(jobId, fecha) {
-  const r = await fetch(`${API}/api/informe/${jobId}/html`);
-  const html = await r.text();
-  lastReportHtml = html;
-  displayReport(html, fecha);
+  const tipos = ['ciso', 'ceo', 'general'];
+  const htmls = {};
+  await Promise.all(tipos.map(async tipo => {
+    try {
+      const r = await fetch(`${API}/api/informe/${jobId}/${tipo}/html`);
+      if (r.ok) htmls[tipo] = await r.text();
+    } catch {}
+  }));
+  displayReport(htmls, fecha);
 }
 
 async function loadLastReport() {
   try {
-    const r = await fetch(`${API}/api/informe/ultimo/html`);
-    const html = await r.text();
-    lastReportHtml = html;
-    displayReport(html, null);
+    const tipos = ['ciso', 'ceo', 'general'];
+    const htmls = {};
+    await Promise.all(tipos.map(async tipo => {
+      try {
+        const r = await fetch(`${API}/api/informe/ultimo/${tipo}/html`);
+        if (r.ok) htmls[tipo] = await r.text();
+      } catch {}
+    }));
+    if (!Object.keys(htmls).length) throw new Error('Sin informes');
+    displayReport(htmls, null);
   } catch { showError('No se pudo cargar el último informe.'); }
 }
 
-function displayReport(html, fecha) {
+let lastReportHtmls = {};
+
+function displayReport(htmls, fecha) {
+  lastReportHtmls = htmls;
   showState('report');
   document.getElementById('report-meta').textContent =
     fecha ? `Generado el ${new Date(fecha).toLocaleString('es-ES')}` : 'Último informe guardado';
-  const iframe = document.getElementById('report-frame');
-  iframe.srcdoc = html;
-  iframe.onload = () => {
-    try { iframe.style.height = (iframe.contentDocument.body.scrollHeight + 40) + 'px'; }
-    catch { iframe.style.height = '800px'; }
-  };
+
+  const LABELS = { ciso: '👨‍💻 CISO — Técnico', ceo: '📊 CEO — Ejecutivo', general: '📋 DPO — Compliance' };
+  const tipos = Object.keys(htmls);
+  const tabsEl = document.getElementById('report-tabs');
+  const framesEl = document.getElementById('report-frames');
+
+  tabsEl.innerHTML = tipos.map((t, i) => `
+    <button class="report-tab${i===0?' active':''}" data-tipo="${t}" onclick="switchTab('${t}')">
+      ${LABELS[t] || t}
+    </button>`).join('');
+
+  framesEl.innerHTML = tipos.map((t, i) => `
+    <div class="report-frame-wrap" id="frame-wrap-${t}" style="display:${i===0?'block':'none'}">
+      <iframe id="report-frame-${t}" sandbox="allow-scripts allow-same-origin"
+              style="width:100%;border:none;min-height:500px;display:block"></iframe>
+    </div>`).join('');
+
+  tipos.forEach(t => {
+    const iframe = document.getElementById(`report-frame-${t}`);
+    iframe.srcdoc = htmls[t] || '<p style="padding:40px;color:#888">Informe no disponible</p>';
+    iframe.onload = () => {
+      try { iframe.style.height = (iframe.contentDocument.body.scrollHeight + 40) + 'px'; }
+      catch { iframe.style.height = '800px'; }
+    };
+  });
+
+  // Botón descargar — descarga el tab activo
   document.getElementById('dl-btn').onclick = () => {
-    const blob = new Blob([html], { type: 'text/html' });
+    const active = document.querySelector('.report-tab.active');
+    const tipo = active ? active.dataset.tipo : tipos[0];
+    const blob = new Blob([htmls[tipo] || ''], { type: 'text/html' });
     const a = Object.assign(document.createElement('a'), {
       href: URL.createObjectURL(blob),
-      download: `auditoria_${new Date().toISOString().slice(0,10)}.html`
+      download: `auditoria_${tipo}_${new Date().toISOString().slice(0,10)}.html`
     });
     a.click();
   };
+}
+
+function switchTab(tipo) {
+  document.querySelectorAll('.report-tab').forEach(b => b.classList.toggle('active', b.dataset.tipo === tipo));
+  document.querySelectorAll('[id^="frame-wrap-"]').forEach(w => {
+    w.style.display = w.id === `frame-wrap-${tipo}` ? 'block' : 'none';
+  });
 }
 
 // ── State machine ──

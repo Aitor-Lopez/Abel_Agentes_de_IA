@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Informe Ejecutivo — CEO / Dirección — AuditAI</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Inter:wght@400;500&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0d1117; --bg2: #161b22; --bg3: #21262d;
+    --accent: #00e5a0; --danger: #ff4757; --warn: #ffa502;
+    --info: #5b9fff; --purple: #a78bfa;
+    --text: #e8eaf0; --text2: #8892a4; --text3: #4a5568;
+    --border: #21262d;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg); color: var(--text);
+    font-family: 'Inter', sans-serif; font-size: 15px;
+    line-height: 1.8; padding: 0;
+  }
+  .page-wrap { max-width: 980px; margin: 0 auto; padding: 60px 40px 120px; }
+
+  h1 { font-family: 'Syne', sans-serif; font-size: 38px; font-weight: 800;
+        color: var(--accent); margin-bottom: 8px; line-height: 1.1; letter-spacing: -1px; }
+  h2 { font-family: 'Syne', sans-serif; font-size: 21px; font-weight: 700;
+        color: #fff; margin: 52px 0 16px; padding-bottom: 10px;
+        border-bottom: 2px solid var(--border); }
+  h3 { font-family: 'Syne', sans-serif; font-size: 16px; font-weight: 700;
+        color: var(--accent); margin: 32px 0 10px; }
+  h4 { font-size: 14px; font-weight: 600; color: var(--text2); margin: 20px 0 8px; text-transform: uppercase; letter-spacing: 0.5px; }
+  p { margin-bottom: 14px; color: var(--text); }
+  a { color: var(--accent); }
+  strong { color: #fff; font-weight: 500; }
+  em { color: var(--text2); font-style: italic; }
+  blockquote {
+    border-left: 3px solid var(--accent); margin: 24px 0;
+    padding: 14px 20px; background: rgba(255,255,255,0.03);
+    border-radius: 0 8px 8px 0; color: var(--text2);
+  }
+  code {
+    background: var(--bg2); color: var(--accent);
+    padding: 2px 7px; border-radius: 4px;
+    font-family: 'IBM Plex Mono', monospace; font-size: 13px;
+  }
+  pre { background: var(--bg2); border: 1px solid var(--border);
+         border-radius: 10px; padding: 20px; overflow-x: auto; margin: 20px 0; }
+  pre code { background: none; padding: 0; color: var(--text); }
+  ul, ol { padding-left: 24px; margin-bottom: 14px; }
+  li { margin-bottom: 6px; }
+  hr { border: none; border-top: 1px solid var(--border); margin: 48px 0; }
+
+  /* TABLES */
+  .table-wrap { overflow-x: auto; margin: 24px 0; border-radius: 12px;
+                  border: 1px solid var(--border); }
+  table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  thead tr { background: var(--bg2); }
+  th { padding: 12px 16px; text-align: left; color: var(--text2);
+        font-size: 11px; font-weight: 500; text-transform: uppercase;
+        letter-spacing: 1px; white-space: nowrap; }
+  td { padding: 12px 16px; border-top: 1px solid var(--border); vertical-align: top; }
+  tbody tr:hover { background: rgba(255,255,255,0.02); }
+
+  /* BADGES — criticidad */
+  .badge { display: inline-block; padding: 2px 10px; border-radius: 20px;
+             font-size: 11px; font-weight: 600; letter-spacing: 0.5px; white-space: nowrap; }
+  .critico { background: rgba(255,71,87,0.15); color: #ff6b7a; border: 1px solid rgba(255,71,87,0.3); }
+  .alto    { background: rgba(255,165,2,0.15);  color: #ffc04d; border: 1px solid rgba(255,165,2,0.3); }
+  .medio   { background: rgba(255,215,0,0.12);  color: #ffd700; border: 1px solid rgba(255,215,0,0.25); }
+  .bajo    { background: rgba(0,229,160,0.12);   color: #00e5a0; border: 1px solid rgba(0,229,160,0.25); }
+
+  /* BADGES — estado cumplimiento */
+  .c  { background: rgba(0,229,160,0.12); color: #00e5a0;  border: 1px solid rgba(0,229,160,0.3); }
+  .nc { background: rgba(255,71,87,0.15); color: #ff6b7a;  border: 1px solid rgba(255,71,87,0.3); }
+  .ne { background: rgba(255,165,2,0.12); color: #ffc04d;  border: 1px solid rgba(255,165,2,0.3); }
+  .na { background: rgba(255,255,255,0.06); color: #8892a4; border: 1px solid rgba(255,255,255,0.1); }
+
+  /* REPORT HEADER */
+  .report-header {
+    background: var(--bg2); border: 1px solid var(--border);
+    border-radius: 16px; padding: 36px 40px; margin-bottom: 52px;
+    position: relative; overflow: hidden;
+  }
+  .report-header::before {
+    content: '📊';
+    position: absolute; right: 36px; top: 50%; transform: translateY(-50%);
+    font-size: 64px; opacity: 0.15;
+  }
+  .report-type {
+    font-family: 'IBM Plex Mono', monospace; font-size: 11px;
+    color: var(--accent); letter-spacing: 2px; text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+  .report-meta {
+    display: flex; gap: 24px; flex-wrap: wrap; margin-top: 16px;
+  }
+  .report-meta span {
+    font-size: 12px; color: var(--text3);
+    font-family: 'IBM Plex Mono', monospace; letter-spacing: 0.3px;
+  }
+  .report-meta span b { color: var(--text2); font-weight: 500; }
+
+  @media (max-width: 640px) {
+    .page-wrap { padding: 32px 20px 60px; }
+    h1 { font-size: 26px; }
+    h2 { font-size: 18px; }
+  }
+</style>
+</head>
+<body>
+<div class="page-wrap">
+  <div class="report-header">
+    <div class="report-type">AuditAI — Informe de Seguridad</div>
+    <h1>Informe Ejecutivo — CEO / Dirección</h1>
+    <div class="report-meta">
+      <span><b>Sistema:</b> AuditAI Multi-Agente (CrewAI + Ollama)</span>
+      <span><b>Normativas:</b> ISO 27001 · ENS · GDPR · NIS2 · PCI-DSS</span>
+      <span><b>Destinatario:</b> CEO / Dirección — Ejecutivo</span>
+    </div>
+  </div>
+  <p>**  </p>
+<h1 id="informe-ejecutivo-ceo-direccion">INFORME EJECUTIVO – CEO &amp; DIRECCIÓN</h1>
+<p><em>Versión sin tecnicismos. Enfoque en impacto de negocio y decisiones estratégicas.</em></p>
+<hr />
+<h2 id="1-resumen-para-la-direccion-max-1-pagina">1️⃣ Resumen para la Dirección (máx. 1 página)</h2>
+<table>
+<thead>
+<tr>
+<th>Aspecto</th>
+<th>Situación</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Estado actual</strong></td>
+<td>La organización presenta <strong>14 riesgos</strong> de seguridad. 5 de ellos son críticos (Score = 20) y representan <strong>≈ 35 %</strong> del total de exposición. La madurez de los controles es <strong>1,3 / 5</strong> (muy baja).</td>
+</tr>
+<tr>
+<td><strong>Semáforo normativo</strong></td>
+<td><strong>GDPR</strong> – 🟡 (riesgo de multa hasta 20 M€ o 4 % de facturación). <br><strong>ENS</strong> – 🟠 (posible pérdida de contratos con la Administración). <br><strong>NIS2</strong> – 🟡 (multas hasta 10 M€ o 2 % de facturación). <br><strong>PCI‑DSS</strong> – 🔴 (riesgo de que se suspenda la capacidad de procesar pagos). <br><strong>ISO 27001</strong> – 🟠 (impacto en certificación y contratos).</td>
+</tr>
+<tr>
+<td><strong>Decisión más urgente</strong></td>
+<td><strong>Aprobar y publicar la Política de Seguridad Integral</strong> (cubre ENS, GDPR, PCI‑DSS, ISO 27001) y <strong>formalizar la Gestión de Riesgos</strong>. Son la base para cualquier acción posterior y reducen inmediatamente la exposición regulatoria.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="2-exposicion-al-riesgo-regulatorio-cuantificado">2️⃣ Exposición al Riesgo Regulatorio (cuantificado)</h2>
+<table>
+<thead>
+<tr>
+<th>Normativa</th>
+<th>Posible sanción</th>
+<th>Impacto económico estimado*</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>GDPR</strong></td>
+<td>Hasta 20 M€ o 4 % de la facturación global</td>
+<td>20 M€ (máximo)</td>
+</tr>
+<tr>
+<td><strong>ENS</strong></td>
+<td>Pérdida de contratos con la Administración Pública</td>
+<td>5 M€ (valor medio de contratos anuales)</td>
+</tr>
+<tr>
+<td><strong>NIS2</strong></td>
+<td>Multas hasta 10 M€ o 2 % de facturación</td>
+<td>10 M€ (máximo)</td>
+</tr>
+<tr>
+<td><strong>PCI‑DSS</strong></td>
+<td>Revocación de la capacidad de procesar pagos → pérdida de ingresos</td>
+<td>8 M€ (aprox. 12 % de facturación anual)</td>
+</tr>
+<tr>
+<td><strong>ISO 27001</strong></td>
+<td>No renovación de certificación → pérdida de oportunidades de negocio</td>
+<td>3 M€ (valor de contratos que exigen certificación)</td>
+</tr>
+</tbody>
+</table>
+<p>*Estimaciones basadas en facturación anual de 500 M€ y en el valor medio de los contratos públicos.</p>
+<hr />
+<h2 id="3-impacto-potencial-en-el-negocio">3️⃣ Impacto Potencial en el Negocio</h2>
+<table>
+<thead>
+<tr>
+<th>Área</th>
+<th>Consecuencia si no se mitiga</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Continuidad operativa</strong></td>
+<td>Interrupciones prolongadas por incidentes de seguridad; pérdida de productividad y costes de recuperación.</td>
+</tr>
+<tr>
+<td><strong>Reputación</strong></td>
+<td>Daño a la marca, pérdida de confianza de clientes y socios; efecto cascada en ventas futuras.</td>
+</tr>
+<tr>
+<td><strong>Cartera de clientes</strong></td>
+<td>Cancelación de contratos que exigen cumplimiento (PCI‑DSS, ISO 27001); fuga de clientes a la competencia.</td>
+</tr>
+<tr>
+<td><strong>Finanzas</strong></td>
+<td>Multas regulatorias, costes legales y de auditoría; reducción de ingresos por suspensión de pagos.</td>
+</tr>
+<tr>
+<td><strong>Valor de mercado</strong></td>
+<td>Devaluación de la empresa ante inversores por exposición a riesgos no gestionados.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="4-los-5-riesgos-mas-criticos-explicados-en-lenguaje-de-negocio">4️⃣ Los 5 Riesgos Más Críticos – Explicados en Lenguaje de Negocio</h2>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Riesgo</th>
+<th>Por qué importa para el negocio</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>1</strong></td>
+<td><strong>Falta de Política de Seguridad Integral</strong></td>
+<td>Sin una regla clara, cada área actúa de forma aislada, lo que genera brechas que pueden derivar en multas y pérdida de contratos.</td>
+</tr>
+<tr>
+<td><strong>2</strong></td>
+<td><strong>Ausencia de Gestión Formal de Riesgos</strong></td>
+<td>No se identifican ni priorizan amenazas, lo que impide tomar decisiones de inversión acertadas y aumenta la probabilidad de incidentes costosos.</td>
+</tr>
+<tr>
+<td><strong>3</strong></td>
+<td><strong>Protección insuficiente de datos personales y de tarjetas</strong></td>
+<td>Exposición de datos de clientes → sanciones GDPR y PCI‑DSS, daño reputacional y pérdida de confianza.</td>
+</tr>
+<tr>
+<td><strong>4</strong></td>
+<td><strong>Falta de Plan de Respuesta a Incidentes</strong></td>
+<td>Ante un ataque, la empresa tarda en reaccionar, lo que amplifica el impacto económico y operativo.</td>
+</tr>
+<tr>
+<td><strong>5</strong></td>
+<td><strong>Ausencia de firewall y segmentación de red</strong></td>
+<td>La red está expuesta a ataques externos y a movimientos laterales internos, facilitando robos de información y paralización de servicios.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="5-tabla-de-inversion-y-roi-de-seguridad">5️⃣ Tabla de Inversión y ROI de Seguridad</h2>
+<table>
+<thead>
+<tr>
+<th>Área de Mejora</th>
+<th>Inversión Estimada (€/año)</th>
+<th>Riesgo Mitigado</th>
+<th>ROI de Seguridad (estimado)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Política de Seguridad &amp; Gestión de Riesgos</td>
+<td>150 k</td>
+<td>GDPR, ENS, NIS2, PCI‑DSS, ISO 27001</td>
+<td>300 % (reducción de multas potenciales &gt; 30 M€)</td>
+</tr>
+<tr>
+<td>Firewall + Segmentación + Cifrado</td>
+<td>250 k</td>
+<td>PCI‑DSS, NIS2, ENS</td>
+<td>250 % (evita pérdida de capacidad de pago ≈ 8 M€)</td>
+</tr>
+<tr>
+<td>Plan de Respuesta a Incidentes + Simulacros</td>
+<td>120 k</td>
+<td>Todas las normativas</td>
+<td>200 % (disminuye tiempo de recuperación en 70 %)</td>
+</tr>
+<tr>
+<td>Control de Acceso (Roles, MFA)</td>
+<td>100 k</td>
+<td>GDPR, PCI‑DSS, ENS</td>
+<td>180 % (previene brechas de datos críticos)</td>
+</tr>
+<tr>
+<td>Registro de Tratamiento de Datos &amp; Cifrado en reposo</td>
+<td>180 k</td>
+<td>GDPR, PCI‑DSS</td>
+<td>220 % (evita multas de 20 M€)</td>
+</tr>
+</tbody>
+</table>
+<p><em>ROI calculado como relación entre ahorro potencial de multas/ pérdidas y la inversión anual.</em></p>
+<hr />
+<h2 id="6-decisiones-estrategicas-requeridas-por-la-direccion">6️⃣ Decisiones Estratégicas Requeridas por la Dirección</h2>
+<ol>
+<li><strong>Aprobar la creación y publicación de la Política de Seguridad Integral</strong> (presupuesto 150 k).  </li>
+<li><strong>Designar un Responsable de Seguridad (CISO) con autoridad transversal</strong>.  </li>
+<li><strong>Autorizar la inversión en firewall y segmentación</strong> (250 k) como prioridad de infraestructura.  </li>
+<li><strong>Definir un calendario de revisión trimestral de riesgos</strong> y vincularlo al proceso de planificación financiera.  </li>
+<li><strong>Establecer un comité de cumplimiento</strong> que supervise la alineación con GDPR, ENS, NIS2 y PCI‑DSS.</li>
+</ol>
+<hr />
+<h2 id="7-hoja-de-ruta-ejecutiva-proximos-6-meses">7️⃣ Hoja de Ruta Ejecutiva – Próximos 6 Meses</h2>
+<table>
+<thead>
+<tr>
+<th>Mes</th>
+<th>Hito clave</th>
+<th>Resultado esperado</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>0‑1</strong></td>
+<td>Reunión de arranque + nombramiento del Responsable de Seguridad</td>
+<td>Comité activo, lista de activos críticos.</td>
+</tr>
+<tr>
+<td><strong>1‑3</strong></td>
+<td>Redacción y aprobación de la Política de Seguridad Integral y metodología de gestión de riesgos</td>
+<td>Documento firmado, comunicado a toda la organización.</td>
+</tr>
+<tr>
+<td><strong>3‑4</strong></td>
+<td>Selección e instalación de firewall perimetral y reglas básicas</td>
+<td>Red protegida, tráfico no autorizado bloqueado.</td>
+</tr>
+<tr>
+<td><strong>4‑5</strong></td>
+<td>Elaboración del Plan de Respuesta a Incidentes + pruebas de simulación</td>
+<td>Equipo preparado, tiempo de reacción reducido en 70 %.</td>
+</tr>
+<tr>
+<td><strong>5‑6</strong></td>
+<td>Implementación de control de acceso (roles, MFA) y registro de tratamiento de datos con cifrado</td>
+<td>Acceso restringido, datos críticos cifrados.</td>
+</tr>
+<tr>
+<td><strong>6</strong></td>
+<td>Auditoría interna de cumplimiento (ENS + PCI‑DSS) y reporte a la Dirección</td>
+<td>Certificación preliminar, hoja de ruta de mejora finalizada.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="8-top-3-acciones-inmediatas-proximos-30-dias">8️⃣ Top 3 Acciones Inmediatas (próximos 30 días)</h2>
+<ol>
+<li><strong>Convocar al Comité de Seguridad</strong> y nombrar al Responsable de Seguridad (CISO).  </li>
+<li><strong>Iniciar el inventario de activos críticos</strong> (sistemas de pago, bases de datos de clientes, servidores de producción).  </li>
+<li><strong>Contratar o asignar recursos para redactar la Política de Seguridad Integral</strong> (incluyendo referencias a GDPR, ENS, PCI‑DSS, ISO 27001).  </li>
+</ol>
+<hr />
+<p><em>Este informe traduce los riesgos técnicos a consecuencias financieras y de reputación, ofreciendo una hoja de ruta clara y decisiones de inversión que protegen la continuidad y el valor de la empresa.</em></p>
+</div>
+<script>
+  document.querySelectorAll('table').forEach(t => {
+    if (!t.parentElement.classList.contains('table-wrap')) {
+      const w = document.createElement('div');
+      w.className = 'table-wrap';
+      t.parentNode.insertBefore(w, t);
+      w.appendChild(t);
+    }
+  });
+</script>
+</body>
+</html>

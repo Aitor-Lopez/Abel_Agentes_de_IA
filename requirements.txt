@@ -6,6 +6,11 @@ langchain-ollama>=0.2.0
 crewai-tools>=0.12.0
 python-dotenv==1.0.1
 pysqlite3-binary
+pdfplumber
+pypdf
+python-docx
+openpyxl
+
 # Servidor web
 fastapi>=0.110.0
 uvicorn[standard]>=0.29.0
