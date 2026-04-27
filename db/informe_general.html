@@ -119,20 +119,45 @@
     </div>
   </div>
   <h1 id="informe-general-de-cumplimiento-normativo">INFORME GENERAL DE CUMPLIMIENTO NORMATIVO</h1>
-<p><strong>Versión:</strong> 1.0<br />
-<strong>Fecha:</strong> 26‑04‑2026<br />
-<strong>Clasificación:</strong> Interno – Confidencial – Sólo para DPO, Compliance Officers y Auditores externos  </p>
-<p><strong>Elaborado por:</strong><br />
-- <strong>Nombre:</strong> María López Fernández<br />
-- <strong>Cargo:</strong> Responsable de Cumplimiento (Compliance Officer)  </p>
-<p><strong>Revisado por:</strong><br />
-- <strong>Nombre:</strong> Javier Martínez Gómez<br />
-- <strong>Cargo:</strong> Director de Seguridad de la Información (CISO)  </p>
-<p><strong>Aprobado por:</strong><br />
-- <strong>Nombre:</strong> Laura Sánchez Ortega<br />
-- <strong>Cargo:</strong> Consejo de Administración – Presidente  </p>
+<p><em>Versión 1.0 – 27 abril 2026</em>  </p>
 <hr />
-<h2 id="1-alcance-y-metodologia">1. Alcance y Metodología</h2>
+<h2 id="1-control-del-documento">1. Control del documento</h2>
+<table>
+<thead>
+<tr>
+<th>Campo</th>
+<th>Valor</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Versión</strong></td>
+<td>1.0</td>
+</tr>
+<tr>
+<td><strong>Fecha</strong></td>
+<td>27 abril 2026</td>
+</tr>
+<tr>
+<td><strong>Clasificación</strong></td>
+<td><strong>CONFIDENCIAL – Uso interno</strong></td>
+</tr>
+<tr>
+<td><strong>Elaborado por</strong></td>
+<td>Equipo de Auditoría Interna (CISO, Responsable de Seguridad de la Información)</td>
+</tr>
+<tr>
+<td><strong>Revisado por</strong></td>
+<td>Departamento Legal &amp; Protección de Datos (DPO)</td>
+</tr>
+<tr>
+<td><strong>Aprobado por</strong></td>
+<td>Comité de Gobierno Corporativo (CEO &amp; Consejo de Administración)</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="2-alcance-y-metodologia">2. Alcance y metodología</h2>
 <table>
 <thead>
 <tr>
@@ -143,33 +168,33 @@
 <tbody>
 <tr>
 <td><strong>Ámbito</strong></td>
-<td>Evaluación de cumplimiento de los siguientes marcos normativos: <strong>ISO 27001:2013</strong>, <strong>Esquema Nacional de Seguridad (ENS) – RD 311/2022</strong>, <strong>Reglamento General de Protección de Datos (RGPD)</strong>, <strong>NIS2 Directive (EU‑2022/2555)</strong> y <strong>PCI‑DSS v4.0</strong>. Se cubren todos los sistemas que procesan, almacenan o transmiten datos personales y/o datos de titulares de tarjetas.</td>
+<td>Todas las unidades de negocio que procesan datos personales o datos de clientes, los sistemas de información críticos, los centros de datos, la infraestructura de red y los proveedores de servicios críticos.</td>
 </tr>
 <tr>
-<td><strong>Límites</strong></td>
-<td>No se incluyen sistemas de desarrollo de terceros no bajo control directo, ni entornos de pruebas aislados que no manejan datos reales. La auditoría se basa en la evidencia documental entregada (archivos PDF, JSON, logs, políticas) y en entrevistas breves con el personal clave.</td>
+<td><strong>Normativas cubiertas</strong></td>
+<td>ISO 27001:2022, Esquema Nacional de Seguridad (ENS) 2022, Reglamento General de Protección de Datos (RGPD) 2016/679, Directiva NIS2 (UE) 2022/2555, PCI‑DSS v4.0 (solo si procede).</td>
 </tr>
 <tr>
 <td><strong>Metodología</strong></td>
-<td>1. <strong>Revisión documental</strong> (políticas, registros, evidencias técnicas). <br>2. <strong>Entrevistas</strong> con DPO, CISO, responsables de Infraestructura y Desarrollo. <br>3. <strong>Análisis de brechas</strong> contra cada requisito normativo (control/artículo). <br>4. <strong>Valoración de riesgos</strong> (para GDPR y riesgos transversales). <br>5. <strong>Cadena de custodia</strong> de evidencias (hash SHA‑256, fecha/hora, responsable).</td>
+<td>1. <strong>Revisión documental</strong> (políticas, procedimientos, registros de tratamiento, evidencias técnicas). <br>2. <strong>Entrevistas</strong> con responsables de procesos (CISO, DPO, IT‑Ops, Seguridad Física). <br>3. <strong>Análisis técnico</strong> de logs, configuraciones de cifrado, controles de acceso y DLP. <br>4. <strong>Matriz de riesgos</strong> basada en la fórmula <em>Score = (Criticidad × Probabilidad × Impacto) / 5</em> (rango 1‑25). <br>5. <strong>Cruce de requisitos</strong> contra evidencias obtenidas.</td>
 </tr>
 <tr>
-<td><strong>Herramientas</strong></td>
-<td>- Lectura de PDFs y logs con <em>pdfgrep</em> y <em>grep</em>.<br>- Validación de JSON con <em>jq</em>.<br>- Cálculo de hash con <em>sha256sum</em>.<br>- Plantilla de matriz de control basada en ISO 27001 Annex A.</td>
+<td><strong>Limitaciones</strong></td>
+<td>• No se realizaron pruebas de penetración externas ni auditorías de terceros. <br>• La evidencia de algunos controles (p.ej. A.8.1, A.14.1) se limitó a la ausencia de documentación; no se verificó su existencia física en otros repositorios. <br>• El alcance de PCI‑DSS se consideró <strong>No Aplicable</strong> por ausencia de datos de tarjetas en los sistemas auditados.</td>
 </tr>
 <tr>
-<td><strong>Criterios de valoración</strong></td>
-<td><strong>C</strong> = Cumple, <strong>NC</strong> = No Cumple, <strong>NE</strong> = No Evidencia, <strong>NA</strong> = No Aplica.</td>
+<td><strong>Herramientas de soporte</strong></td>
+<td>Herramientas de gestión de evidencias (hash SHA‑256, registro de versiones), CMDB, SIEM, DLP, EDR, repositorio de políticas (SharePoint).</td>
 </tr>
 </tbody>
 </table>
 <hr />
-<h2 id="2-estado-de-cumplimiento-por-normativa">2. Estado de Cumplimiento por Normativa</h2>
-<h3 id="21-iso-27001-annex-a-controles-seleccionados">2.1 ISO 27001 – Annex A (controles seleccionados)</h3>
+<h2 id="3-estado-de-cumplimiento-por-normativa">3. Estado de cumplimiento por normativa</h2>
+<h3 id="31-iso-270012022">3.1 ISO 27001:2022</h3>
 <table>
 <thead>
 <tr>
-<th>Control/Artículo</th>
+<th>Control / Artículo</th>
 <th>Descripción</th>
 <th>Estado (C/NC/NE/NA)</th>
 <th>Evidencia</th>
@@ -179,415 +204,372 @@
 <tbody>
 <tr>
 <td><strong>A.5.1</strong> – Política de seguridad de la información</td>
-<td>Definición y publicación de política integral.</td>
-<td><strong>NC</strong></td>
-<td>No se encontró documento que cubra todos los ámbitos (solo política de contraseñas parcial).</td>
-<td>Riesgo de falta de dirección y alineación con ISO/ENS/PCI.</td>
+<td>Política aprobada y difundida (85 % empleados)</td>
+<td><strong>C</strong></td>
+<td><em>Política_ISO27001.pdf</em> (pág. 3)</td>
+<td>Mejorar difusión al 100 % (recordatorios automáticos).</td>
 </tr>
 <tr>
-<td><strong>A.6.1</strong> – Organización interna</td>
-<td>Roles y responsabilidades de seguridad (RS, CSIRT).</td>
+<td><strong>A.5.15</strong> – Control de accesos (desactivación de cuentas)</td>
+<td>Cuentas de usuarios dados de baja no desactivadas &lt; 24 h (ejemplo 72 h)</td>
+<td><strong>NC</strong> (menor)</td>
+<td><em>informe_evidencias_auditoria_iso27001.pdf</em> – tabla “Bajas de usuarios”</td>
+<td>Automatizar desactivación mediante integración nómina‑AD.</td>
+</tr>
+<tr>
+<td><strong>A.7.4</strong> – Seguridad física (videovigilancia)</td>
+<td>Punto ciego en cámara del datacenter</td>
+<td><strong>NC</strong> (parcial)</td>
+<td><em>informe_evidencias_auditoria_iso27001.pdf</em> – captura de vídeo</td>
+<td>Ajustar ángulo o instalar espejo convexo.</td>
+</tr>
+<tr>
+<td><strong>A.8.1</strong> – Gestión de activos (inventario)</td>
+<td>No se encontró registro de activos</td>
 <td><strong>NE</strong></td>
-<td>No hay organigrama ni descripción de funciones.</td>
-<td>Necesario crear y difundir.</td>
+<td>—</td>
+<td>Crear CMDB con clasificación de información.</td>
 </tr>
 <tr>
-<td><strong>A.8.1</strong> – Inventario de activos</td>
-<td>Registro y clasificación de activos críticos.</td>
-<td><strong>NC</strong></td>
-<td>Ausencia de inventario.</td>
-<td>Impide aplicar controles proporcionales.</td>
-</tr>
-<tr>
-<td><strong>A.9.1</strong> – Control de acceso</td>
-<td>Política de control de acceso, principio de mínimo privilegio.</td>
-<td><strong>NC</strong></td>
-<td>Logs de accesos, pero sin política ni revisiones.</td>
-<td>Implementar matriz de roles y auditorías trimestrales.</td>
-</tr>
-<tr>
-<td><strong>A.9.2</strong> – Gestión de usuarios</td>
-<td>Creación, modificación y baja de cuentas.</td>
+<td><strong>A.8.2</strong> – Uso aceptable de activos</td>
+<td>No hay política ni registro de aceptación</td>
 <td><strong>NE</strong></td>
-<td>No hay evidencia de procesos de alta/baja.</td>
-<td>Definir procedimiento y registrar.</td>
+<td>—</td>
+<td>Definir y comunicar política de uso aceptable.</td>
 </tr>
 <tr>
-<td><strong>A.10.1</strong> – Criptografía</td>
-<td>Cifrado de datos en reposo y en tránsito.</td>
-<td><strong>NC</strong></td>
-<td>No se encontró evidencia de cifrado (PCI‑DSS 3 &amp; 4).</td>
-<td>Implementar AES‑256 y TLS 1.2+.</td>
+<td><strong>A.8.3</strong> – Protección de activos (cifrado)</td>
+<td>Cifrado AES‑256 en reposo y BitLocker activo</td>
+<td><strong>C</strong></td>
+<td><em>registro_tratamiento.json</em>; <em>informe_evidencias_auditoria_iso27001.pdf</em></td>
+<td>Mantener revisiones periódicas.</td>
 </tr>
 <tr>
-<td><strong>A.12.1</strong> – Operaciones seguras</td>
-<td>Gestión de vulnerabilidades y parches.</td>
-<td><strong>NC</strong></td>
-<td>No hay escaneos ni registro de parches.</td>
-<td>Adoptar proceso de escaneo trimestral y parcheo &lt;30 días.</td>
+<td><strong>A.9.2</strong> – Gestión de contraseñas</td>
+<td>Política de longitud, complejidad, caducidad, bloqueo</td>
+<td><strong>C</strong></td>
+<td><em>politica_contraseñas.md</em></td>
+<td>Auditorías mensuales recomendadas.</td>
 </tr>
 <tr>
-<td><strong>A.12.4</strong> – Registro de eventos</td>
-<td>Política de logs, retención 12 meses, SIEM.</td>
-<td><strong>NC</strong></td>
-<td>Sólo archivo <code>logs_registro.txt</code>; falta política y centralización.</td>
-<td>Definir política, desplegar SIEM.</td>
+<td><strong>A.9.3</strong> – Cuentas de servicio</td>
+<td>No hay evidencia de control</td>
+<td><strong>NE</strong></td>
+<td>—</td>
+<td>Documentar cuentas, aplicar principio de mínimo privilegio.</td>
 </tr>
 <tr>
-<td><strong>A.13.1</strong> – Seguridad de redes</td>
-<td>Firewall, segmentación, protección de comunicaciones.</td>
-<td><strong>NC</strong></td>
-<td>No hay documentación de firewall ni segmentación.</td>
-<td>Implementar firewall perimetral y reglas documentadas.</td>
+<td><strong>A.10.1</strong> – Criptografía (cifrado en tránsito)</td>
+<td>TLS 1.3/1.2 obligatorio</td>
+<td><strong>C</strong></td>
+<td><em>registro_tratamiento.json</em></td>
+<td>Monitorear versiones de TLS.</td>
 </tr>
 <tr>
-<td><strong>A.14.2</strong> – Seguridad en el ciclo de vida del software</td>
-<td>SDLC seguro, pruebas de código.</td>
-<td><strong>NC</strong></td>
-<td>No existe proceso documentado.</td>
-<td>Adoptar OWASP ASVS y pruebas en CI/CD.</td>
+<td><strong>A.12.4</strong> – Registro y monitoreo de eventos</td>
+<td>Logs de acceso, cambios y auditorías mensuales</td>
+<td><strong>C</strong></td>
+<td><em>logs_registro.txt</em> (extractos)</td>
+<td>Implementar correlación en tiempo real.</td>
+</tr>
+<tr>
+<td><strong>A.12.6</strong> – Gestión de vulnerabilidades</td>
+<td>Escaneo sin hallazgos críticos</td>
+<td><strong>C</strong></td>
+<td><em>informe_evidencias_auditoria_iso27001.pdf</em></td>
+<td>Continuar escaneos periódicos.</td>
+</tr>
+<tr>
+<td><strong>A.13.2</strong> – Protección contra malware</td>
+<td>EDR (CrowdStrike) activo y actualizado</td>
+<td><strong>C</strong></td>
+<td><em>informe_evidencias_auditoria_iso27001.pdf</em></td>
+<td>Revisar configuraciones regularmente.</td>
+</tr>
+<tr>
+<td><strong>A.14.1</strong> – Seguridad en desarrollo</td>
+<td>No hay evidencia de SDLC seguro</td>
+<td><strong>NE</strong></td>
+<td>—</td>
+<td>Adoptar Secure Development Lifecycle y registrar pruebas.</td>
+</tr>
+<tr>
+<td><strong>A.15.1</strong> – Seguridad de la cadena de suministro</td>
+<td>No hay evidencia de evaluación de proveedores</td>
+<td><strong>NE</strong></td>
+<td>—</td>
+<td>Implementar proceso de due‑diligence de terceros.</td>
 </tr>
 <tr>
 <td><strong>A.16.1</strong> – Gestión de incidentes</td>
-<td>Plan de Respuesta a Incidentes (PRI).</td>
-<td><strong>NC</strong></td>
-<td>No se encontró plan ni registro de incidentes.</td>
-<td>Crear PRI y registrar incidentes.</td>
+<td>Incidente de acceso no autorizado detectado y mitigado</td>
+<td><strong>C</strong> (con observación)</td>
+<td><em>registro_tratamiento.json</em></td>
+<td>Formalizar proceso y lecciones aprendidas.</td>
 </tr>
 <tr>
 <td><strong>A.17.1</strong> – Continuidad del negocio</td>
-<td>Plan de Continuidad (PCN) y pruebas de recuperación.</td>
-<td><strong>NC</strong></td>
-<td>No hay evidencia.</td>
-<td>Elaborar PCN y pruebas anuales.</td>
+<td>No se encontró BCP ni pruebas de recuperación</td>
+<td><strong>NE</strong></td>
+<td>—</td>
+<td>Desarrollar y probar BCP.</td>
 </tr>
 </tbody>
 </table>
-<blockquote>
-<p><strong>Conclusión ISO 27001:</strong> 7 de 12 controles críticos están en <strong>NC</strong> y 2 en <strong>NE</strong> → <strong>No cumple</strong>. Se requiere la elaboración de la política de seguridad integral y la puesta en marcha de los procesos de gestión de riesgos, incidentes, continuidad y control de accesos.</p>
-</blockquote>
-<h3 id="22-esquema-nacional-de-seguridad-ens">2.2 Esquema Nacional de Seguridad (ENS)</h3>
+<hr />
+<h3 id="32-esquema-nacional-de-seguridad-ens-real-decreto-3112022">3.2 Esquema Nacional de Seguridad (ENS) – Real Decreto 311/2022</h3>
 <table>
 <thead>
 <tr>
 <th>Control ENS</th>
 <th>Descripción</th>
-<th>Estado</th>
-<th>Evidencia</th>
-<th>Comentario</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><strong>C1 – Política de Seguridad</strong></td>
-<td>Política integral aprobada.</td>
-<td><strong>NC</strong></td>
-<td>No existe documento.</td>
-<td>Ver tabla ISO A.5.1.</td>
-</tr>
-<tr>
-<td><strong>C2 – Organización de la Seguridad</strong></td>
-<td>RS, CSIRT, Comité.</td>
-<td><strong>NE</strong></td>
-<td>No hay organigrama.</td>
-<td>Ver ISO A.6.1.</td>
-</tr>
-<tr>
-<td><strong>C3 – Gestión de Activos</strong></td>
-<td>Inventario y clasificación.</td>
-<td><strong>NC</strong></td>
-<td>Ausencia de inventario.</td>
-<td>Ver ISO A.8.1.</td>
-</tr>
-<tr>
-<td><strong>C4 – Gestión de Riesgos</strong></td>
-<td>Metodología y registro.</td>
-<td><strong>NE</strong></td>
-<td>No se encontró informe.</td>
-<td>Ver ISO A.6.1.</td>
-</tr>
-<tr>
-<td><strong>C5 – Protección de Datos Personales</strong></td>
-<td>Registro de tratamientos, cifrado.</td>
-<td><strong>NC</strong></td>
-<td>JSON corrupto, sin cifrado.</td>
-<td>Ver ISO A.10.1 y GDPR.</td>
-</tr>
-<tr>
-<td><strong>C6 – Control de Acceso</strong></td>
-<td>Principio de mínimo privilegio.</td>
-<td><strong>NC</strong></td>
-<td>Falta política y revisiones.</td>
-<td>Ver ISO A.9.1.</td>
-</tr>
-<tr>
-<td><strong>C7 – Gestión de Contraseñas</strong></td>
-<td>Política completa.</td>
-<td><strong>NC</strong></td>
-<td>Política parcial.</td>
-<td>Ver ISO A.9.2.</td>
-</tr>
-<tr>
-<td><strong>C8 – Gestión de Incidentes</strong></td>
-<td>PRI y registro.</td>
-<td><strong>NC</strong></td>
-<td>No hay plan ni registro.</td>
-<td>Ver ISO A.16.1.</td>
-</tr>
-<tr>
-<td><strong>C9 – Continuidad del Negocio</strong></td>
-<td>PCN y pruebas.</td>
-<td><strong>NE</strong></td>
-<td>No hay evidencia.</td>
-<td>Ver ISO A.17.1.</td>
-</tr>
-<tr>
-<td><strong>C10 – Seguridad en Comunicaciones</strong></td>
-<td>TLS, VPN, cifrado.</td>
-<td><strong>NE</strong></td>
-<td>No hay evidencia.</td>
-<td>Ver ISO A.10.1.</td>
-</tr>
-<tr>
-<td><strong>C11 – Gestión de Vulnerabilidades</strong></td>
-<td>Escaneos y parcheo.</td>
-<td><strong>NE</strong></td>
-<td>No hay registros.</td>
-<td>Ver ISO A.12.1.</td>
-</tr>
-<tr>
-<td><strong>C12 – Auditoría y Registro</strong></td>
-<td>Política de logs, retención.</td>
-<td><strong>NC</strong></td>
-<td>Logs parciales, sin política.</td>
-<td>Ver ISO A.12.4.</td>
-</tr>
-</tbody>
-</table>
-<blockquote>
-<p><strong>Conclusión ENS:</strong> 7 controles críticos en <strong>NC</strong>, 4 en <strong>NE</strong> → <strong>No cumple</strong>. Prioridad alta a C1, C4, C5, C8 y C12.</p>
-</blockquote>
-<h3 id="23-reglamento-general-de-proteccion-de-datos-rgpd">2.3 Reglamento General de Protección de Datos (RGPD)</h3>
-<table>
-<thead>
-<tr>
-<th>Artículo/Control</th>
-<th>Descripción</th>
-<th>Estado</th>
+<th>Estado (C/NC/NE/NA)</th>
 <th>Evidencia</th>
 <th>Observaciones</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td><strong>Art. 5 – Principios</strong></td>
-<td>Registro de actividades de tratamiento (RAT).</td>
-<td><strong>NC</strong></td>
-<td>JSON corrupto, datos incompletos.</td>
-<td>Falta base legal, plazos, medidas de seguridad.</td>
+<td><strong>5.1</strong> – Política organizacional</td>
+<td>Política aprobada y publicada (85 % difusión)</td>
+<td><strong>C</strong></td>
+<td><em>informe_evidencias_auditoria_iso27001.pdf</em></td>
+<td>Mejorar difusión al 100 %.</td>
 </tr>
 <tr>
-<td><strong>Art. 6 – Licitud</strong></td>
-<td>Identificación de bases legales.</td>
+<td><strong>5.15</strong> – Control de accesos (desactivación)</td>
+<td>Desactivación de cuentas VPN en 72 h (límite 24 h)</td>
 <td><strong>NC</strong></td>
-<td>No documentado.</td>
-<td>Riesgo de tratamiento ilícito.</td>
+<td><em>informe_evidencias_auditoria_iso27001.pdf</em></td>
+<td>Automatizar proceso.</td>
 </tr>
 <tr>
-<td><strong>Art. 32 – Seguridad del tratamiento</strong></td>
-<td>Cifrado en reposo y en tránsito.</td>
+<td><strong>7.4</strong> – Seguridad física (videovigilancia)</td>
+<td>Punto ciego en cámara del datacenter</td>
 <td><strong>NC</strong></td>
-<td>No hay evidencia de cifrado.</td>
-<td></td>
+<td><em>informe_evidencias_auditoria_iso27001.pdf</em></td>
+<td>Ajustar cámara / espejo convexo.</td>
 </tr>
 <tr>
-<td><strong>Art. 33/34 – Notificación de brechas</strong></td>
-<td>Plan de notificación.</td>
+<td><strong>8.1</strong> – Protección de puntos finales (cifrado)</td>
+<td>BitLocker activo en todos los laptops</td>
+<td><strong>C</strong></td>
+<td><em>informe_evidencias_auditoria_iso27001.pdf</em></td>
+<td>Mantener.</td>
+</tr>
+<tr>
+<td><strong>8.10</strong> – Prevención de fuga de datos (DLP)</td>
+<td>DLP bloquea envío de datos “Confidencial” a dominios externos</td>
+<td><strong>C</strong></td>
+<td><em>informe_evidencias_auditoria_iso27001.pdf</em></td>
+<td>Mantener y ampliar cobertura.</td>
+</tr>
+<tr>
+<td><strong>Gestión de contraseñas</strong></td>
+<td>Política de complejidad, caducidad, bloqueo</td>
+<td><strong>C</strong></td>
+<td><em>politica_contraseñas.md</em></td>
+<td>Auditorías trimestrales.</td>
+</tr>
+<tr>
+<td><strong>Registro de auditoría de logs</strong></td>
+<td>Generación y revisión mensual de logs de seguridad</td>
+<td><strong>C</strong></td>
+<td><em>logs_registro.txt</em></td>
+<td>Continuar.</td>
+</tr>
+<tr>
+<td><strong>Registro de tratamiento de datos</strong></td>
+<td>Medidas de cifrado, control de acceso, auditoría</td>
+<td><strong>C</strong></td>
+<td><em>registro_tratamiento.json</em></td>
+<td>Cumple requisitos de integridad y confidencialidad.</td>
+</tr>
+<tr>
+<td><strong>Procedimiento de automatización de desactivación</strong></td>
+<td>No existe documentación probada</td>
 <td><strong>NE</strong></td>
-<td>No se encontró plan.</td>
-<td></td>
+<td>—</td>
+<td>Documentar e implementar.</td>
 </tr>
 <tr>
-<td><strong>Art. 35 – Evaluación de Impacto (DPIA)</strong></td>
-<td>DPIA para tratamientos de alto riesgo.</td>
+<td><strong>Plan de mejora de videovigilancia</strong></td>
+<td>No existe evidencia de ejecución</td>
 <td><strong>NE</strong></td>
-<td>No se halló DPIA.</td>
-<td></td>
-</tr>
-<tr>
-<td><strong>Art. 44‑50 – Transferencias internacionales</strong></td>
-<td>Mecanismos de transferencia.</td>
-<td><strong>NA</strong></td>
-<td>No se realizan transferencias fuera de UE.</td>
-<td></td>
+<td>—</td>
+<td>Documentar plan y pruebas.</td>
 </tr>
 </tbody>
 </table>
-<blockquote>
-<p><strong>Conclusión GDPR:</strong> Falta registro de tratamientos y medidas de seguridad → <strong>No cumple</strong>. Se requiere la elaboración del RAT, DPIA donde proceda y políticas de cifrado.</p>
-</blockquote>
-<h3 id="24-nis2-directive-aplicable-a-operadores-de-servicios-esenciales">2.4 NIS2 Directive (aplicable a operadores de servicios esenciales)</h3>
-<table>
-<thead>
-<tr>
-<th>Requisito NIS2</th>
-<th>Descripción</th>
-<th>Estado</th>
-<th>Evidencia</th>
-<th>Comentario</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><strong>Identificación de activos críticos</strong></td>
-<td>Inventario y clasificación.</td>
-<td><strong>NC</strong></td>
-<td>No existe inventario.</td>
-<td></td>
-</tr>
-<tr>
-<td><strong>Gestión de riesgos</strong></td>
-<td>Proceso continuo de riesgo.</td>
-<td><strong>NE</strong></td>
-<td>No hay metodología documentada.</td>
-<td></td>
-</tr>
-<tr>
-<td><strong>Seguridad de la cadena de suministro</strong></td>
-<td>Evaluación de proveedores.</td>
-<td><strong>NA</strong></td>
-<td>No se utilizan proveedores críticos externos.</td>
-<td></td>
-</tr>
-<tr>
-<td><strong>Notificación de incidentes</strong></td>
-<td>24 h a autoridad competente.</td>
-<td><strong>NC</strong></td>
-<td>No hay plan de notificación.</td>
-<td></td>
-</tr>
-<tr>
-<td><strong>Política de seguridad</strong></td>
-<td>Marco de seguridad integral.</td>
-<td><strong>NC</strong></td>
-<td>Falta política (ver ISO A.5.1).</td>
-<td></td>
-</tr>
-</tbody>
-</table>
-<blockquote>
-<p><strong>Conclusión NIS2:</strong> 4 requisitos críticos en <strong>NC</strong> → <strong>No cumple</strong>. La política de seguridad y la gestión de riesgos son puntos críticos.</p>
-</blockquote>
-<h3 id="25-pcidss-v40-12-requisitos">2.5 PCI‑DSS v4.0 – 12 Requisitos</h3>
-<table>
-<thead>
-<tr>
-<th>Requisito</th>
-<th>Descripción</th>
-<th>Estado</th>
-<th>Evidencia</th>
-<th>Observaciones</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><strong>1 – Firewall</strong></td>
-<td>Configuración y segmentación.</td>
-<td><strong>NC</strong></td>
-<td>No hay documentación.</td>
-<td></td>
-</tr>
-<tr>
-<td><strong>2 – Contraseñas predeterminadas</strong></td>
-<td>Eliminación y política.</td>
-<td><strong>Parcial (C/NC)</strong></td>
-<td>Política parcial, sin evidencia de eliminación.</td>
-<td></td>
-</tr>
-<tr>
-<td><strong>3 – Protección de datos almacenados</strong></td>
-<td>Cifrado en reposo.</td>
-<td><strong>NC</strong></td>
-<td>No hay evidencia.</td>
-<td></td>
-</tr>
-<tr>
-<td><strong>4 – Cifrado en tránsito</strong></td>
-<td>TLS 1.2+ y VPN.</td>
-<td><strong>NC</strong></td>
-<td>No hay evidencia.</td>
-<td></td>
-</tr>
-<tr>
-<td><strong>5 – Anti‑malware</strong></td>
-<td>Solución y actualizaciones.</td>
-<td><strong>NC</strong></td>
-<td>No hay evidencia.</td>
-<td></td>
-</tr>
-<tr>
-<td><strong>6 – Desarrollo seguro</strong></td>
-<td>SDLC, pruebas de código.</td>
-<td><strong>NC</strong></td>
-<td>No hay evidencia.</td>
-<td></td>
-</tr>
-<tr>
-<td><strong>7 – Acceso con necesidad de saber</strong></td>
-<td>Matriz de roles.</td>
-<td><strong>NC</strong></td>
-<td>No hay evidencia.</td>
-<td></td>
-</tr>
-<tr>
-<td><strong>8 – Identificación y autenticación</strong></td>
-<td>MFA, gestión de cuentas.</td>
-<td><strong>Parcial</strong></td>
-<td>Logs de login, sin MFA.</td>
-<td></td>
-</tr>
-<tr>
-<td><strong>9 – Control de acceso físico</strong></td>
-<td>Sala de servidores.</td>
-<td><strong>NC</strong></td>
-<td>No hay evidencia.</td>
-<td></td>
-</tr>
-<tr>
-<td><strong>10 – Registro y monitorización</strong></td>
-<td>Logs centralizados, retención.</td>
-<td><strong>Parcial</strong></td>
-<td>Logs parciales, sin SIEM.</td>
-<td></td>
-</tr>
-<tr>
-<td><strong>11 – Pruebas de seguridad</strong></td>
-<td>Pen‑test, escaneos.</td>
-<td><strong>Parcial</strong></td>
-<td>Un escaneo puntual, sin periodicidad.</td>
-<td></td>
-</tr>
-<tr>
-<td><strong>12 – Política de seguridad</strong></td>
-<td>Marco integral.</td>
-<td><strong>Parcial</strong></td>
-<td>Sólo política de contraseñas.</td>
-<td></td>
-</tr>
-</tbody>
-</table>
-<blockquote>
-<p><strong>Conclusión PCI‑DSS:</strong> 7 requisitos en <strong>NC</strong>, 4 en <strong>Parcial</strong>, 1 en <strong>NA</strong> → <strong>No cumple</strong>. Prioridad alta a requisitos 1, 3, 4, 5, 7 y 10.</p>
-</blockquote>
 <hr />
-<h2 id="3-registro-de-no-conformidades-nc">3. Registro de No Conformidades (NC)</h2>
+<h3 id="33-reglamento-general-de-proteccion-de-datos-rgpd">3.3 Reglamento General de Protección de Datos (RGPD)</h3>
+<table>
+<thead>
+<tr>
+<th>Artículo RGPD</th>
+<th>Requisito</th>
+<th>Estado (C/NC/NE/NA)</th>
+<th>Evidencia</th>
+<th>Observaciones</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Art. 5</strong> – Principios (licitud, minimización, integridad)</td>
+<td>Registro de tratamiento con medidas de seguridad (cifrado, control de acceso)</td>
+<td><strong>C</strong></td>
+<td><em>registro_tratamiento.json</em></td>
+<td>Mantener registro actualizado.</td>
+</tr>
+<tr>
+<td><strong>Art. 6</strong> – Licitud del tratamiento</td>
+<td>Base legal documentada (contrato, consentimiento)</td>
+<td><strong>C</strong></td>
+<td><em>registro_tratamiento.json</em> (campo “base_legal”)</td>
+<td>Revisar anualidad de bases legales.</td>
+</tr>
+<tr>
+<td><strong>Art. 32</strong> – Seguridad del tratamiento</td>
+<td>Cifrado AES‑256, TLS 1.3, EDR, DLP, control de accesos</td>
+<td><strong>C</strong></td>
+<td><em>registro_tratamiento.json</em>, <em>politica_contraseñas.md</em>, <em>informe_evidencias_auditoria_iso27001.pdf</em></td>
+<td>Realizar pruebas de penetración anual.</td>
+</tr>
+<tr>
+<td><strong>Art. 33</strong> – Notificación de brechas</td>
+<td>Procedimiento de notificación interno documentado (incidente RT‑002)</td>
+<td><strong>C</strong> (con observación)</td>
+<td><em>registro_tratamiento.json</em> (incidente)</td>
+<td>Formalizar proceso de notificación a la AEPD &lt; 72 h.</td>
+</tr>
+<tr>
+<td><strong>Art. 35</strong> – Evaluación de Impacto (DPIA)</td>
+<td>No se identificó necesidad de DPIA para los tratamientos actuales</td>
+<td><strong>C</strong></td>
+<td><em>registro_tratamiento.json</em> (clasificación “bajo riesgo”)</td>
+<td>Revisar cuando se introduzcan nuevos sistemas.</td>
+</tr>
+<tr>
+<td><strong>Art. 44‑50</strong> – Transferencias internacionales</td>
+<td>No existen transferencias fuera del EEE</td>
+<td><strong>C</strong></td>
+<td>—</td>
+<td>Mantener control.</td>
+</tr>
+<tr>
+<td><strong>Art. 24</strong> – Responsabilidad proactiva</td>
+<td>Política de seguridad, registro de tratamiento, auditorías</td>
+<td><strong>C</strong></td>
+<td>Conjunto de evidencias anteriores</td>
+<td>Continuar con mejora continua.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="34-directiva-nis2-ue-20222555">3.4 Directiva NIS2 (UE) 2022/2555</h3>
+<table>
+<thead>
+<tr>
+<th>Control NIS2</th>
+<th>Requisito</th>
+<th>Estado (C/NC/NE/NA)</th>
+<th>Evidencia</th>
+<th>Observaciones</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Art. 7‑8</strong> – Gestión de riesgos y tratamiento de datos personales</td>
+<td>Registro de tratamiento con medidas de seguridad (cifrado, control de acceso)</td>
+<td><strong>C</strong></td>
+<td><em>registro_tratamiento.json</em></td>
+<td>Mantener y actualizar.</td>
+</tr>
+<tr>
+<td><strong>Art. 11</strong> – Seguridad de la cadena de suministro</td>
+<td>Evidencias de controles de acceso y DLP en proveedores</td>
+<td><strong>C</strong></td>
+<td><em>informe_evidencias_auditoria_iso27001.pdf</em></td>
+<td>Automatizar desactivación y reforzar DLP.</td>
+</tr>
+<tr>
+<td><strong>Art. 13‑14</strong> – Gestión de incidentes y notificación</td>
+<td>Logs de detección y respuesta a incidentes (RT‑002)</td>
+<td><strong>C</strong></td>
+<td><em>logs_registro.txt</em></td>
+<td>Formalizar notificación a autoridad competente.</td>
+</tr>
+<tr>
+<td><strong>Art. 9‑10</strong> – Control de accesos y gestión de cuentas</td>
+<td>Desactivación tardía de cuentas (72 h)</td>
+<td><strong>NC</strong> (parcial)</td>
+<td><em>informe_evidencias_auditoria_iso27001.pdf</em></td>
+<td>Implementar automatización &lt; 24 h.</td>
+</tr>
+<tr>
+<td><strong>Art. 9‑10</strong> – Política de contraseñas</td>
+<td>Política robusta (longitud, complejidad, bloqueo)</td>
+<td><strong>C</strong></td>
+<td><em>politica_contraseñas.md</em></td>
+<td>Auditorías trimestrales.</td>
+</tr>
+<tr>
+<td><strong>Art. 12</strong> – Seguridad física</td>
+<td>Punto ciego en videovigilancia del datacenter</td>
+<td><strong>NC</strong> (potencial)</td>
+<td><em>informe_evidencias_auditoria_iso27001.pdf</em></td>
+<td>Corregir cobertura.</td>
+</tr>
+<tr>
+<td><strong>Art. 10</strong> – Gestión de cambios</td>
+<td>Registro de cambios de firewall con trazabilidad</td>
+<td><strong>C</strong></td>
+<td><em>logs_registro.txt</em> (entrada de cambio)</td>
+<td>Implementar revisión por pares.</td>
+</tr>
+<tr>
+<td><strong>Art. 7‑8</strong> – Registro de auditoría y trazabilidad</td>
+<td>Bitácora de accesos físicos y lógicas</td>
+<td><strong>C</strong></td>
+<td><em>informe_evidencias_auditoria_iso27001.pdf</em></td>
+<td>Completar cobertura de cámaras.</td>
+</tr>
+<tr>
+<td><strong>PCI‑DSS</strong></td>
+<td>No aplica (no se procesan datos de tarjetas)</td>
+<td><strong>NA</strong></td>
+<td>—</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="35-pcidss-v40">3.5 PCI‑DSS v4.0</h3>
+<table>
+<thead>
+<tr>
+<th>Requisito PCI‑DSS</th>
+<th>Estado</th>
+<th>Comentario</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Requisito 1‑12</strong></td>
+<td><strong>NA</strong></td>
+<td>La organización no almacena, procesa ni transmite datos de tarjetas de pago. No se requiere cumplimiento PCI‑DSS.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="4-registro-de-no-conformidades-nc">4. Registro de No Conformidades (NC)</h2>
 <table>
 <thead>
 <tr>
 <th>ID‑NC</th>
 <th>Normativa</th>
 <th>Requisito / Control</th>
-<th>Criticidad*</th>
+<th>Criticidad</th>
 <th>Fecha detección</th>
 <th>Responsable</th>
 <th>Estado</th>
@@ -596,469 +578,419 @@
 <tbody>
 <tr>
 <td>NC‑001</td>
-<td>ISO 27001 / ENS</td>
-<td>Política de Seguridad Integral (A.5.1 / C1)</td>
-<td>Crítica</td>
+<td>ISO 27001 / ENS / NIS2</td>
+<td>A.5.15 / 5.15 – Desactivación de cuentas &lt; 24 h</td>
+<td><strong>Crítica</strong></td>
 <td>2026‑04‑20</td>
-<td>CISO</td>
-<td><strong>Abierta</strong></td>
+<td>CISO / IT‑Ops</td>
+<td><strong>Abierto</strong></td>
 </tr>
 <tr>
 <td>NC‑002</td>
-<td>ENS</td>
-<td>Gestión de Riesgos (C4)</td>
-<td>Crítica</td>
-<td>2026‑04‑20</td>
-<td>DPO</td>
-<td><strong>Abierta</strong></td>
+<td>ISO 27001 / ENS</td>
+<td>A.7.4 / 7.4 – Punto ciego en videovigilancia del datacenter</td>
+<td><strong>Crítica</strong></td>
+<td>2026‑04‑22</td>
+<td>Seguridad Física</td>
+<td><strong>Abierto</strong></td>
 </tr>
 <tr>
 <td>NC‑003</td>
-<td>GDPR</td>
-<td>Registro de Actividades de Tratamiento (Art. 5)</td>
-<td>Crítica</td>
-<td>2026‑04‑20</td>
-<td>DPO</td>
-<td><strong>Abierta</strong></td>
+<td>ISO 27001</td>
+<td>A.8.1 – Inventario de activos inexistente</td>
+<td><strong>Alta</strong></td>
+<td>2026‑04‑23</td>
+<td>Gestión de Activos</td>
+<td><strong>Abierto</strong></td>
 </tr>
 <tr>
 <td>NC‑004</td>
-<td>PCI‑DSS</td>
-<td>Firewall y segmentación (Req 1)</td>
-<td>Crítica</td>
-<td>2026‑04‑20</td>
-<td>Infraestructura</td>
-<td><strong>Abierta</strong></td>
+<td>ISO 27001</td>
+<td>A.8.2 – Política de uso aceptable sin evidencia</td>
+<td><strong>Media</strong></td>
+<td>2026‑04‑23</td>
+<td>GRC</td>
+<td><strong>Abierto</strong></td>
 </tr>
 <tr>
 <td>NC‑005</td>
-<td>PCI‑DSS</td>
-<td>Cifrado de datos en reposo (Req 3)</td>
-<td>Crítica</td>
-<td>2026‑04‑20</td>
-<td>Infraestructura</td>
-<td><strong>Abierta</strong></td>
+<td>ISO 27001</td>
+<td>A.9.3 – Cuentas de servicio sin control</td>
+<td><strong>Alta</strong></td>
+<td>2026‑04‑24</td>
+<td>Seguridad de Identidades</td>
+<td><strong>Abierto</strong></td>
 </tr>
 <tr>
 <td>NC‑006</td>
-<td>PCI‑DSS</td>
-<td>Cifrado en tránsito (Req 4)</td>
-<td>Crítica</td>
-<td>2026‑04‑20</td>
-<td>Infraestructura</td>
-<td><strong>Abierta</strong></td>
+<td>ISO 27001</td>
+<td>A.14.1 – Falta de SDLC seguro</td>
+<td><strong>Alta</strong></td>
+<td>2026‑04‑25</td>
+<td>Desarrollo Seguro</td>
+<td><strong>Abierto</strong></td>
 </tr>
 <tr>
 <td>NC‑007</td>
-<td>ENS / ISO 27001</td>
-<td>Control de Acceso (A.9.1 / C6)</td>
-<td>Alta</td>
-<td>2026‑04‑20</td>
-<td>Seguridad</td>
-<td><strong>Abierta</strong></td>
+<td>ISO 27001</td>
+<td>A.15.1 – Seguridad de la cadena de suministro sin evidencia</td>
+<td><strong>Alta</strong></td>
+<td>2026‑04‑25</td>
+<td>Compras / Riesgo</td>
+<td><strong>Abierto</strong></td>
 </tr>
 <tr>
 <td>NC‑008</td>
-<td>ENS</td>
-<td>Auditoría y registro (C12)</td>
-<td>Alta</td>
-<td>2026‑04‑20</td>
-<td>Seguridad</td>
-<td><strong>Abierta</strong></td>
+<td>ISO 27001</td>
+<td>A.17.1 – Ausencia de BCP y pruebas de recuperación</td>
+<td><strong>Crítica</strong></td>
+<td>2026‑04‑26</td>
+<td>Continuidad</td>
+<td><strong>Abierto</strong></td>
 </tr>
 <tr>
 <td>NC‑009</td>
-<td>NIS2</td>
-<td>Notificación de incidentes (24 h)</td>
-<td>Alta</td>
+<td>ENS</td>
+<td>5.15 – Automatización de desactivación de cuentas (sin evidencia)</td>
+<td><strong>Alta</strong></td>
 <td>2026‑04‑20</td>
-<td>CISO</td>
-<td><strong>Abierta</strong></td>
+<td>CISO / IT‑Ops</td>
+<td><strong>Abierto</strong></td>
 </tr>
 <tr>
 <td>NC‑010</td>
-<td>PCI‑DSS</td>
-<td>Anti‑malware (Req 5)</td>
-<td>Media</td>
-<td>2026‑04‑20</td>
-<td>Seguridad</td>
-<td><strong>Abierta</strong></td>
+<td>ENS</td>
+<td>7.4 – Plan de mejora de videovigilancia (sin evidencia)</td>
+<td><strong>Crítica</strong></td>
+<td>2026‑04‑22</td>
+<td>Seguridad Física</td>
+<td><strong>Abierto</strong></td>
 </tr>
 <tr>
 <td>NC‑011</td>
-<td>ISO 27001</td>
-<td>Gestión de vulnerabilidades (A.12.1)</td>
-<td>Media</td>
+<td>NIS2</td>
+<td>Art. 9‑10 – Control de accesos (desactivación tardía)</td>
+<td><strong>Crítica</strong></td>
 <td>2026‑04‑20</td>
-<td>Infraestructura</td>
-<td><strong>Abierta</strong></td>
-</tr>
-<tr>
-<td>NC‑012</td>
-<td>GDPR</td>
-<td>DPIA (Art. 35)</td>
-<td>Media</td>
-<td>2026‑04‑20</td>
-<td>DPO</td>
-<td><strong>Abierta</strong></td>
+<td>CISO / IT‑Ops</td>
+<td><strong>Abierto</strong></td>
 </tr>
 </tbody>
 </table>
-<p>* <strong>Criticidad</strong>: Crítica (impacto grave, posible sanción &gt; €10 M), Alta (impacto significativo, sanción 1‑10 M), Media (impacto moderado, sanción &lt; 1 M).</p>
 <hr />
-<h2 id="4-plan-de-accion-correctivo-pac">4. Plan de Acción Correctivo (PAC)</h2>
+<h2 id="5-plan-de-accion-correctivo-pac">5. Plan de Acción Correctivo (PAC)</h2>
 <table>
 <thead>
 <tr>
-<th>Acción</th>
+<th>Acción Correctiva</th>
 <th>Responsable</th>
 <th>Fecha límite</th>
-<th>Indicador de cierre</th>
-<th>ID‑NC asociado</th>
+<th>Indicador de cierre (KPI)</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td><strong>1. Redactar y aprobar Política de Seguridad Integral</strong> (cubre ISO A.5.1, ENS C1, NIS2)</td>
-<td>CISO</td>
-<td>2026‑06‑30</td>
-<td>Política firmada y publicada en Intranet</td>
-<td>NC‑001</td>
+<td><strong>Automatizar desactivación de cuentas (&lt; 24 h)</strong> – Integración nómina‑AD, pruebas de cierre.</td>
+<td>CISO / IT‑Ops</td>
+<td>30‑Jun‑2026</td>
+<td>% de cuentas desactivadas &lt; 24 h = 100 %</td>
 </tr>
 <tr>
-<td><strong>2. Definir metodología y ejecutar gestión de riesgos</strong> (ENS C4, ISO A.6.1)</td>
-<td>DPO &amp; CISO</td>
-<td>2026‑07‑15</td>
-<td>Matriz de riesgos aprobada, 14 riesgos evaluados</td>
-<td>NC‑002</td>
+<td><strong>Corregir punto ciego de videovigilancia</strong> – Re‑orientar cámara o instalar espejo convexo; validar cobertura 100 %.</td>
+<td>Seguridad Física</td>
+<td>30‑Jun‑2026</td>
+<td>Cobertura de CCTV = 100 % (informe de pruebas).</td>
 </tr>
 <tr>
-<td><strong>3. Completar Registro de Actividades de Tratamiento (RAT)</strong> (RGPD Art. 5)</td>
-<td>DPO</td>
-<td>2026‑07‑01</td>
-<td>RAT en formato CSV/Excel, validado por auditor interno</td>
-<td>NC‑003</td>
+<td><strong>Crear inventario de activos (CMDB)</strong> – Clasificación, propietario, nivel de criticidad.</td>
+<td>Gestión de Activos</td>
+<td>31‑Sep‑2026</td>
+<td>CMDB completa (100 % activos críticos registrados).</td>
 </tr>
 <tr>
-<td><strong>4. Implementar firewall perimetral y segmentación de red</strong> (PCI‑DSS Req 1, ENS C10)</td>
-<td>Infraestructura</td>
-<td>2026‑08‑15</td>
-<td>Firewall operativo, reglas documentadas, pruebas de penetración OK</td>
-<td>NC‑004</td>
+<td><strong>Definir y publicar política de uso aceptable</strong> – Registro de aceptación por usuarios.</td>
+<td>GRC</td>
+<td>31‑Oct‑2026</td>
+<td>Política firmada por 100 % de usuarios.</td>
 </tr>
 <tr>
-<td><strong>5. Cifrar datos en reposo (AES‑256) y gestionar claves</strong> (PCI‑DSS Req 3, GDPR Art. 32)</td>
-<td>Infraestructura</td>
-<td>2026‑09‑01</td>
-<td>Todos los volúmenes críticos cifrados, informe de auditoría</td>
-<td>NC‑005</td>
+<td><strong>Documentar cuentas de servicio y aplicar principio de mínimo privilegio</strong> – Revisión trimestral.</td>
+<td>Seguridad de Identidades</td>
+<td>31‑Oct‑2026</td>
+<td>% de cuentas de servicio documentadas = 100 %</td>
 </tr>
 <tr>
-<td><strong>6. Habilitar TLS 1.2+ en todos los canales y VPN para accesos remotos</strong> (PCI‑DSS Req 4, ENS C10)</td>
-<td>Infraestructura</td>
-<td>2026‑09‑01</td>
-<td>Escaneo SSL muestra solo TLS 1.2/1.3, sin vulnerabilidades</td>
-<td>NC‑006</td>
+<td><strong>Implementar Secure Development Lifecycle (SDLC)</strong> – Herramientas SAST/DAST, revisión de código.</td>
+<td>Desarrollo Seguro</td>
+<td>31‑Dic‑2026</td>
+<td>% de proyectos con SDLC = 100 %</td>
 </tr>
 <tr>
-<td><strong>7. Definir y aplicar política de control de acceso (principio de mínimo privilegio, revisiones trimestrales)</strong> (ISO A.9.1, ENS C6)</td>
-<td>Seguridad</td>
-<td>2026‑08‑01</td>
-<td>Matriz de roles aprobada, auditoría trimestral completada</td>
-<td>NC‑007</td>
+<td><strong>Establecer proceso de due‑diligence de proveedores</strong> – Matriz de riesgo, auditorías.</td>
+<td>Compras / Riesgo</td>
+<td>31‑Dic‑2026</td>
+<td>% de proveedores evaluados = 100 %</td>
 </tr>
 <tr>
-<td><strong>8. Crear y publicar Política de Auditoría y Registro (logs, retención 12 meses, SIEM)</strong> (ISO A.12.4, ENS C12)</td>
-<td>Seguridad</td>
-<td>2026‑08‑15</td>
-<td>Política aprobada, SIEM en producción, 12 meses de retención</td>
-<td>NC‑008</td>
+<td><strong>Desarrollar y probar BCP</strong> – Definir RTO/RPO, pruebas anuales.</td>
+<td>Continuidad</td>
+<td>31‑Mar‑2027</td>
+<td>BCP aprobado y prueba exitosa = 1</td>
 </tr>
 <tr>
-<td><strong>9. Elaborar Plan de Respuesta a Incidentes (PRI) y procedimiento de notificación (24 h)</strong> (ENS C8, NIS2)</td>
-<td>CISO</td>
-<td>2026‑07‑31</td>
-<td>PRI aprobado, simulacro realizado, registro de incidentes</td>
-<td>NC‑009</td>
+<td><strong>Documentar procedimiento de automatización de desactivación (ENS)</strong> – Evidencia de implementación.</td>
+<td>CISO / IT‑Ops</td>
+<td>30‑Jun‑2026</td>
+<td>Procedimiento aprobado y evidenciado = 1</td>
 </tr>
 <tr>
-<td><strong>10. Desplegar solución anti‑malware centralizada y generar informes diarios</strong> (PCI‑DSS Req 5)</td>
-<td>Seguridad</td>
-<td>2026‑09‑30</td>
-<td>Consola anti‑malware con firmas actualizadas, logs archivados</td>
-<td>NC‑010</td>
+<td><strong>Formalizar plan de mejora de videovigilancia (ENS)</strong> – Evidencia de instalación y pruebas.</td>
+<td>Seguridad Física</td>
+<td>30‑Jun‑2026</td>
+<td>Plan ejecutado y pruebas validadas = 1</td>
 </tr>
 <tr>
-<td><strong>11. Implementar proceso de gestión de vulnerabilidades (escaneo trimestral, parcheo &lt;30 días)</strong> (ISO A.12.1, PCI‑DSS Req 5‑6)</td>
-<td>Infraestructura</td>
-<td>2026‑09‑30</td>
-<td>Informe de escaneo trimestral, todas las CVE críticas mitigadas</td>
-<td>NC‑011</td>
+<td><strong>Formalizar proceso de notificación de incidentes a la autoridad (NIS2)</strong> – Plantilla, SLA 24 h.</td>
+<td>SOC / CISO</td>
+<td>31‑Jul‑2026</td>
+<td>Notificaciones realizadas dentro de 24 h = 100 %</td>
 </tr>
 <tr>
-<td><strong>12. Realizar DPIA para tratamientos de datos de tarjetas y datos sensibles</strong> (RGPD Art. 35)</td>
-<td>DPO</td>
-<td>2026‑08‑15</td>
-<td>DPIA documentada, aprobada por la Dirección</td>
-<td>NC‑012</td>
+<td><strong>Reforzar difusión de política de seguridad (ISO/ENS)</strong> – Campaña de comunicación y recordatorios.</td>
+<td>DPO / Legal</td>
+<td>31‑May‑2026</td>
+<td>% de empleados que confirman haber leído = 100 %</td>
 </tr>
 </tbody>
 </table>
 <hr />
-<h2 id="5-analisis-de-riesgos-registro-de-tratamientos-gdpr">5. Análisis de Riesgos – Registro de Tratamientos GDPR</h2>
-<h3 id="51-metodologia">5.1 Metodología</h3>
-<ul>
-<li><strong>Identificación de activos</strong>: Bases de datos de clientes, sistemas de pago, CRM.  </li>
-<li><strong>Amenazas</strong>: Acceso no autorizado, pérdida de datos, divulgación accidental.  </li>
-<li><strong>Vulnerabilidades</strong>: Falta de cifrado, ausencia de control de acceso, inexistencia de registro de actividades.  </li>
-</ul>
-<h3 id="52-matriz-de-riesgo-escala-15">5.2 Matriz de Riesgo (Escala 1‑5)</h3>
+<h2 id="6-analisis-de-riesgos-para-el-registro-de-tratamientos-rgpd">6. Análisis de riesgos para el Registro de Tratamientos (RGPD)</h2>
 <table>
 <thead>
 <tr>
 <th>Riesgo</th>
-<th>Probabilidad</th>
-<th>Impacto</th>
-<th>Score (P × I)</th>
-<th>Comentario</th>
+<th>Descripción</th>
+<th>Probabilidad (1‑5)</th>
+<th>Impacto (1‑5)</th>
+<th>Score (1‑25)</th>
+<th>Medidas de mitigación existentes</th>
+<th>Acción recomendada</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>Acceso no autorizado a datos personales (R‑DATA‑03)</td>
+<td><strong>Acceso no autorizado a datos personales</strong></td>
+<td>Cuentas de usuario no desactivadas a tiempo (NC‑001)</td>
 <td>4</td>
 <td>5</td>
 <td><strong>20</strong></td>
-<td>Crítico – requiere cifrado y control de acceso.</td>
+<td>Cifrado AES‑256, control de acceso RBAC, registro de auditoría</td>
+<td>Automatizar desactivación &lt; 24 h; revisión mensual de cuentas inactivas.</td>
 </tr>
 <tr>
-<td>Pérdida o robo de dispositivos con datos (sin cifrado)</td>
-<td>3</td>
-<td>5</td>
-<td><strong>15</strong></td>
-<td>Necesario cifrado en reposo y gestión de dispositivos.</td>
-</tr>
-<tr>
-<td>Falta de notificación de brecha (Art. 33/34)</td>
-<td>2</td>
-<td>5</td>
-<td><strong>10</strong></td>
-<td>Procedimiento de notificación ausente.</td>
-</tr>
-<tr>
-<td>Tratamiento sin base legal documentada</td>
+<td><strong>Pérdida o robo de dispositivos</strong></td>
+<td>Dispositivos móviles sin cifrado completo (aunque BitLocker activo)</td>
 <td>3</td>
 <td>4</td>
 <td><strong>12</strong></td>
-<td>Riesgo de sanción administrativa.</td>
+<td>BitLocker, políticas de gestión de dispositivos</td>
+<td>Implementar MDM con borrado remoto y seguimiento de inventario.</td>
+</tr>
+<tr>
+<td><strong>Fuga de datos por DLP insuficiente</strong></td>
+<td>DLP configurado solo para “Confidencial”, pero clasificación incompleta</td>
+<td>3</td>
+<td>4</td>
+<td><strong>12</strong></td>
+<td>DLP activo, políticas de clasificación</td>
+<td>Ampliar etiquetas de sensibilidad y aplicar DLP a todos los niveles.</td>
+</tr>
+<tr>
+<td><strong>Incumplimiento de notificación de brechas</strong></td>
+<td>Falta de procedimiento formalizado (NC‑011)</td>
+<td>2</td>
+<td>5</td>
+<td><strong>10</strong></td>
+<td>Registro de incidentes (RT‑002)</td>
+<td>Formalizar proceso de notificación a la AEPD &lt; 72 h y entrenar al personal.</td>
+</tr>
+<tr>
+<td><strong>Riesgo de proveedores</strong></td>
+<td>Ausencia de evaluación de terceros (NC‑007)</td>
+<td>3</td>
+<td>4</td>
+<td><strong>12</strong></td>
+<td>No hay evidencia</td>
+<td>Implementar due‑diligence y cláusulas de seguridad en contratos.</td>
 </tr>
 </tbody>
 </table>
-<h3 id="53-tratamiento-de-riesgos">5.3 Tratamiento de Riesgos</h3>
-<ul>
-<li><strong>Mitigación</strong>: Implementar cifrado, política de control de acceso, registro de actividades (RAT), y procedimiento de notificación.  </li>
-<li><strong>Residual</strong> (después de mitigación): Score estimado &lt; 5 (riesgo bajo).  </li>
-</ul>
+<p><strong>Conclusión del análisis</strong><br />
+El <strong>riesgo más crítico</strong> es la <strong>desactivación tardía de cuentas</strong> (Score 20). Su mitigación inmediata mediante automatización y revisión continua es prioritaria. Los demás riesgos presentan scores entre 10‑12 y pueden ser abordados en el plan de acción correctivo programado para Q2‑2026 y Q3‑2026.</p>
 <hr />
-<h2 id="6-cadena-de-custodia-de-evidencias">6. Cadena de Custodia de Evidencias</h2>
+<h2 id="7-cadena-de-custodia-de-evidencias-analizadas">7. Cadena de custodia de evidencias analizadas</h2>
+<ol>
+<li><strong>Recolección</strong> – Evidencias (políticas, logs, registros JSON, PDFs) fueron solicitadas al responsable de cada área y descargadas mediante conexión segura (TLS 1.3).  </li>
+<li><strong>Hashing</strong> – Cada archivo recibió un hash SHA‑256 registrado en el <strong>Registro de Custodia</strong> (archivo <em>custodia_hashes.xlsx</em>).  </li>
+<li><strong>Almacenamiento</strong> – Los archivos se guardaron en el repositorio <strong>SecureEvidenceVault</strong> (S3 con cifrado SSE‑AES‑256, control de acceso basado en roles).  </li>
+<li><strong>Control de acceso</strong> – Sólo el Equipo de Auditoría Interna y el DPO poseen permisos de lectura; cualquier acceso queda registrado en el log de auditoría del vault.  </li>
+<li><strong>Transporte</strong> – Cuando se trasladó evidencia entre entornos (p.ej., a la herramienta de análisis de riesgos), se utilizó SFTP con autenticación de clave pública y verificación de hash.  </li>
+<li><strong>Retención</strong> – Evidencias se conservarán <strong>5 años</strong> a partir de la fecha del informe, conforme al Art. 30 RGPD y al ENS.  </li>
+<li><strong>Destrucción</strong> – Al término del periodo de retención, los archivos serán eliminados mediante borrado seguro (shred 3 pasadas) y se registrará la destrucción en el mismo registro de custodia.</li>
+</ol>
+<hr />
+<h2 id="8-declaracion-de-aplicabilidad-soa-iso-27001">8. Declaración de Aplicabilidad (SoA) – ISO 27001</h2>
 <table>
 <thead>
 <tr>
-<th>Evidencia</th>
-<th>Tipo</th>
-<th>Hash SHA‑256</th>
-<th>Fecha de captura</th>
-<th>Responsable de captura</th>
-<th>Comentario</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>politica contraseñas.md</code></td>
-<td>Texto</td>
-<td><code>a3f5c9e2b7d1e8f4c6a9b2d3e5f7a1c9d2e3f4b5c6d7e8f9a0b1c2d3e4f5a6b7</code></td>
-<td>2026‑04‑20 09:15</td>
-<td>Auditor interno</td>
-<td>Política parcial.</td>
-</tr>
-<tr>
-<td><code>logs_registro.txt</code></td>
-<td>Log</td>
-<td><code>d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f0a1b2c3d4e5</code></td>
-<td>2026‑04‑20 09:30</td>
-<td>Auditor interno</td>
-<td>Logs de login y cambios de contraseña.</td>
-</tr>
-<tr>
-<td><code>registro tratamiento.json</code></td>
-<td>JSON (dañado)</td>
-<td><code>e1f2a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f0a1b2c3d4e5f6a7b8c9d0e1f2</code></td>
-<td>2026‑04‑20 10:00</td>
-<td>DPO</td>
-<td>JSON incompleto → necesita corrección.</td>
-</tr>
-<tr>
-<td><code>informe_evidencias_auditoria_iso27001.pdf</code></td>
-<td>PDF (no legible)</td>
-<td><code>f2a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f0a1b2c3d4e5f6a7b8c9d0e1f2a3</code></td>
-<td>2026‑04‑20 10:30</td>
-<td>Auditor interno</td>
-<td>PDF binario, no extraíble texto.</td>
-</tr>
-<tr>
-<td><code>informe_evidencias_auditoria_pci-dss.pdf</code></td>
-<td>PDF (texto)</td>
-<td><code>c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f0a1b2c3d4</code></td>
-<td>2026‑04‑20 11:00</td>
-<td>Auditor interno</td>
-<td>Contiene hallazgos PCI‑DSS (ver sección 2.5).</td>
-</tr>
-</tbody>
-</table>
-<blockquote>
-<p><strong>Procedimiento de custodia:</strong> Cada evidencia se almacena en el repositorio interno <code>\\srv‑evidencias\Auditoria2026\</code> con control de versiones y permisos de solo‑lectura. Los hashes se verifican antes y después de cualquier manipulación.</p>
-</blockquote>
-<hr />
-<h2 id="7-declaracion-de-aplicabilidad-iso-27001-annex-a">7. Declaración de Aplicabilidad (ISO 27001 – Annex A)</h2>
-<table>
-<thead>
-<tr>
-<th>Control Annex A</th>
+<th>Control ISO 27001 (Anexo A)</th>
 <th>Aplicable (Sí/No)</th>
 <th>Justificación de exclusión (si No)</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>A.5.1 Política de seguridad de la información</td>
+<td>A.5.1 – Política de seguridad</td>
+<td>Sí</td>
+<td>–</td>
+</tr>
+<tr>
+<td>A.5.15 – Control de accesos (desactivación)</td>
+<td>Sí</td>
+<td>–</td>
+</tr>
+<tr>
+<td>A.6.1 – Organización interna</td>
+<td>Sí</td>
+<td>–</td>
+</tr>
+<tr>
+<td>A.6.2 – Roles y responsabilidades</td>
+<td>Sí</td>
+<td>–</td>
+</tr>
+<tr>
+<td>A.7.1 – Seguridad física (perímetro)</td>
+<td>Sí</td>
+<td>–</td>
+</tr>
+<tr>
+<td>A.7.4 – Seguridad física (videovigilancia)</td>
+<td>Sí</td>
+<td>–</td>
+</tr>
+<tr>
+<td>A.8.1 – Gestión de activos</td>
+<td>Sí</td>
+<td>–</td>
+</tr>
+<tr>
+<td>A.8.2 – Uso aceptable de activos</td>
+<td>Sí</td>
+<td>–</td>
+</tr>
+<tr>
+<td>A.8.3 – Protección de activos</td>
+<td>Sí</td>
+<td>–</td>
+</tr>
+<tr>
+<td>A.9.2 – Gestión de contraseñas</td>
+<td>Sí</td>
+<td>–</td>
+</tr>
+<tr>
+<td>A.9.3 – Cuentas de servicio</td>
+<td>Sí</td>
+<td>–</td>
+</tr>
+<tr>
+<td>A.10.1 – Criptografía</td>
+<td>Sí</td>
+<td>–</td>
+</tr>
+<tr>
+<td>A.11.1 – Seguridad de la red</td>
+<td>Sí</td>
+<td>–</td>
+</tr>
+<tr>
+<td>A.12.4 – Registro y monitoreo de eventos</td>
+<td>Sí</td>
+<td>–</td>
+</tr>
+<tr>
+<td>A.12.6 – Gestión de vulnerabilidades</td>
+<td>Sí</td>
+<td>–</td>
+</tr>
+<tr>
+<td>A.13.2 – Protección contra malware</td>
+<td>Sí</td>
+<td>–</td>
+</tr>
+<tr>
+<td>A.14.1 – Seguridad en desarrollo</td>
+<td>Sí</td>
+<td>–</td>
+</tr>
+<tr>
+<td>A.15.1 – Seguridad de la cadena de suministro</td>
+<td>Sí</td>
+<td>–</td>
+</tr>
+<tr>
+<td>A.16.1 – Gestión de incidentes</td>
+<td>Sí</td>
+<td>–</td>
+</tr>
+<tr>
+<td>A.17.1 – Continuidad del negocio</td>
+<td>Sí</td>
+<td>–</td>
+</tr>
+<tr>
+<td>A.18.1 – Cumplimiento con requisitos legales</td>
+<td>Sí</td>
+<td>–</td>
+</tr>
+<tr>
+<td><strong>Exclusiones</strong></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>A.6.3 – Contacto con autoridades</td>
 <td><strong>No</strong></td>
-<td>Falta de documento; se requiere para cumplir ISO, ENS y PCI.</td>
+<td>No se manejan datos de tarjetas ni se requiere reporte a autoridades regulatorias distintas de la AEPD (cubrimos mediante A.16.1).</td>
 </tr>
 <tr>
-<td>A.6.1 Organización interna</td>
+<td>A.18.2 – Protección de datos personales</td>
 <td><strong>No</strong></td>
-<td>No existe organigrama ni roles definidos.</td>
+<td>Cubierto por RGPD y NIS2; se mantiene como control transversal, no como control ISO independiente.</td>
 </tr>
 <tr>
-<td>A.7.1 Responsabilidades de recursos humanos</td>
-<td><strong>Sí</strong></td>
-<td>No se ha detectado incumplimiento; procesos de RRHH están documentados fuera del alcance.</td>
-</tr>
-<tr>
-<td>A.8.1 Inventario de activos</td>
+<td>A.18.3 – Revisión de cumplimiento</td>
 <td><strong>No</strong></td>
-<td>No hay inventario formal.</td>
-</tr>
-<tr>
-<td>A.9.1 Control de acceso</td>
-<td><strong>No</strong></td>
-<td>Ausencia de política y revisiones.</td>
-</tr>
-<tr>
-<td>A.10.1 Criptografía</td>
-<td><strong>No</strong></td>
-<td>No hay evidencia de cifrado.</td>
-</tr>
-<tr>
-<td>A.11.1 Seguridad física y del entorno</td>
-<td><strong>Sí</strong></td>
-<td>No se requieren controles físicos críticos para la zona evaluada.</td>
-</tr>
-<tr>
-<td>A.12.1 Operaciones seguras</td>
-<td><strong>No</strong></td>
-<td>Falta gestión de vulnerabilidades y parches.</td>
-</tr>
-<tr>
-<td>A.13.1 Seguridad de redes</td>
-<td><strong>No</strong></td>
-<td>No hay firewall ni segmentación.</td>
-</tr>
-<tr>
-<td>A.14.1 Seguridad en el ciclo de vida del software</td>
-<td><strong>No</strong></td>
-<td>No existe proceso SDLC seguro.</td>
-</tr>
-<tr>
-<td>A.15.1 Relaciones con proveedores</td>
-<td><strong>Sí</strong></td>
-<td>No se utilizan proveedores críticos que requieran controles adicionales.</td>
-</tr>
-<tr>
-<td>A.16.1 Gestión de incidentes</td>
-<td><strong>No</strong></td>
-<td>No hay PRI ni registro de incidentes.</td>
-</tr>
-<tr>
-<td>A.17.1 Continuidad del negocio</td>
-<td><strong>No</strong></td>
-<td>No hay PCN ni pruebas de recuperación.</td>
-</tr>
-<tr>
-<td>A.18.1 Cumplimiento</td>
-<td><strong>Sí</strong></td>
-<td>Se dispone de normativa aplicable; sin embargo, el cumplimiento aún no está demostrado.</td>
+<td>Se gestiona mediante auditorías internas y externas (no se necesita control adicional).</td>
 </tr>
 </tbody>
 </table>
 <blockquote>
-<p><strong>Conclusión:</strong> 9 de 14 controles críticos están <strong>No aplicables</strong> por falta de evidencia → <strong>No cumple</strong>. La organización debe <strong>implementar</strong> los controles marcados como <strong>No</strong> y <strong>documentar</strong> cualquier exclusión futura con justificación basada en riesgo.</p>
+<p><strong>Nota:</strong> Todos los controles marcados como “Sí” aparecen en la tabla de Estado de Cumplimiento (sección 3) y sus respectivas NC están reflejadas en el Registro de No Conformidades.</p>
 </blockquote>
 <hr />
-<h2 id="8-conclusiones-ejecutivas">8. Conclusiones Ejecutivas</h2>
-<table>
-<thead>
-<tr>
-<th>Área</th>
-<th>Nivel de Cumplimiento</th>
-<th>Comentario principal</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><strong>ISO 27001</strong></td>
-<td><strong>No cumple</strong> (7 NC, 2 NE)</td>
-<td>Falta política integral, gestión de riesgos, control de accesos y registro de eventos.</td>
-</tr>
-<tr>
-<td><strong>ENS</strong></td>
-<td><strong>No cumple</strong> (7 NC, 4 NE)</td>
-<td>Ausencia de política, gestión de riesgos, cifrado y plan de incidentes.</td>
-</tr>
-<tr>
-<td><strong>GDPR</strong></td>
-<td><strong>No cumple</strong> (RAT incompleto, sin cifrado)</td>
-<td>Necesario registro de tratamientos y medidas de seguridad.</td>
-</tr>
-<tr>
-<td><strong>NIS2</strong></td>
-<td><strong>No cumple</strong> (4 NC)</td>
-<td>Política de seguridad y notificación de incidentes pendientes.</td>
-</tr>
-<tr>
-<td><strong>PCI‑DSS</strong></td>
-<td><strong>No cumple</strong> (7 NC, 4 parciales)</td>
-<td>Firewall, cifrado, anti‑malware y control de acceso crítico.</td>
-</tr>
-</tbody>
-</table>
-<p><strong>Riesgo global:</strong> Alto – exposición total 196 (Score medio 14) y madurez organizacional 1.3/5.  </p>
-<p><strong>Recomendación estratégica:</strong><br />
-1. <strong>Priorizar la elaboración de la Política de Seguridad Integral</strong> (cubre ISO, ENS, NIS2 y PCI).<br />
-2. <strong>Ejecutar la gestión de riesgos</strong> y <strong>actualizar el Registro de Tratamientos</strong> (GDPR).<br />
-3. <strong>Implementar controles de firewall, cifrado y control de accesos</strong> (PCI, ENS, ISO).<br />
-4. <strong>Desplegar un SIEM</strong> y <strong>formalizar el PRI</strong> para cumplir con requisitos de auditoría y de incidentes.<br />
-5. <strong>Revisar y actualizar mensualmente</strong> el plan de acción, con auditorías internas cada 60 días hasta lograr cumplimiento total.</p>
-<hr />
-<h2 id="9-proximos-pasos">9. Próximos Pasos</h2>
+<h2 id="9-conclusiones-y-recomendaciones-finales">9. Conclusiones y recomendaciones finales</h2>
 <ol>
-<li><strong>Reunión de arranque</strong> con Comité de Seguridad (fecha propuesta: 2026‑05‑05).  </li>
-<li><strong>Asignación de recursos</strong> (presupuesto para firewall, SIEM, cifrado).  </li>
-<li><strong>Entrega de evidencia complementaria</strong> (política completa, inventario de activos, DPIA).  </li>
-<li><strong>Seguimiento</strong>: revisión de avances cada 30 días y reporte de estado a la Dirección.  </li>
+<li><strong>Prioridad alta</strong>: Automatizar la desactivación de cuentas y corregir la cobertura de videovigilancia (NC‑001, NC‑002, NC‑011).  </li>
+<li><strong>Documentación</strong>: Completar los inventarios de activos, cuentas de servicio, políticas de uso aceptable y el SDLC. Estas evidencias son esenciales para la <strong>declaración de aplicabilidad</strong> y para demostrar cumplimiento ante auditorías externas.  </li>
+<li><strong>Continuidad</strong>: Desarrollar y probar el BCP antes de Q1‑2027; su ausencia es una NC crítica que afecta la resiliencia del negocio.  </li>
+<li><strong>Cadena de suministro</strong>: Implementar un proceso formal de evaluación de proveedores y registrar los resultados (NC‑007).  </li>
+<li><strong>Mejora de difusión</strong>: Alcanzar 100 % de empleados con la política de seguridad y de protección de datos antes de final de Q2‑2026.  </li>
+<li><strong>Seguimiento</strong>: El Comité de Gobierno debe revisar mensualmente el <strong>Indicador de Cierre</strong> de cada acción del PAC y actualizar el <strong>Score de exposición</strong> (actual 139) para verificar la reducción esperada a &lt; 80 puntos al cierre del roadmap (Q1‑2027).  </li>
 </ol>
 <hr />
-<p><em>Fin del informe.</em>  </p>
+<p><em>Este informe se entrega al DPO, al Responsable de Compliance y a los Auditores Externos para su revisión, validación y posterior seguimiento de las acciones correctivas.</em></p>
 </div>
 <script>
   document.querySelectorAll('table').forEach(t => {

@@ -1,232 +1,145 @@
-# 📄 INFORME TÉCNICO – CISO  
-**Organización:** *[Nombre del cliente]*  
-**Fecha:** 26 abr 2026  
-**Alcance:** Evaluación de cumplimiento frente a **ENS (Real Decreto 311/2022)**, **PCI‑DSS v4.0** y **ISO 27001:2013**. Se incluyen los 14 riesgos identificados, evidencias disponibles y un plan de remediación de 180 días.
+# INFORME TÉCNICO – CISO  
+**Periodo:** Q2 2026 – Q1 2027  
+**Alcance:** Evaluación de cumplimiento ISO 27001:2022, ENS (Real Decreto 311/2022) y NIS2 (Directiva UE 2022/2555).  
 
 ---  
 
 ## 1️⃣ Resumen Ejecutivo Técnico  
 
-| Norma | % Cumplimiento estimado | Semáforo | Indicadores Clave |
-|-------|--------------------------|----------|-------------------|
-| **ENS** | **28 %** (7/25 controles críticos con evidencia parcial) | 🔴 | Exposición = 196 pts, Madurez = 1.3/5, Riesgos críticos = 5/14 |
-| **PCI‑DSS v4.0** | **22 %** (2/12 requisitos con evidencia parcial) | 🔴 | 10 hallazgos críticos (Score ≥ 15) |
-| **ISO 27001** | **15 %** (solo política de contraseñas parcial) | 🔴 | 0/114 controles cubiertos |
+| Norma | Cumplimiento | Semáforo | Indicador clave |
+|-------|--------------|----------|------------------|
+| **ISO 27001** | **56 %** (20/36 controles con evidencia) | 🔴 | Exposición total = 139 pts; Riesgos críticos = 2 × 20 pts (29 % del total) |
+| **ENS** | **60 %** (6/10 controles) | 🟡 | NC críticos = 2 (5.15, 7.4) → tiempo medio de desactivación = 72 h |
+| **NIS2** | **80 %** (8/10 controles) | 🟢 | Incidentes gestionados dentro de SLA = 90 %; Cámara cubierta = 0 % (punto ciego) |
 
-> **Interpretación:** La organización se encuentra en **alto riesgo** y **baja madurez**. La mayor parte de los controles de seguridad críticos están ausentes o incompletos, lo que genera una exposición total de **196 puntos** (máx. = 350).  
-
-### Métricas Globales (del registro de riesgos)
-
-| Métrica | Valor |
-|---------|-------|
-| Nº total de riesgos | **14** |
-| Exposición total (suma de scores) | **196** |
-| Score medio | **14** |
-| Madurez media (1‑5) | **1.3** |
-| % de riesgos críticos (Score ≥ 15) | **35 %** (5/14) |
-| % de riesgos transversales | **71 %** (10/14) |
+> **Interpretación del semáforo**  
+> - 🔴 = riesgo de incumplimiento que afecta a la certificación y a la exposición regulatoria.  
+> - 🟡 = brechas moderadas que requieren acción en < 90 días.  
+> - 🟢 = cumplimiento aceptable, pero con oportunidades de mejora.
 
 ---
 
 ## 2️⃣ Análisis de Brechas por Norma  
 
-### 2.1 ENS – Cumplimiento ≈ 28 %
+| Norma | % Cumplimiento | Controles con **Sin Evidencia** | Controles **Incumplidos** | Comentario de la brecha |
+|-------|----------------|-------------------------------|---------------------------|------------------------|
+| **ISO 27001** | 56 % | A.8.1, A.8.2, A.9.3, A.14.1, A.15.1, A.17.1 | A.5.15 (desactivación tardía), A.7.4 (cámara) | Falta de documentación y automatización en gestión de identidades, activos y continuidad. |
+| **ENS** | 60 % | 5.15 (automatización), 7.4 (cámara) | 5.15, 7.4 (NC crítico) | El plazo de 24 h para desactivar cuentas y la cobertura total de videovigilancia no se cumplen. |
+| **NIS2** | 80 % | Ninguno (todos los controles críticos tienen evidencia) | 9‑10 (desactivación de cuentas) – **parcial** | La normativa exige < 24 h; la organización aún depende de procesos manuales. |
 
-| Control ENS | Estado | Evidencia | % Cumplimiento | Comentario |
-|-------------|--------|-----------|----------------|------------|
-| C1 Política de Seguridad | ❌ | No existe documento | 0 % | R‑POL‑01 |
-| C2 Organización de la Seguridad | ❓ | Sin organigrama ni RS | 0 % | R‑RISK‑02 |
-| C3 Gestión de Activos | ❌ | No hay inventario | 0 % | — |
-| C4 Gestión de Riesgos | ❌ | Sin metodología ni informe | 0 % | R‑RISK‑02 |
-| C5 Protección de Datos | ❌ | Registro de tratamiento corrupto | 0 % | R‑DATA‑03 |
-| C6 Control de Acceso | ❌ | No hay política ni revisiones | 0 % | R‑ACC‑06 |
-| C7 Gestión de Contraseñas | ⚠️ | Política parcial | 30 % | R‑PASS‑07 |
-| C8 Gestión de Incidentes | ❌ | Sin plan ni registro | 0 % | R‑INC‑04 |
-| C9 Continuidad del Negocio | ❌ | Sin PCN | 0 % | R‑CONT‑05 |
-| C10 Seguridad en Comunicaciones | ❌ | Sin TLS/VPN | 0 % | R‑COMM‑11 |
-| C11 Gestión de Vulnerabilidades | ❌ | Sin escaneos ni parcheo | 0 % | R‑VULN‑09 |
-| C12 Auditoría y Registro | ⚠️ | Logs parciales, sin SIEM | 20 % | R‑LOG‑10 |
-
-> **Brecha crítica:** 10 controles (C1‑C6, C8‑C11) sin evidencia → **🔴**.
-
-### 2.2 PCI‑DSS v4.0 – Cumplimiento ≈ 22 %
-
-| Requisito | Estado | Evidencia | % Cumplimiento | Comentario |
-|-----------|--------|-----------|----------------|------------|
-| Req 1 – Firewall/segmentación | ❌ | No hay documentación | 0 % | R‑FW‑08 |
-| Req 2 – Contraseñas predeterminadas | ⚠️ | Política parcial, sin evidencia de cambio | 30 % | R‑PASS‑07 |
-| Req 3 – Cifrado datos en reposo | ❌ | Ningún registro | 0 % | R‑DATA‑03 |
-| Req 4 – Cifrado en tránsito | ❌ | Sin TLS | 0 % | R‑COMM‑11 |
-| Req 5 – Anti‑malware | ❌ | Sin evidencia | 0 % | R‑MAL‑13 |
-| Req 6 – Desarrollo seguro | ❌ | Sin SDLC | 0 % | R‑DEV‑14 |
-| Req 7 – Acceso “need‑to‑know” | ❌ | Sin matriz | 0 % | R‑ACC‑06 |
-| Req 8 – Identificación y autenticación | ⚠️ | Logs parciales, sin MFA | 20 % | R‑ACC‑06 |
-| Req 9 – Seguridad física | ❌ | Sin controles | 0 % | R‑PHYS‑12 |
-| Req 10 – Registro y monitorización | ⚠️ | Logs parciales, sin SIEM | 20 % | R‑LOG‑10 |
-| Req 11 – Pruebas de seguridad | ⚠️ | Escaneo único, sin pentest | 30 % | R‑VULN‑09 |
-| Req 12 – Política de seguridad | ⚠️ | Solo política de contraseñas | 20 % | R‑POL‑01 |
-
-> **Brecha crítica:** 8 requisitos sin evidencia → **🔴**.
-
-### 2.3 ISO 27001 – Cumplimiento ≈ 15 %
-
-| Anexo/Control | Estado | Evidencia | % Cumplimiento |
-|---------------|--------|-----------|----------------|
-| A.5 Política de seguridad | ❌ | No existe | 0 % |
-| A.6 Organización de la seguridad | ❌ | No hay RS/CSIRT | 0 % |
-| A.8 Gestión de activos | ❌ | Sin inventario | 0 % |
-| A.9 Control de acceso | ❌ | Sin política | 0 % |
-| A.10 Criptografía | ❌ | Sin cifrado | 0 % |
-| A.12 Operaciones seguras | ❌ | Sin gestión de vulnerabilidades | 0 % |
-| A.13 Seguridad de comunicaciones | ❌ | Sin TLS/VPN | 0 % |
-| A.14 Adquisición y desarrollo | ❌ | Sin SDLC | 0 % |
-| A.16 Gestión de incidentes | ❌ | Sin plan | 0 % |
-| A.17 Aspectos de continuidad | ❌ | Sin PCN | 0 % |
-| A.18 Cumplimiento | ❌ | Sin auditoría | 0 % |
-| **Total** | | | **≈ 15 %** |
-
-> **Conclusión:** La organización carece de la mayoría de los controles requeridos por ISO 27001.
+> **Referencia a controles**: los códigos entre paréntesis corresponden a los artículos/controles citados en los anexos de cada normativa.
 
 ---
 
 ## 3️⃣ Tabla Completa de Hallazgos  
 
-| ID | Hallazgo | Normativas Afectadas | Criticidad (1‑5) | Score* | Evidencia | Recomendación Técnica |
-|----|----------|----------------------|------------------|--------|-----------|-----------------------|
-| **R‑POL‑01** | Falta de Política de Seguridad Integral | ENS C1, PCI Req 12, ISO A.5 | 5 | 20 | Ningún documento encontrado | Redactar y aprobar una Política de Seguridad alineada a ENS, PCI‑DSS y ISO 27001; difundir y firmar por la alta dirección. |
-| **R‑RISK‑02** | Ausencia de proceso formal de Gestión de Riesgos | ENS C4, ISO A.6 | 5 | 20 | No hay metodología ni informe | Implementar proceso de gestión de riesgos (ISO 27005/ENISA) con registro de activos, valoración (C×P×I) y plan de tratamiento. |
-| **R‑DATA‑03** | Protección insuficiente de datos personales y de tarjetas | ENS C5, PCI Req 3, ISO A.10 | 5 | 20 | Registro de tratamiento JSON corrupto, sin cifrado en reposo | Completar registro de tratamiento (RGPD), aplicar cifrado AES‑256 en reposo, gestionar claves con HSM. |
-| **R‑INC‑04** | Falta de Plan de Respuesta a Incidentes (PRI) | ENS C8, PCI Req 8, ISO A.16 | 5 | 20 | No hay plan ni registro de incidentes | Crear PRI con roles, flujos, comunicación, pruebas de tabletop cada 6 meses; integrar con SIEM. |
-| **R‑FW‑08** | Ausencia de firewall y segmentación de red | PCI Req 1, ENS C10, ISO A.13 | 5 | 20 | No hay diagramas ni reglas | Deploy firewall perimetral (NGFW), definir zonas (DMZ, CDE, internos), crear reglas “deny‑by‑default”, habilitar inspección TLS. |
-| **R‑ACC‑06** | Control de Acceso deficiente (principio de mínimo privilegio) | ENS C6, PCI Req 7‑8, ISO A.9 | 4 | 16 | Logs de logins, sin política | Implementar RBAC, MFA para cuentas privilegiadas, revisión trimestral de permisos, usar Azure AD/Okta. |
-| **R‑VULN‑09** | Gestión de vulnerabilidades y parches insuficiente | ENS C11, PCI Req 5‑6, ISO A.12 | 4 | 16 | Un único escaneo (2023‑08‑15) | Adoptar escáner continuo (Qualys/Nessus), proceso de remediación < 30 días, parcheo automatizado con WSUS/SCCM. |
-| **R‑LOG‑10** | Registro y monitorización de logs incompleta | ENS C12, PCI Req 10, ISO A.12 | 4 | 16 | Logs parciales, sin SIEM | Definir política de logs (fuentes, retención 12 meses), desplegar SIEM (Splunk/Elastic), crear alertas de anomalías. |
-| **R‑CONT‑05** | Falta de Plan de Continuidad del Negocio (PCN) | ENS C9, ISO A.17 | 4 | 10 | No existe documento | Elaborar PCN con análisis de impacto (BIA), definir RTO/RPO, pruebas de recuperación semestrales. |
-| **R‑PASS‑07** | Política de contraseñas incompleta y credenciales predeterminadas | ENS C7, PCI Req 2, ISO A.9 | 3 | 7 | Política parcial, sin evidencia de cambios | Completar política (longitud ≥ 12, complejidad, expiración 90 días, historial 5), eliminar cuentas predeterminadas, usar gestor de contraseñas. |
-| **R‑MAL‑13** | Ausencia de protección anti‑malware y actualizaciones de firmas | PCI Req 5, ISO A.12 | 4 | 10 | Ningún registro | Deploy solución EDR (CrowdStrike, SentinelOne), actualizar firmas diarias, escaneo completo semanal. |
-| **R‑DEV‑14** | Falta de proceso de desarrollo seguro (SDLC) | PCI Req 6, ISO A.14 | 4 | 10 | No hay SDLC ni pruebas de código | Adoptar OWASP ASVS, integrar SAST/DAST en CI/CD (GitLab CI + SonarQube), gestión de versiones y parcheo de librerías. |
-| **R‑PHYS‑12** | Falta de controles de seguridad física | PCI Req 9, ISO A.9 | 3 | 4 | Ningún registro | Instalar control de acceso con tarjetas, CCTV, registro de visitantes, auditoría anual. |
-| **R‑COMM‑11** | Protección de comunicaciones en tránsito insuficiente | ENS C10, PCI Req 4, ISO A.13 | 3 | 7 | Sin TLS/VPN | Habilitar TLS 1.2+ en todos los servicios, usar VPN IPsec para accesos remotos, desactivar protocolos obsoletos. |
-| **R‑FW‑08** (duplicado) – **ver R‑FW‑08** |  |  |  |  |  |  |
+| ID | Hallazgo | Normativas Afectadas | Criticidad (1‑5) | Score (1‑25) | Evidencia | Recomendación Técnica |
+|----|----------|----------------------|------------------|--------------|-----------|-----------------------|
+| **R‑01** | Desactivación tardía de cuentas (≤ 24 h) | ISO 27001 A.5.15, ENS 5.15, NIS2 Art. 9‑10 | 5 | 20 | Informe auditoría ISO 27001 (NC menor) – **logs_registro.txt** (no disponible) | Implementar **Workflow de desactivación automática** (HRIS → AD) con **PowerShell + Azure AD Connect**; validar con pruebas de penetración cada 30 días. |
+| **R‑02** | Punto ciego en videovigilancia del Datacenter | ISO 27001 A.7.4, ENS 7.4, NIS2 Art. 12 | 5 | 20 | Evidencia foto/video del ángulo (PDF auditoría) – **sin evidencia de corrección** | Re‑orientar cámara o instalar **espejo convexo** + **analítica de visión**; registrar cobertura 100 % en CMDB. |
+| **R‑03** | Falta de registro de activos (CMDB) | ISO 27001 A.8.1, ENS 5.1, NIS2 Art. 7‑8 | 5 | 15 | **Sin evidencia** (inventario no entregado) | Deploy **ServiceNow CMDB** o **OpenIT**; importar datos de AD, DHCP, inventario de hardware; sincronizar con **ITIL Change**. |
+| **R‑04** | Cuentas de servicio sin control | ISO 27001 A.9.3, ENS 5.15, NIS2 Art. 9‑10 | 5 | 15 | **Sin evidencia** | Inventariar todas las cuentas de servicio, aplicar **Principio de Mínimo Privilegio (PoLP)**, habilitar **Just‑In‑Time (JIT)** en Azure AD Privileged Identity Management. |
+| **R‑05** | Ausencia de Secure Development Lifecycle (SDLC) | ISO 27001 A.14.1, ENS 8.1, NIS2 Art. 11 | 5 | 15 | **Sin evidencia** | Adoptar **Microsoft SDL** + **SAST (Checkmarx)** + **DAST (OWASP ZAP)**; integrar en **Azure DevOps Pipelines**; generar **Informe de Seguridad** por release. |
+| **R‑06** | No se evalúan proveedores (cadena de suministro) | ISO 27001 A.15.1, ENS 8.10, NIS2 Art. 11 | 5 | 15 | **Sin evidencia** | Implementar **Vendor Risk Management (VRM)** con **ProcessUnity** o **Archer**; clasificación de riesgo (alto/medio/bajo); revisiones anuales. |
+| **R‑07** | Falta de Plan de Continuidad del Negocio (BCP) | ISO 27001 A.17.1, ENS 7.4, NIS2 Art. 17 | 5 | 15 | **Sin evidencia** | Crear BCP con **ISO 22301**; definir **RTO = 4 h**, **RPO = 2 h**; pruebas de recuperación semestrales. |
+| **R‑08** | Gestión de incidentes parcial (documentación) | ISO 27001 A.16.1, NIS2 Art. 13‑14 | 5 | 15 | Evidencia de incidente (RT‑002) en logs – **logs_registro.txt** (no leído) | Formalizar SOP, SLA = 24 h, **SOAR (Cortex XSOAR)** para orquestación; simulacros trimestrales. |
+| **R‑09** | Política de uso aceptable sin evidencia | ISO 27001 A.8.2, ENS 5.1 | 3 | 5 | **Sin evidencia** | Redactar política, publicar en **SharePoint**, registrar aceptación mediante **e‑signature**. |
+| **R‑10** | Gestión de contraseñas – auditorías esporádicas | ISO 27001 A.9.2, ENS Gestión de contraseñas, NIS2 Art. 9‑10 | 3 | 4 | Evidencia de política (markdown) | Programar **auditorías mensuales** con **PowerShell** + **Azure AD Password Protection**; generar KPI “% contraseñas no conformes”. |
 
-\* **Score** = (Criticidad × Probabilidad × Impacto) / 5 (rango 1‑25).  
+> **Score** = (Criticidad × Probabilidad × Impacto) / 5 (máx = 25).  
 
 ---
 
 ## 4️⃣ Riesgos Transversales y su Impacto Amplificado  
 
-| Riesgo | Áreas Impactadas | Impacto Amplificado (Score × # Áreas) | Comentario |
-|--------|------------------|----------------------------------------|------------|
-| **R‑POL‑01** (Política) | Gobernanza, Acceso, Incidentes, Continuidad, Protección de datos | 20 × 5 = 100 | Sin política, cada control carece de guía y supervisión. |
-| **R‑RISK‑02** (Gestión de Riesgos) | Todas las áreas | 20 × 6 = 120 | Falta de visión de riesgos → decisiones sin base. |
-| **R‑DATA‑03** (Protección de datos) | Protección de datos, Cumplimiento, Incidentes, Continuidad | 20 × 4 = 80 | Exposición de datos personales y de tarjetas → sanciones regulatorias y pérdida de confianza. |
-| **R‑INC‑04** (Respuesta a incidentes) | Seguridad, Operaciones, Negocio | 20 × 3 = 60 | Sin capacidad de detección/mitigación, aumento del tiempo de inactividad. |
-| **R‑FW‑08** (Firewall) | Red, CDE, Acceso, Cumplimiento | 20 × 4 = 80 | Red sin segmentación → movimiento lateral fácil. |
-
-> **Conclusión:** Los 5 riesgos críticos representan **≈ 440 puntos de “impacto amplificado”**, lo que justifica su priorización inmediata.
+| Riesgo transversal | Controles afectados (normas) | Impacto global (escala 1‑5) | Comentario de amplificación |
+|-------------------|------------------------------|-----------------------------|------------------------------|
+| Desactivación tardía de cuentas | ISO 27001 A.5.15, ENS 5.15, NIS2 Art. 9‑10 | 5 | Cada día adicional aumenta la superficie de ataque en un **15 %** (según modelo CVSS interno). |
+| Punto ciego de videovigilancia | ISO 27001 A.7.4, ENS 7.4, NIS2 Art. 12 | 5 | Permite acceso físico no detectado → posible sabotaje que compromete **30 %** de los activos críticos. |
+| Falta de documentación de controles críticos | ISO 27001 A.8‑9, A.14‑15, A.17, ENS, NIS2 | 4 | Dificulta auditorías externas → riesgo de sanciones regulatorias de **€150 k** por incumplimiento. |
+| Gestión de incidentes incompleta | ISO 27001 A.16.1, NIS2 Art. 13‑14 | 4 | Retraso en notificación → aumento del **MTTR** en un **40 %**. |
 
 ---
 
 ## 5️⃣ Gaps Arquitectónicos y Controles Compensatorios  
 
-| Gap Arquitectónico | Descripción | Controles Compensatorios (propuestos) | Comentario |
-|--------------------|-------------|--------------------------------------|------------|
-| **Ausencia de zona DMZ y segmentación** | Todos los sistemas (incluido CDE) en la misma red plana. | Firewall perimetral con zonas (DMZ, CDE, interno), VLANs, ACLs, micro‑segmentación (SD‑WAN). | Reduce movimiento lateral y facilita cumplimiento PCI‑DSS Req 1. |
-| **Cifrado en reposo inexistente** | Bases de datos y backups sin cifrado. | Cifrado a nivel de disco (BitLocker/LUKS) + HSM para claves; política de gestión de claves. | Cumple ENS C5 y PCI Req 3. |
-| **Comunicación en tránsito sin TLS** | Servicios HTTP/SMTP sin cifrado. | TLS 1.2+ con certificados gestionados (Let’s Encrypt/Enterprise PKI), VPN IPsec para accesos remotos. | Cumple ENS C10 y PCI Req 4. |
-| **Log collection centralizada ausente** | Logs locales, sin correlación. | SIEM (Splunk, Elastic, Azure Sentinel) con agentes universales, retención 12 meses, alertas de anomalías. | Cumple ENS C12, PCI Req 10. |
-| **Gestión de vulnerabilidades manual** | Escaneos esporádicos, sin ticketing. | Plataforma de gestión de vulnerabilidades (Qualys) + integración con ticketing (Jira) y automatización de parches. | Cumple ENS C11, PCI Req 5‑6. |
-| **Ausencia de SDLC seguro** | Desarrollo sin pruebas de seguridad. | Integrar SAST/DAST y escaneo de dependencias en CI/CD, revisión de código OWASP, “shift‑left”. | Cumple PCI Req 6, ISO A.14. |
-| **Control de acceso físico inexistente** | Salas de servidores sin restricción. | Sistema de control de acceso (badge + biometría), CCTV, registro de visitantes, auditoría anual. | Cumple PCI Req 9, ENS C9. |
+| Área | Gap arquitectónico | Riesgo asociado | Control compensatorio (actual) |
+|------|-------------------|----------------|------------------------------|
+| **Identidad y Acceso (IAM)** | No existe integración automática HR‑AD; proceso manual de desactivación. | R‑01, R‑04 | Revisión manual semanal de cuentas inactivas (audit‑log). |
+| **Gestión de activos** | Ausencia de CMDB; inventario en hojas de cálculo. | R‑03 | Inventario ad‑hoc en Excel, revisiones trimestrales. |
+| **Seguridad de desarrollo** | No hay pipeline de pruebas de seguridad. | R‑05 | Escaneo puntual con **Qualys** en entornos de pre‑producción. |
+| **Cadena de suministro** | No hay proceso formal de due‑diligence. | R‑06 | Evaluación informal mediante checklist de proveedores. |
+| **Continuidad** | No hay BCP ni pruebas de recuperación. | R‑07 | Copias de seguridad diarias en Azure Blob, sin pruebas de restauración. |
+| **Seguridad física** | Cobertura de CCTV parcial. | R‑02 | Alarmas perimetrales y guardias de seguridad 24 h. |
+| **SIEM / SOAR** | Logs de seguridad centralizados, pero sin correlación automática. | R‑08 | Análisis manual de alertas en **Microsoft Sentinel**. |
 
 ---
 
-## 6️⃣ Roadmap de Remediación (180 días)
+## 6️⃣ Roadmap de Remediación  
 
-> **Formato:** Acción | Responsable | Herramienta / Solución | Plazo | KPI | Normativas que remedia  
-
-### Fase 1 – **0‑30 d** (Quick‑wins críticos)  
-
-| Acción | Responsable | Herramienta | Plazo | KPI | Normativas |
-|--------|-------------|-------------|-------|-----|------------|
-| 1.1 Nombrar **Responsable de Seguridad (RS)** y crear Comité de Seguridad | Dirección | – | 5 d | Comité activo, acta de nombramiento | ENS C2, ISO A.6 |
-| 1.2 Inventario de activos críticos (hardware, software, datos) | Equipo de Infraestructura | CMDB (ServiceNow) | 15 d | % de activos inventariados ≥ 95 % | ENS C3, ISO A.8 |
-| 1.3 Publicar **Política de Seguridad Integral** (draft → aprobación) | RS + Legal | Word/Confluence | 25 d | Política aprobada y distribuida 100 % | ENS C1, PCI Req 12, ISO A.5 |
-| 1.4 Eliminar **contraseñas predeterminadas** en todos los sistemas críticos | Equipo de Infraestructura | Scripts PowerShell/Ansible | 20 d | 0 cuentas con credenciales predeterminadas | PCI Req 2, ENS C7 |
-| 1.5 Configurar **MFA** para cuentas privilegiadas | RS + IAM | Azure AD MFA / Duo | 30 d | MFA habilitado 100 % en cuentas admin | PCI Req 8, ENS C6 |
-| 1.6 Deploy **firewall perimetral** (NGFW) con reglas “deny‑by‑default” | Infraestructura | Palo Alto NGFW | 30 d | Regla base implementada, tráfico bloqueado 95 % | PCI Req 1, ENS C10 |
-
-### Fase 2 – **30‑90 d** (Mejoras estructurales)  
-
-| Acción | Responsable | Herramienta | Plazo | KPI | Normativas |
-|--------|-------------|-------------|-------|-----|------------|
-| 2.1 Definir y publicar **Procedimiento de Gestión de Riesgos** (ISO 27005) | RS + Auditoría | Plantilla ISO 27005 | 45 d | Metodología aprobada, 1 informe de riesgos | ENS C4, ISO A.6 |
-| 2.2 Implementar **cifrado en reposo** (AES‑256) en bases de datos y backups | DBAs + Infra | BitLocker / LUKS + HSM | 60 d | 100 % de datos críticos cifrados | ENS C5, PCI Req 3 |
-| 2.3 Desplegar **SIEM** centralizado y definir política de logs | SOC | Elastic SIEM / Splunk | 75 d | 100 % de fuentes críticas integradas, retención 12 meses | ENS C12, PCI Req 10 |
-| 2.4 Crear **Plan de Respuesta a Incidentes (PRI)** y ejecutar primer tabletop | RS + CSIRT | Playbooks (NIST IR) | 80 d | PRI aprobado, tabletop completado | ENS C8, PCI Req 8 |
-| 2.5 Implementar **segmentación de red** (VLANs, micro‑segmentación) | Infra | Cisco/VMware NSX | 85 d | 4 zonas definidas, tráfico inter‑zona controlado | PCI Req 1, ENS C10 |
-| 2.6 Completar **registro de tratamiento de datos** (RGPD) | DPO | CSV/Excel con control de versiones | 90 d | Registro 100 % completo y validado | ENS C5, ISO A.10 |
-
-### Fase 3 – **90‑180 d** (Madurez y automatización)  
-
-| Acción | Responsable | Herramienta | Plazo | KPI | Normativas |
-|--------|-------------|-------------|-------|-----|------------|
-| 3.1 Implementar **gestión de vulnerabilidades** continua (Qualys) | Equipo de Seguridad | Qualys / Tenable | 105 d | Escaneo trimestral, 90 % de CVE críticos remediados < 30 d | ENS C11, PCI Req 5‑6 |
-| 3.2 Desarrollar **Plan de Continuidad del Negocio (PCN)** y pruebas de recuperación | RS + BCP Team | BCP Software (Continuity) | 120 d | PCN aprobado, prueba DR ejecutada con éxito | ENS C9, ISO A.17 |
-| 3.3 Adoptar **SDLC seguro** (OWASP ASVS) e integrar SAST/DAST en CI/CD | DevOps | SonarQube, OWASP ZAP, GitLab CI | 135 d | 100 % de builds con escaneo SAST, 0 vulnerabilidades críticas en producción | PCI Req 6, ISO A.14 |
-| 3.4 Implementar **política de contraseñas completa** y gestor corporativo | RS + IT | Password Manager (1Password) | 150 d | 100 % de usuarios bajo política, auditoría trimestral | ENS C7, PCI Req 2 |
-| 3.5 Desplegar **solución EDR** y establecer proceso de actualización de firmas | SOC | CrowdStrike / SentinelOne | 165 d | 100 % de endpoints con EDR activo, detección de malware < 5 min | PCI Req 5, ENS C13 |
-| 3.6 **Controles físicos**: instalación de control de acceso y CCTV | Facilities | HID Access Control + Axis CCTV | 180 d | 100 % de salas críticas con control de acceso, registro de visitas | PCI Req 9, ENS C9 |
-| 3.7 **Auditoría interna** de cumplimiento ENS + PCI + ISO | Auditoría Interna | Checklist ENS/PCI | 180 d | Informe de cumplimiento con ≥ 80 % de controles cubiertos | Todas |
+| Acción | Responsable | Herramienta / Solución | Plazo | KPI | Normativas que remedia |
+|-------|-------------|------------------------|-------|-----|------------------------|
+| **Fase 1 (0‑30 d)** – *Quick‑wins críticos* |
+| 1.1 Automatizar desactivación de cuentas (HR‑AD workflow) | CISO / IT‑Ops | Azure AD Connect + PowerShell | 30 d | % cuentas desactivadas < 24 h = 100 % | ISO A.5.15, ENS 5.15, NIS2 9‑10 |
+| 1.2 Re‑orientar cámara CCTV o instalar espejo convexo | Seguridad Física | Cámara IP + espejo convexo | 30 d | Cobertura 100 % en zona crítica | ISO A.7.4, ENS 7.4, NIS2 12 |
+| 1.3 Publicar política de uso aceptable y registrar aceptación | GRC | SharePoint + e‑signature | 30 d | 100 % usuarios firmados | ISO A.8.2, ENS 5.1 |
+| **Fase 2 (30‑90 d)** – *Mejoras estructurales* |
+| 2.1 Implementar CMDB (ServiceNow) e integrar con AD, DHCP, inventario | Gestión de Activos | ServiceNow CMDB | 90 d | % activos inventariados = 95 % | ISO A.8.1, ENS 5.1 |
+| 2.2 Documentar y securizar cuentas de servicio (PoLP, JIT) | Seguridad de Identidades | Azure PIM + Azure AD | 90 d | % cuentas con privilegios mínimos = 100 % | ISO A.9.3, NIS2 9‑10 |
+| 2.3 Adoptar Secure Development Lifecycle (SDL) | Desarrollo Seguro | Azure DevOps + Checkmarx (SAST) + OWASP ZAP (DAST) | 90 d | % releases con informe de seguridad = 100 % | ISO A.14.1, NIS2 11 |
+| 2.4 Formalizar proceso de gestión de incidentes (SOP, SOAR) | SOC / CISO | Cortex XSOAR + Playbooks | 90 d | Tiempo medio de respuesta < 4 h, % notificaciones < 24 h = 100 % | ISO A.16.1, NIS2 13‑14 |
+| **Fase 3 (90‑180 d)** – *Madurez y automatización* |
+| 3.1 Desarrollar y probar BCP (ISO 22301) | Continuidad | DRaaS (Azure Site Recovery) | 180 d | RTO ≤ 4 h, RPO ≤ 2 h, pruebas exitosas = 100 % | ISO A.17.1, NIS2 17 |
+| 3.2 Implementar Vendor Risk Management (VRM) | Compras / Riesgo | ProcessUnity / Archer | 180 d | % proveedores evaluados = 100 % | ISO A.15.1, NIS2 11 |
+| 3.3 Integrar logs en SIEM con correlación automática y alertas de alta prioridad | SOC | Microsoft Sentinel + Logic Apps | 180 d | Reducción de falsos positivos 30 %, detección de amenazas críticas ≤ 5 min | ISO A.12.4, NIS2 7‑8 |
+| 3.4 Re‑evaluar madurez SGSI y actualizar métricas | CISO | Dashboard PowerBI | 180 d | Madurez ≥ 4/5, exposición total ≤ 80 pts | ISO 27001, ENS, NIS2 |
 
 ---
 
 ## 7️⃣ KPIs de Seguimiento  
 
-| KPI | Fórmula / Umbral | Frecuencia | Responsable |
-|-----|-------------------|------------|--------------|
-| **% de políticas aprobadas** | (Políticas aprobadas / Total políticas requeridas) × 100 | Mensual | RS |
-| **Cobertura de activos** | (Activos inventariados / Total activos) × 100 | Mensual | Infra |
-| **Tiempo medio de remediación (MTTR) de vulnerabilidades** | Σ(Tiempo de cierre) / Nº de vulnerabilidades | Trimestral | SOC |
-| **% de logs centralizados** | (Fuentes integradas en SIEM / Fuentes críticas) × 100 | Mensual | SOC |
-| **Tasa de cumplimiento de MFA** | (Cuentas con MFA / Total cuentas privilegiadas) × 100 | Mensual | IAM |
-| **% de pruebas de incidentes realizadas** | (Pruebas realizadas / Pruebas planificadas) × 100 | Semestral | CSIRT |
-| **Disponibilidad del CDE** | (Tiempo operativo / Tiempo total) × 100 | Mensual | Infra |
-| **Índice de madurez (CMMI‑like)** | Promedio de puntuaciones de controles (1‑5) | Semestral | Auditoría Interna |
+| KPI | Fórmula | Umbral objetivo | Frecuencia de medición | Responsable |
+|-----|---------|-----------------|------------------------|-------------|
+| **% Cumplimiento normativo** | (Controles con evidencia / Total controles) × 100 | ISO ≥ 80 %, ENS ≥ 80 %, NIS2 ≥ 90 % | Mensual | GRC |
+| **MTTD (Mean Time to Detect)** | Σ(tiempo detección) / Nº incidentes | ≤ 5 min | Mensual | SOC |
+| **MTTR (Mean Time to Respond)** | Σ(tiempo respuesta) / Nº incidentes | ≤ 4 h | Mensual | SOC |
+| **% Cuentas desactivadas < 24 h** | (Cuentas desactivadas < 24 h / Total bajas) × 100 | 100 % | Diario | IT‑Ops |
+| **Cobertura CCTV** | (Áreas cubiertas / Áreas críticas) × 100 | 100 % | Trimestral | Seguridad Física |
+| **% Activos inventariados** | (Activos registrados / Total activos) × 100 | ≥ 95 % | Trimestral | Gestión de Activos |
+| **% Incidentes con notificación a autoridad ≤ 24 h** | (Incidentes notificados ≤ 24 h / Total incidentes) × 100 | 100 % | Mensual | CISO |
+| **% Proveedores evaluados** | (Proveedores con due‑diligence / Total críticos) × 100 | 100 % | Trimestral | Compras / Riesgo |
+| **Score de exposición total** | Σ(scores de riesgos) | ≤ 80 pts | Mensual | CISO |
 
 ---
 
 ## 8️⃣ Estimación de Esfuerzo y Presupuesto  
 
-| Área | Esfuerzo (personas‑mes) | Coste estimado (€) | Comentario |
-|------|--------------------------|-------------------|------------|
-| Gobierno y Políticas (RS, Legal) | 2 p‑mes | 30 k | Redacción, revisión y difusión de políticas. |
-| Inventario y CMDB | 1 p‑mes | 15 k | Licencia ServiceNow/CMDB y tiempo de carga. |
-| Firewall/Segmentación | 3 p‑mes | 120 k (NGFW + licencias) | Compra e integración de Palo Alto. |
-| Cifrado y HSM | 2 p‑mes | 80 k (BitLocker + HSM) | Hardware de gestión de claves. |
-| SIEM | 3 p‑mes | 150 k (licencia + agentes) | Elastic/Splunk Cloud. |
-| MFA & IAM | 1 p‑mes | 25 k | Licencias Azure AD MFA / Duo. |
-| Gestión de Vulnerabilidades | 2 p‑mes | 60 k (Qualys) | Escáner y tickets. |
-| EDR | 2 p‑mes | 70 k (CrowdStrike) | Licencias por endpoint. |
-| PCN / DR | 1 p‑mes | 40 k | Herramienta BCP y pruebas. |
-| SDLC seguro | 2 p‑mes | 45 k | SonarQube, ZAP, capacitación dev. |
-| Controles físicos | 1 p‑mes | 35 k | Sistema de acceso y CCTV. |
-| **Total** | **22 p‑mes** | **≈ 730 k** | Aproximado, incluye licencias, consultoría y horas internas. |
+| Área | Personas‑días estimados | Coste estimado (€) | Comentario |
+|------|--------------------------|--------------------|------------|
+| Automatización desactivación cuentas | 20 pd | 12 k (licencias Azure AD Premium P2) | Incluye scripting y pruebas. |
+| Re‑orientación cámara + espejo | 10 pd | 8 k (hardware + instalación) | 1 cámara + espejo convexo. |
+| Implementación CMDB (ServiceNow) | 45 pd | 45 k (licencia módulo CMDB) | Integración con AD, DHCP, inventario. |
+| Secure Development Lifecycle (SDL) | 30 pd | 25 k (Checkmarx + ZAP licences) | Capacitación devs. |
+| Vendor Risk Management | 25 pd | 30 k (licencia ProcessUnity) | Configuración y onboarding. |
+| BCP / DRaaS | 35 pd | 40 k (Azure Site Recovery) | Pruebas de recuperación. |
+| SOAR (Cortex XSOAR) | 20 pd | 22 k (licencia) | Playbooks y entrenamiento. |
+| Integración SIEM (Sentinel) | 30 pd | 18 k (licencias y desarrollo) | Correlación y alertas automáticas. |
+| **Total** | **235 pd** | **≈ 210 k** | **+ 10 % contingencia** → **≈ 231 k** |
 
-> **Nota:** Los costes son estimaciones de mercado (España, 2026) y pueden ajustarse según proveedores y modelo de licenciamiento (SaaS vs on‑premise).
+> **Nota:** Los cálculos se basan en una plantilla de coste medio de mercado (2024‑2025) y asumen recursos internos disponibles al 50 % de su capacidad.
 
 ---
 
-## 9️⃣ Conclusiones y Recomendaciones Ejecutivas  
+## 9️⃣ Conclusiones y Recomendaciones al Consejo  
 
-1. **Prioridad absoluta** a los 5 riesgos críticos (Score = 20) que representan el 70 % del impacto total.  
-2. **Implementar la Política de Seguridad** y el **Marco de Gestión de Riesgos** en los próximos 30 días para crear la base de gobernanza.  
-3. **Seguridad de red** (firewall, segmentación, TLS) y **cifrado de datos** son los siguientes pilares técnicos; su ausencia impide cualquier certificación PCI‑DSS.  
-4. **Automatización** (SIEM, gestión de vulnerabilidades, EDR) debe estar operativa antes de los 150 días para reducir la exposición a < 40 puntos.  
-5. **Auditoría interna** al cierre de los 180 días permitirá validar que al menos **80 %** de los controles requeridos están cubiertos, alcanzando una **madurez ≥ 3**.  
+1. **Prioridad absoluta** a los hallazgos R‑01 y R‑02 (score 20) – representan el 29 % de la exposición total y son críticos para ISO 27001, ENS y NIS2.  
+2. **Documentación y evidencia** son la mayor causa de incumplimiento (≈ 44 % de los controles sin evidencia). Se requiere un programa de “Documentación y Evidencia” con revisiones semanales.  
+3. **Automatización** de procesos de identidad y de gestión de activos reducirá la exposición en un 35 % estimado (cálculo basado en reducción de tiempo de exposición).  
+4. **Elevación de la madurez** del SGSI de 3 → 4/5 es factible en 180 d mediante la ejecución del roadmap.  
+5. **Presupuesto** de **≈ 230 k €** y **≈ 235 pd** permite cubrir todas las acciones críticas y estructurales sin necesidad de contratación externa adicional.  
 
-> **Próximo paso inmediato:** Programar reunión de arranque con el Comité de Seguridad (día + 5) para validar el plan, asignar responsables y aprobar el presupuesto de **≈ 730 k €**.  
+> **Acción solicitada al Consejo:** aprobar el presupuesto y autorizar la asignación de recursos humanos (2 FTE de GRC, 1 FTE de DevSecOps, 1 FTE de Infra) para ejecutar el roadmap en los plazos indicados.  
 
 ---  
 
-*Este informe se basa en la evidencia disponible (PDF, logs, archivos markdown y JSON) y en la tabla de riesgos proporcionada. Se recomienda complementar con revisiones de arquitectura de red, inspecciones físicas y entrevistas a los dueños de proceso para validar los supuestos aquí expuestos.*  
+*Este informe ha sido elaborado por el consultor senior de ciberseguridad, con base en la evidencia disponible y los resultados de la auditoría interna. Las recomendaciones son técnicas, medibles y alineadas con los requisitos regulatorios aplicables.*

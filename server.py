@@ -11,10 +11,25 @@ from fastapi import FastAPI, UploadFile, File, HTTPException
 from fastapi.responses import HTMLResponse, FileResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
+from evidence_reader import leer_evidencias, formatear_evidencias_para_prompt
 
 from crewai import LLM, Agent, Task, Crew, Process
 from crewai_tools import DirectoryReadTool, FileReadTool
 
+import pdfplumber
+from crewai.tools import BaseTool
+
+class PDFReadTool(BaseTool):
+    name: str = "PDFReadTool"
+    description: str = "Lee archivos PDF y devuelve su contenido como texto. Úsalo para archivos .pdf"
+
+    def _run(self, file_path: str) -> str:
+        try:
+            with pdfplumber.open(file_path) as pdf:
+                return "\n".join(p.extract_text() or "" for p in pdf.pages)
+        except Exception as e:
+            return f"Error al leer el PDF: {e}"
+        
 load_dotenv()
 
 app = FastAPI(title="AuditAI Server")
@@ -49,15 +64,17 @@ def build_crew() -> tuple[Crew, dict]:
         temperature=0.1,
     )
 
-    docs_tool = DirectoryReadTool(directory=str(EVIDENCIAS_DIR))
-    file_tool = FileReadTool()
+    # 1. LEER TODAS LAS EVIDENCIAS CON PYTHON DIRECTAMENTE
+    evidencias_dict = leer_evidencias(EVIDENCIAS_DIR)
+    texto_evidencias = formatear_evidencias_para_prompt(evidencias_dict)
 
     # ── Agentes Auditores Especializados ──
     normativas = [
         {
             "n": "ISO 27001:2022",
-            "g": "Identificar incumplimientos en los 93 controles del Anexo A de ISO 27001:2022, evaluando gestión de activos, control de accesos, criptografía, seguridad física, gestión de incidentes y continuidad de negocio.",
+            "g": "Analizar ÚNICAMENTE el contenido extraído de los archivos. E Identificar incumplimientos en los 93 controles del Anexo A de ISO 27001:2022, evaluando gestión de activos, control de accesos, criptografía, seguridad física, gestión de incidentes y continuidad de negocio.",
             "backstory": (
+                "Eres un auditor extremadamente riguroso. TIENES PROHIBIDO inventar contenido. Si no usas las herramientas de lectura, no puedes saber qué hay en los archivos."
                 "Eres un Lead Auditor certificado ISO/IEC 27001 con más de 12 años de experiencia en auditorías de SGSI "
                 "para organizaciones del sector financiero, sanitario y de infraestructuras críticas. Has liderado más de "
                 "80 proyectos de certificación en Europa y Latinoamérica. Tu metodología combina análisis de brechas "
@@ -67,8 +84,9 @@ def build_crew() -> tuple[Crew, dict]:
         },
         {
             "n": "ENS (Esquema Nacional de Seguridad)",
-            "g": "Auditar el cumplimiento del Real Decreto 311/2022 (ENS), evaluando las medidas de protección en categorías BÁSICA, MEDIA y ALTA.",
+            "g": "Analizar ÚNICAMENTE el contenido extraído de los archivos. Y Auditar el cumplimiento del Real Decreto 311/2022 (ENS), evaluando las medidas de protección en categorías BÁSICA, MEDIA y ALTA.",
             "backstory": (
+                "Eres un auditor extremadamente riguroso. TIENES PROHIBIDO inventar contenido. Si no usas las herramientas de lectura, no puedes saber qué hay en los archivos."
                 "Eres un auditor acreditado ENS por el CCN-CERT con experiencia en administraciones públicas y "
                 "proveedores de servicios digitales para el sector público español. Conoces en profundidad la Guía "
                 "CCN-STIC 808. Has participado en más de 40 proyectos de adecuación ENS."
@@ -76,8 +94,9 @@ def build_crew() -> tuple[Crew, dict]:
         },
         {
             "n": "GDPR / RGPD",
-            "g": "Verificar el cumplimiento del Reglamento (UE) 2016/679, analizando bases legales de tratamiento, derechos ARCO+, registro de actividades, EIPD y transferencias internacionales.",
+            "g": "Analizar ÚNICAMENTE el contenido extraído de los archivos. Y Verificar el cumplimiento del Reglamento (UE) 2016/679, analizando bases legales de tratamiento, derechos ARCO+, registro de actividades, EIPD y transferencias internacionales.",
             "backstory": (
+                "Eres un auditor extremadamente riguroso. TIENES PROHIBIDO inventar contenido. Si no usas las herramientas de lectura, no puedes saber qué hay en los archivos."
                 "Eres un Data Protection Officer (DPO) certificado con especialización en derecho digital europeo. "
                 "Has asesorado a más de 60 organizaciones en su adecuación al RGPD y has gestionado notificaciones "
                 "de brechas ante la AEPD. Dominas el análisis de flujos de datos y la elaboración de EIPD."
@@ -85,8 +104,9 @@ def build_crew() -> tuple[Crew, dict]:
         },
         {
             "n": "NIS2 (Directiva UE 2022/2555)",
-            "g": "Evaluar la resiliencia operacional y obligaciones de gestión de riesgos, notificación de incidentes y seguridad de la cadena de suministro conforme a NIS2.",
+            "g": "Analizar ÚNICAMENTE el contenido extraído de los archivos. Y Evaluar la resiliencia operacional y obligaciones de gestión de riesgos, notificación de incidentes y seguridad de la cadena de suministro conforme a NIS2.",
             "backstory": (
+                "Eres un auditor extremadamente riguroso. TIENES PROHIBIDO inventar contenido. Si no usas las herramientas de lectura, no puedes saber qué hay en los archivos."
                 "Eres un experto en ciberseguridad de infraestructuras críticas con certificación CISSP. "
                 "Has participado en ejercicios de resiliencia a nivel europeo coordinados por ENISA y conoces "
                 "en detalle los requisitos de notificación de incidentes de NIS2."
@@ -94,8 +114,9 @@ def build_crew() -> tuple[Crew, dict]:
         },
         {
             "n": "PCI-DSS v4.0",
-            "g": "Auditar los 12 requisitos de PCI-DSS v4.0 para proteger datos de tarjetas de pago, evaluando segmentación de red, cifrado, gestión de vulnerabilidades y controles de acceso.",
+            "g": "Analizar ÚNICAMENTE el contenido extraído de los archivos. Y Auditar los 12 requisitos de PCI-DSS v4.0 para proteger datos de tarjetas de pago, evaluando segmentación de red, cifrado, gestión de vulnerabilidades y controles de acceso.",
             "backstory": (
+                "Eres un auditor extremadamente riguroso. TIENES PROHIBIDO inventar contenido. Si no usas las herramientas de lectura, no puedes saber qué hay en los archivos."
                 "Eres un Qualified Security Assessor (QSA) certificado PCI-DSS con más de 10 años evaluando "
                 "entornos CDE. Has realizado assessments para bancos y procesadores de pago de nivel 1. "
                 "Conoces a fondo los cambios en la versión 4.0."
@@ -108,42 +129,47 @@ def build_crew() -> tuple[Crew, dict]:
             role=f"Auditor Senior {item['n']}",
             goal=item["g"],
             backstory=item["backstory"],
-            tools=[file_tool],
             llm=llm,
             verbose=True,
-            max_iter=15,
-            memory=True,
+            max_iter=30,
+            memory=False,
+            allow_delegation=False,
+            reasoning=False
         )
         for item in normativas
     ]
 
-        # ANTES del bucle, lista los archivos reales
-    archivos_reales = [str(f) for f in EVIDENCIAS_DIR.iterdir() if f.is_file()]
-    lista_archivos = "\n".join(f"- {f}" for f in archivos_reales)
     tareas_audit = []
 
     for agent in especialistas:
         norma = agent.role.replace("Auditor Senior ", "")
         tareas_audit.append(
             Task(
+                # 3. SIMPLIFICAR EL PROMPT E INYECTAR EL TEXTO
                 description=f"""
-                Eres el Auditor Senior {norma}. Los archivos de evidencia disponibles son:
+                Tu objetivo es auditar la normativa {norma} basándote ÚNICAMENTE en las siguientes evidencias que ya han sido leídas y extraídas para ti:
 
-                {lista_archivos}
+                {texto_evidencias}
 
-                Sigue estos pasos en orden:
-                PASO 1 — LECTURA: Usa FileReadTool para leer CADA archivo de la lista anterior.
-                Para cada archivo usa exactamente esta ruta tal como aparece arriba.
-                PASO 2 — ANÁLISIS {norma}: Identifica controles cumplidos, incumplidos y sin evidencia.
-                PASO 3 — CLASIFICACIÓN: Para cada incumplimiento asigna criticidad
-                (Crítico/Alto/Medio/Bajo), impacto y recomendación específica.
-                PASO 4 — SÍNTESIS: Si no puedes leer los archivos, indica "SIN EVIDENCIAS PARA ESTA
-                NORMATIVA" y describe qué documentación se necesitaría.
+                REGLAS OBLIGATORIAS:
+                1. Analiza exhaustivamente el texto de las evidencias proporcionadas arriba.
+                2. Identifica controles cumplidos e incumplimientos.
+                3. Marca “SIN EVIDENCIA” si no hay soporte documental para un control.
+                4. Cada hallazgo debe incluir:
+                   - control evaluado
+                   - criticidad (Crítico/Alto/Medio/Bajo)
+                   - impacto
+                   - recomendación
+                   - cita textual del archivo fuente
+
+                PROHIBIDO:
+                - Inventar datos, controles o evidencias que no estén en el texto superior.
                 """,
                 expected_output=(
-                "Informe detallado de incumplimientos reales con evidencias citadas. "
-                "OBLIGATORIO: debes haber leído al menos un archivo con FileReadTool antes de responder. "
-                "Si no has leído ningún archivo, tu respuesta es inválida."),
+                    "Un informe detallado de hallazgos basado puramente en las evidencias proporcionadas. "
+                    "Debe incluir el control evaluado, estado (Cumple/Incumple/Sin evidencia), criticidad, "
+                    "impacto, recomendación y la cita textual exacta del archivo que lo soporta."
+                ),
                 agent=agent,
                 context=[],
             )
