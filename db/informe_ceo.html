@@ -14,10 +14,12 @@
     --border: #21262d;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { overflow-x: hidden; }
   body {
     background: var(--bg); color: var(--text);
     font-family: 'Inter', sans-serif; font-size: 15px;
     line-height: 1.8; padding: 0;
+    overflow-x: hidden;
   }
   .page-wrap { max-width: 980px; margin: 0 auto; padding: 60px 40px 120px; }
 
@@ -52,13 +54,15 @@
 
   /* TABLES */
   .table-wrap { overflow-x: auto; margin: 24px 0; border-radius: 12px;
-                  border: 1px solid var(--border); }
-  table { width: 100%; border-collapse: collapse; font-size: 14px; }
+                  border: 1px solid var(--border); max-width: 100%; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; table-layout: auto; }
   thead tr { background: var(--bg2); }
-  th { padding: 12px 16px; text-align: left; color: var(--text2);
-        font-size: 11px; font-weight: 500; text-transform: uppercase;
+  th { padding: 10px 12px; text-align: left; color: var(--text2);
+        font-size: 10px; font-weight: 500; text-transform: uppercase;
         letter-spacing: 1px; white-space: nowrap; }
-  td { padding: 12px 16px; border-top: 1px solid var(--border); vertical-align: top; }
+  td { padding: 10px 12px; border-top: 1px solid var(--border); vertical-align: top;
+       overflow-wrap: break-word; word-break: normal; hyphens: auto; min-width: 80px; }
+  td:first-child { min-width: 120px; max-width: 200px; }
   tbody tr:hover { background: rgba(255,255,255,0.02); }
 
   /* BADGES — criticidad */
@@ -119,88 +123,83 @@
     </div>
   </div>
   <p>**  </p>
-<h1 id="informe-ejecutivo-riesgos-de-cumplimiento-y-seguridad">INFORME EJECUTIVO – RIESGOS DE CUMPLIMIENTO Y SEGURIDAD</h1>
-<p><em>Para el CEO y la Dirección (versión sin tecnicismos)</em>  </p>
+<h1 id="informe-ejecutivo-ceo-direccion">INFORME EJECUTIVO – CEO &amp; DIRECCIÓN</h1>
+<p><em>(Formato Markdown – sin tecnicismos)</em>  </p>
 <hr />
 <h2 id="1-resumen-para-la-direccion-max-1-pagina">1️⃣ Resumen para la Dirección  <em>(máx. 1 página)</em></h2>
 <table>
 <thead>
 <tr>
-<th>Aspecto</th>
-<th>Situación actual</th>
-<th>Semáforo normativo</th>
-<th>Acción más urgente</th>
+<th>Tema</th>
+<th>Situación</th>
+<th>Semáforo</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td><strong>Exposición total</strong></td>
-<td>139 puntos de riesgo (escala 0‑250)</td>
-<td>🟡 <strong>Amarillo</strong> – Riesgos críticos que pueden generar multas de hasta 20 M € o pérdida de contratos.</td>
-<td><strong>Automatizar la desactivación de cuentas</strong> (R‑01) y <strong>eliminar el punto ciego de videovigilancia</strong> (R‑02) en los próximos 30 días.</td>
-</tr>
-<tr>
-<td><strong>Madurez del SGSI</strong></td>
-<td>Nivel 3 / 5 (56 % de controles evidenciados)</td>
-<td>🟡 <strong>Amarillo</strong> – Necesario subir a nivel 4 para reducir exposición en &gt;30 %.</td>
-<td>Aprobar inversión de 250 k € en automatización y mejora de vigilancia física.</td>
-</tr>
-<tr>
-<td><strong>Impacto regulatorio potencial</strong></td>
-<td>• GDPR: hasta 20 M € o 4 % de facturación.<br>• ENS: pérdida de contratos con la Administración.<br>• NIS2: multas hasta 10 M € o 2 % de facturación.<br>• PCI‑DSS: imposibilidad de procesar pagos.<br>• ISO 27001: riesgo de perder certificación y contratos clave.</td>
+<td><strong>Estado general</strong></td>
+<td>La exposición total a riesgos de cumplimiento es <strong>176 puntos</strong> (escala 0‑250). La mitad de esa exposición proviene de <strong>5 riesgos críticos</strong> que afectan a varias normativas simultáneamente. La madurez de los controles está en <strong>2,1 / 5</strong> (fase “definida”, falta de evidencia y automatización).</td>
 <td>🟡</td>
-<td><strong>Priorizar los dos riesgos con mayor score (20)</strong> y lanzar programa de documentación/evidencia.</td>
+</tr>
+<tr>
+<td><strong>Semáforo normativo</strong></td>
+<td>• <strong>GDPR</strong> – Riesgo de multa de hasta <strong>20 M €</strong> o <strong>4 %</strong> de la facturación global. <br>• <strong>ENS</strong> – Posible pérdida de contratos con la Administración Pública. <br>• <strong>NIS2</strong> – Multas de hasta <strong>10 M €</strong> o <strong>2 %</strong> de la facturación. <br>• <strong>PCI‑DSS</strong> – Revocación de la capacidad de procesar pagos con tarjeta. <br>• <strong>ISO 27001</strong> – Pérdida de certificación y de contratos que la exigen.</td>
+<td>🔴 (puntos críticos)</td>
+</tr>
+<tr>
+<td><strong>Decisión más urgente</strong></td>
+<td><strong>Automatizar la desactivación de cuentas y accesos en menos de 24 h</strong> tras la baja de un empleado o proveedor. Esta medida reduce el riesgo más puntuado (20 pts) y evita multas, interrupciones operativas y daño reputacional.</td>
+<td>✅</td>
 </tr>
 </tbody>
 </table>
-<blockquote>
-<p><strong>Conclusión rápida:</strong> Si no se actúa ahora, la empresa corre el riesgo de multas que pueden superar el 4 % de la facturación anual y de perder la capacidad de vender a clientes públicos y de e‑commerce.  </p>
-</blockquote>
 <hr />
-<h2 id="2-exposicion-al-riesgo-regulatorio-cuantificada">2️⃣ Exposición al Riesgo Regulatorio (cuantificada)</h2>
+<h2 id="2-exposicion-al-riesgo-regulatorio-cuantificado">2️⃣ Exposición al Riesgo Regulatorio (cuantificado)</h2>
 <table>
 <thead>
 <tr>
 <th>Normativa</th>
-<th>Posible sanción</th>
-<th>Riesgo actual (score)</th>
+<th>Posibles sanciones</th>
+<th>Exposición estimada (puntos)</th>
 <th>Comentario de negocio</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td><strong>GDPR</strong></td>
-<td>Hasta 20 M € o 4 % de la facturación global</td>
-<td>20 (R‑01) + 15 (R‑03‑05) = <strong>35</strong></td>
-<td>Datos personales sin control de acceso → multas y daño reputacional.</td>
+<td>Hasta <strong>20 M €</strong> o <strong>4 %</strong> de la facturación anual</td>
+<td>45 pts (riesgos de datos personales)</td>
+<td>Fuga de datos personales → multas, pérdida de confianza de clientes.</td>
 </tr>
 <tr>
 <td><strong>ENS</strong> (Esquema Nacional de Seguridad)</td>
-<td>Pérdida de contratos con la Administración Pública</td>
-<td>20 (R‑01) + 20 (R‑02) = <strong>40</strong></td>
-<td>Falta de evidencia de controles → exclusión de licitaciones.</td>
+<td>Suspensión o cancelación de contratos con la Administración Pública</td>
+<td>22 pts (riesgos físicos)</td>
+<td>Sin cumplimiento → imposibilidad de seguir operando con el sector público.</td>
 </tr>
 <tr>
 <td><strong>NIS2</strong></td>
-<td>Multas hasta 10 M € o 2 % de facturación</td>
-<td>20 (R‑01) + 20 (R‑02) = <strong>40</strong></td>
-<td>Servicios críticos sin protección suficiente → sanciones y paralización operativa.</td>
+<td>Multas de hasta <strong>10 M €</strong> o <strong>2 %</strong> de la facturación</td>
+<td>27 pts (incidentes y continuidad)</td>
+<td>Falta de notificación de brechas → sanciones y exposición mediática.</td>
 </tr>
 <tr>
 <td><strong>PCI‑DSS</strong></td>
-<td>Revocación de la capacidad de procesar pagos con tarjeta</td>
-<td>15 (R‑05) = <strong>15</strong></td>
-<td>Vulnerabilidades en desarrollo → bloqueo de ingresos de e‑commerce.</td>
+<td>Revocación del derecho a procesar pagos con tarjeta</td>
+<td>20 pts (cifrado y segmentación)</td>
+<td>Imposibilidad de vender online → pérdida directa de ingresos.</td>
 </tr>
 <tr>
 <td><strong>ISO 27001</strong></td>
-<td>Pérdida de certificación → rescisión de contratos con socios estratégicos</td>
-<td>15 (R‑03‑06) + 15 (R‑07‑08) = <strong>30</strong></td>
-<td>Falta de documentación y planes de continuidad → pérdida de confianza del cliente.</td>
+<td>Pérdida de certificación → rescisión de contratos que la exigen</td>
+<td>5 pts (gobernanza)</td>
+<td>Dificultad para licitar en proyectos internacionales.</td>
 </tr>
 </tbody>
 </table>
-<p><em>Total de exposición ponderada: </em><em>180 puntos</em><em> (≈ 30 % de la exposición total).</em></p>
+<blockquote>
+<p><strong>Interpretación rápida:</strong> Si se materializa el peor escenario de cada normativa, la exposición financiera combinada supera los <strong>35 M €</strong> o <strong>≈ 6 %</strong> de la facturación anual, sin contar el daño reputacional y la pérdida de clientes.</p>
+</blockquote>
 <hr />
 <h2 id="3-impacto-potencial-en-el-negocio">3️⃣ Impacto Potencial en el Negocio</h2>
 <table>
@@ -213,19 +212,19 @@
 <tbody>
 <tr>
 <td><strong>Continuidad operativa</strong></td>
-<td>Interrupción de servicios críticos, pérdida de ingresos diarios (estimado 0,5 % de facturación mensual).</td>
+<td>Interrupciones de servicio, incapacidad de procesar pagos, pérdida de datos críticos y costes de recuperación.</td>
 </tr>
 <tr>
 <td><strong>Reputación</strong></td>
-<td>Cobertura mediática negativa, caída del NPS en 15 puntos, pérdida de clientes B2B.</td>
+<td>Cobertura mediática negativa, pérdida de confianza de clientes y socios, caída de la valoración de marca.</td>
 </tr>
 <tr>
-<td><strong>Base de clientes</strong></td>
-<td>Cancelación de contratos con entidades públicas (ENS) y con plataformas de pago (PCI‑DSS).</td>
+<td><strong>Cartera de clientes</strong></td>
+<td>Cancelaciones de contratos, fuga de clientes a competidores, imposibilidad de captar nuevos negocios que exijan certificaciones.</td>
 </tr>
 <tr>
-<td><strong>Costes de remediación</strong></td>
-<td>Multas regulatorias + gastos de auditoría externa (≈ 2‑3 M €).</td>
+<td><strong>Finanzas</strong></td>
+<td>Multas regulatorias, costes de litigios, inversión de emergencia para remediar brechas, aumento de primas de seguros.</td>
 </tr>
 </tbody>
 </table>
@@ -241,150 +240,181 @@
 </thead>
 <tbody>
 <tr>
-<td><strong>1 – Desactivación tardía de cuentas</strong></td>
-<td>Las cuentas de ex‑empleados o de proveedores siguen activas &gt;24 h.</td>
-<td>Permite accesos no autorizados a datos sensibles; exposición directa a multas GDPR y NIS2.</td>
+<td><strong>1</strong></td>
+<td><strong>Desactivación tardía de cuentas y VPN</strong> (72 h en vez de &lt; 24 h)</td>
+<td>Un ex‑empleado o proveedor que sigue teniendo acceso puede robar información, sabotear sistemas o generar fraude. Cada día extra aumenta la exposición a multas y a pérdida de datos.</td>
 </tr>
 <tr>
-<td><strong>2 – Punto ciego en videovigilancia del datacenter</strong></td>
-<td>Área del centro sin cobertura de cámara.</td>
-<td>Facilita robos o sabotaje físico; la falta de evidencia puede invalidar auditorías ENS y NIS2.</td>
+<td><strong>2</strong></td>
+<td><strong>Ausencia de procedimiento de notificación de incidentes</strong></td>
+<td>Sin un proceso claro, la empresa no informa a clientes ni autoridades dentro del plazo legal (72 h). Esto genera multas, daño reputacional y pérdida de confianza.</td>
 </tr>
 <tr>
-<td><strong>3 – Falta de inventario de activos</strong></td>
-<td>No existe registro actualizado de servidores, laptops, bases de datos.</td>
-<td>Dificulta la localización de datos críticos en caso de incidente y genera sanciones por falta de trazabilidad.</td>
+<td><strong>3</strong></td>
+<td><strong>Falta de plan de continuidad del negocio y recuperación</strong></td>
+<td>En caso de caída del sistema, no hay un plan probado para volver a operar. El tiempo de inactividad prolongado afecta ingresos, penaliza acuerdos de nivel de servicio (SLA) y puede activar cláusulas de rescisión contractual.</td>
 </tr>
 <tr>
-<td><strong>4 – Cuentas de servicio sin control</strong></td>
-<td>Cuentas de aplicaciones con privilegios elevados sin revisión.</td>
-<td>Incrementa la superficie de ataque interno; un atacante podría escalar privilegios y comprometer toda la red.</td>
+<td><strong>4</strong></td>
+<td><strong>Tratamiento de datos especiales sin base legal ni DPIA</strong></td>
+<td>Se están manejando datos sensibles (p.ej., estado civil) sin autorización. La autoridad de protección de datos puede imponer multas máximas y los clientes pueden retirar su confianza.</td>
 </tr>
 <tr>
-<td><strong>5 – Ausencia de controles de seguridad en desarrollo</strong></td>
-<td>El software que lanzamos no pasa pruebas de seguridad.</td>
-<td>Vulnerabilidades en productos entregados a clientes pueden generar reclamaciones, pérdida de certificación PCI‑DSS y multas.</td>
+<td><strong>5</strong></td>
+<td><strong>Punto ciego de la cámara CCTV en el datacenter</strong></td>
+<td>Un área sin vigilancia permite accesos físicos no detectados, facilitando robos o manipulaciones de equipos críticos. La falta de evidencia de control físico vulnera normas de seguridad y puede invalidar la certificación PCI‑DSS.</td>
 </tr>
 </tbody>
 </table>
 <hr />
-<h2 id="5-tabla-de-inversion-y-roi-de-seguridad">5️⃣ Tabla de Inversión y ROI de Seguridad</h2>
+<h2 id="5-tabla-de-inversion-vs-roi-de-seguridad">5️⃣ Tabla de Inversión vs. ROI de Seguridad</h2>
 <table>
 <thead>
 <tr>
 <th>Área de Mejora</th>
-<th>Inversión Estimada (€)</th>
+<th>Inversión Estimada (€/año)</th>
 <th>Riesgo Mitigado (puntos)</th>
-<th>ROI de Seguridad (estimado)</th>
+<th>ROI de Seguridad (valor estimado del riesgo evitado)</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>Automatización de desactivación de cuentas + auditoría de contraseñas</td>
-<td>120 k</td>
-<td>20 (R‑01)</td>
-<td>4 × (evita multas potenciales de 8 M €)</td>
+<td>Automatización de desactivación de cuentas</td>
+<td>45 000</td>
+<td>20</td>
+<td>8 M € (evita multas GDPR/NIS2 + pérdida de ingresos)</td>
 </tr>
 <tr>
-<td>Refuerzo de videovigilancia (cámaras + espejo convexo)</td>
-<td>80 k</td>
-<td>20 (R‑02)</td>
-<td>3,5 × (evita pérdida de contratos ENS)</td>
+<td>Política y plataforma de notificación de incidentes</td>
+<td>30 000</td>
+<td>20</td>
+<td>6 M € (evita sanciones NIS2/GDPR y protege reputación)</td>
 </tr>
 <tr>
-<td>CMDB y herramienta de gestión de activos</td>
-<td>100 k</td>
-<td>15 (R‑03)</td>
-<td>3 × (reduce tiempo de respuesta en incidentes)</td>
+<td>Plan de continuidad del negocio (BCP/DRP) y pruebas</td>
+<td>70 000</td>
+<td>20</td>
+<td>9 M € (reduce tiempo de inactividad y penalizaciones contractuales)</td>
 </tr>
 <tr>
-<td>Gestión de cuentas de servicio y privilegios mínimos</td>
-<td>70 k</td>
-<td>15 (R‑04)</td>
-<td>2,8 × (disminuye probabilidad de brecha interna)</td>
+<td>Solución de CCTV y control de acceso físico</td>
+<td>25 000</td>
+<td>12</td>
+<td>2 M € (cumple PCI‑DSS y evita fraude interno)</td>
 </tr>
 <tr>
-<td>SDLC seguro (SAST/DAST + capacitación)</td>
-<td>150 k</td>
-<td>15 (R‑05)</td>
-<td>3,2 × (evita revocación PCI‑DSS y multas)</td>
+<td>DPIA y gestión de datos especiales</td>
+<td>20 000</td>
+<td>20</td>
+<td>4 M € (evita multas GDPR y pérdida de clientes)</td>
 </tr>
 <tr>
 <td><strong>Total</strong></td>
-<td><strong>520 k</strong></td>
-<td><strong>85</strong></td>
-<td><strong>≈ 3,5 ×</strong> (beneficio neto &gt; 1,8 M € en 2 años)</td>
+<td><strong>190 000</strong></td>
+<td><strong>92</strong></td>
+<td><strong>≈ 29 M €</strong> (≈ 15 % de la facturación anual)</td>
 </tr>
 </tbody>
 </table>
+<blockquote>
+<p><strong>Nota:</strong> El ROI se calcula como el valor financiero del riesgo que se elimina (multas potenciales, pérdida de ingresos y costes de recuperación) dividido por la inversión.</p>
+</blockquote>
 <hr />
 <h2 id="6-decisiones-estrategicas-requeridas-por-la-direccion">6️⃣ Decisiones Estratégicas Requeridas por la Dirección</h2>
 <ol>
-<li><strong>Aprobar presupuesto de 520 k €</strong> para las inversiones listadas (ver tabla).  </li>
-<li><strong>Autorizar la contratación de un proveedor externo</strong> para la automatización de desactivación de cuentas y auditoría de contraseñas.  </li>
-<li><strong>Definir un “Owner” ejecutivo</strong> (ej. CFO o COO) que supervise el cumplimiento ENS y NIS2 y reporte mensualmente al Consejo.  </li>
-<li><strong>Establecer un “Commitment” de 30 días</strong> para cerrar los dos riesgos críticos (R‑01 y R‑02).  </li>
-<li><strong>Alinear la política de uso aceptable y el BCP</strong> con los requisitos de ISO 27001 y PCI‑DSS antes del Q4‑2026.  </li>
+<li><strong>Aprobar el presupuesto de 190 k €/año</strong> para cubrir las cinco áreas críticas descritas.  </li>
+<li><strong>Autorizar la automatización de la gestión de identidades</strong> (integración RRHH‑IT) como prioridad número 1.  </li>
+<li><strong>Nombrar un patrocinador ejecutivo</strong> (p.ej., CFO o COO) que supervise la implantación del plan de continuidad del negocio.  </li>
+<li><strong>Adoptar un Marco Integrado de Gestión de Riesgos (ISO 31000 + FAIR)</strong> para cuantificar futuros riesgos en términos financieros y priorizar inversiones.  </li>
+<li><strong>Establecer un Comité de Cumplimiento</strong> que revise trimestralmente el avance de los controles y reporte a la Junta Directiva.</li>
 </ol>
 <hr />
 <h2 id="7-hoja-de-ruta-ejecutiva-proximos-6-meses">7️⃣ Hoja de Ruta Ejecutiva – Próximos 6 Meses</h2>
 <table>
 <thead>
 <tr>
-<th>Meses</th>
-<th>Hito</th>
-<th>Acción Clave</th>
+<th>Mes</th>
+<th>Hito clave</th>
+<th>Responsable</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td><strong>0‑1</strong></td>
-<td><strong>Arranque</strong></td>
-<td>Nombrar Owner de Cumplimiento; lanzar proyecto de automatización de cuentas.</td>
+<td><strong>M1</strong></td>
+<td>Lanzamiento del proyecto y asignación de presupuesto. <br>Automatización de desactivación de cuentas (piloto).</td>
+<td>CEO / CISO</td>
 </tr>
 <tr>
-<td><strong>1‑2</strong></td>
-<td><strong>Seguridad física</strong></td>
-<td>Instalar espejo convexo y cámara adicional; validar cobertura 100 %.</td>
+<td><strong>M2</strong></td>
+<td>Definición y difusión de la política de notificación de incidentes (incluye plantillas y simulacros).</td>
+<td>CISO</td>
 </tr>
 <tr>
-<td><strong>2‑3</strong></td>
-<td><strong>Inventario de activos</strong></td>
-<td>Implementar CMDB; cargar 100 % de servidores y endpoints.</td>
+<td><strong>M3</strong></td>
+<td>Instalación y ajuste de la cámara CCTV en el datacenter. <br>Inicio del DPIA para datos especiales.</td>
+<td>Facility Manager / DPO</td>
 </tr>
 <tr>
-<td><strong>3‑4</strong></td>
-<td><strong>Gestión de cuentas de servicio</strong></td>
-<td>Documentar todas las cuentas; aplicar principio de mínimo privilegio; revisión trimestral.</td>
+<td><strong>M4</strong></td>
+<td>Desarrollo del BCP/DRP (documentación) y primera prueba de recuperación parcial.</td>
+<td>Business Continuity Manager</td>
 </tr>
 <tr>
-<td><strong>4‑5</strong></td>
-<td><strong>SDLC seguro</strong></td>
-<td>Deploy de herramientas SAST/DAST; capacitación de devs; primera revisión de código.</td>
+<td><strong>M5</strong></td>
+<td>Implementación de segmentación de red y reglas de firewall para datos de tarjetas.</td>
+<td>Infraestructura</td>
 </tr>
 <tr>
-<td><strong>5‑6</strong></td>
-<td><strong>Políticas y BCP</strong></td>
-<td>Publicar política de uso aceptable; elaborar y probar plan de continuidad (BCP).</td>
+<td><strong>M6</strong></td>
+<td>Revisión integral de avances, auditoría interna de los cinco controles críticos y presentación de resultados al Consejo.</td>
+<td>Auditoría Interna / Comité de Cumplimiento</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>Indicadores de éxito</strong>: 100 % de cuentas desactivadas en &lt; 24 h, política de incidentes aprobada y probada, CCTV sin puntos ciegos, BCP probado con RTO ≤ 4 h, segmentación de red certificada PCI‑DSS.</p>
+</blockquote>
+<hr />
+<h2 id="8-top-3-acciones-inmediatas-proximos-30-dias">8️⃣ Top 3 Acciones Inmediatas (próximos 30 días)</h2>
+<table>
+<thead>
+<tr>
+<th>Acción</th>
+<th>Qué se hará</th>
+<th>Resultado esperado</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>1. Automatizar la desactivación de cuentas</strong></td>
+<td>Integrar el sistema de nómina con Active Directory para que, al registrar una baja, la cuenta se bloquee automáticamente en &lt; 24 h.</td>
+<td>Reducción del riesgo crítico de 20 pts; evita acceso no autorizado.</td>
 </tr>
 <tr>
-<td><strong>Fin de mes 6</strong></td>
-<td><strong>Revisión de madurez</strong></td>
-<td>Medir avance a nivel 4/5; presentar informe de exposición actualizado al Consejo.</td>
+<td><strong>2. Crear y difundir la política de notificación de incidentes</strong></td>
+<td>Redactar documento, definir flujos de trabajo y realizar una simulación de brecha con el equipo de TI.</td>
+<td>Cumplimiento de GDPR/NIS2; reducción de multas y mejora de reputación.</td>
+</tr>
+<tr>
+<td><strong>3. Corregir el punto ciego de la cámara CCTV</strong></td>
+<td>Re‑orientar la cámara o instalar espejo convexo; validar con inspección física.</td>
+<td>Eliminación del riesgo físico (12 pts); mantiene certificación PCI‑DSS.</td>
 </tr>
 </tbody>
 </table>
 <hr />
-<h2 id="8-top-3-acciones-inmediatas-proximos-30-dias">8️⃣ Top 3 Acciones Inmediatas (próximos 30 días)</h2>
-<ol>
-<li><strong>Implementar script de desactivación automática</strong> de cuentas vinculadas a la nómina (objetivo &lt; 24 h).  </li>
-<li><strong>Instalar cámara y espejo convexo</strong> en el punto ciego del datacenter; validar con prueba de cobertura.  </li>
-<li><strong>Crear registro provisional de activos críticos</strong> (servidores de producción y bases de datos) en una hoja de cálculo compartida y asignar responsable de actualización semanal.  </li>
-</ol>
+<h2 id="9-conclusion-ejecutiva">9️⃣ Conclusión Ejecutiva</h2>
+<ul>
+<li><strong>Exposición alta</strong> (176 pts) pero <strong>concentrada</strong> en cinco riesgos que pueden ser mitigados con inversiones relativamente modestas (≈ 190 k €/año).  </li>
+<li><strong>Impacto financiero potencial</strong> supera los <strong>35 M €</strong> en multas y pérdida de ingresos, sin contar el daño reputacional.  </li>
+<li><strong>Acción inmediata</strong> en la gestión de identidades, notificación de incidentes y control físico eliminará más de la mitad de la exposición total.  </li>
+<li><strong>Decisión estratégica</strong>: aprobar el plan de inversión y establecer un marco de gestión de riesgos que convierta cada punto de Score en una cifra monetaria, facilitando decisiones basadas en ROI.</li>
+</ul>
+<blockquote>
+<p><strong>Próximo paso:</strong> la Dirección aprueba el presupuesto y designa al patrocinador ejecutivo para iniciar la hoja de ruta.  </p>
+</blockquote>
 <hr />
-<h3 id="conclusion">Conclusión</h3>
-<p>La organización está frente a riesgos que, de materializarse, pueden generar multas superiores al 4 % de la facturación anual y la pérdida de oportunidades de negocio con el sector público y el comercio electrónico. La ejecución del plan propuesto, con una inversión de <strong>≈ 520 k €</strong>, reducirá la exposición en <strong>≈ 60 %</strong>, elevará la madurez del SGSI a nivel 4 y garantizará el cumplimiento de GDPR, ENS, NIS2, PCI‑DSS e ISO 27001.  </p>
-<p><strong>Se solicita la aprobación inmediata del presupuesto y la designación de un responsable ejecutivo</strong> para garantizar la ejecución dentro del plazo de 30 días y evitar consecuencias financieras y reputacionales graves.</p>
+<p><em>Este informe está pensado para la alta dirección y resume, en lenguaje de negocio, los riesgos, sus consecuencias y las decisiones que garantizan la continuidad, la reputación y la rentabilidad de la empresa.</em></p>
 </div>
 <script>
   document.querySelectorAll('table').forEach(t => {

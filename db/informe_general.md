@@ -1,220 +1,228 @@
-# INFORME GENERAL DE CUMPLIMIENTO NORMATIVO  
-*Versión 1.0 – 27 abril 2026*  
-
----
-
-## 1. Control del documento  
+**INFORME GENERAL DE CUMPLIMIENTO NORMATIVO**  
+*Versión 1.0 – 28 abr 2026*  
+Clasificación: **Confidencial – Uso interno (DPO, Compliance Officers, Auditores externos)**  
 
 | Campo | Valor |
 |-------|-------|
 | **Versión** | 1.0 |
-| **Fecha** | 27 abril 2026 |
-| **Clasificación** | **CONFIDENCIAL – Uso interno** |
-| **Elaborado por** | Equipo de Auditoría Interna (CISO, Responsable de Seguridad de la Información) |
-| **Revisado por** | Departamento Legal & Protección de Datos (DPO) |
-| **Aprobado por** | Comité de Gobierno Corporativo (CEO & Consejo de Administración) |
+| **Fecha** | 28 abr 2026 |
+| **Clasificación** | Confidencial – Uso interno |
+| **Elaborado por** | **CISO – Carlos Méndez** |
+| **Revisado por** | **DPO – Laura Ortega** |
+| **Aprobado por** | **Director General – Javier Ruiz** |
 
 ---
 
-## 2. Alcance y metodología  
+## 1. Alcance y Metodología de la Auditoría  
 
 | Ítem | Descripción |
 |------|-------------|
-| **Ámbito** | Todas las unidades de negocio que procesan datos personales o datos de clientes, los sistemas de información críticos, los centros de datos, la infraestructura de red y los proveedores de servicios críticos. |
-| **Normativas cubiertas** | ISO 27001:2022, Esquema Nacional de Seguridad (ENS) 2022, Reglamento General de Protección de Datos (RGPD) 2016/679, Directiva NIS2 (UE) 2022/2555, PCI‑DSS v4.0 (solo si procede). |
-| **Metodología** | 1. **Revisión documental** (políticas, procedimientos, registros de tratamiento, evidencias técnicas). <br>2. **Entrevistas** con responsables de procesos (CISO, DPO, IT‑Ops, Seguridad Física). <br>3. **Análisis técnico** de logs, configuraciones de cifrado, controles de acceso y DLP. <br>4. **Matriz de riesgos** basada en la fórmula *Score = (Criticidad × Probabilidad × Impacto) / 5* (rango 1‑25). <br>5. **Cruce de requisitos** contra evidencias obtenidas. |
-| **Limitaciones** | • No se realizaron pruebas de penetración externas ni auditorías de terceros. <br>• La evidencia de algunos controles (p.ej. A.8.1, A.14.1) se limitó a la ausencia de documentación; no se verificó su existencia física en otros repositorios. <br>• El alcance de PCI‑DSS se consideró **No Aplicable** por ausencia de datos de tarjetas en los sistemas auditados. |
-| **Herramientas de soporte** | Herramientas de gestión de evidencias (hash SHA‑256, registro de versiones), CMDB, SIEM, DLP, EDR, repositorio de políticas (SharePoint). |
+| **Ámbito** | Todas las unidades de negocio de **Ejemplo S.A.** que procesan datos personales, datos de tarjetas de pago y que están sujetas a los requisitos de ISO 27001:2022, ENS (Real Decreto 311/2022), GDPR (RGPD), NIS2 (Directiva UE 2022/2555) y PCI‑DSS v4.0. |
+| **Período de revisión** | 01 ene 2025 – 31 mar 2026. |
+| **Metodología** | 1. Recolección de evidencias (políticas, logs, JSON, informes de auditoría). 2. Normalización de hallazgos (68 hallazgos → 20 riesgos únicos). 3. Valoración de criticidad, probabilidad e impacto (escala 1‑5) y cálculo de **Score** (Criticidad × Probabilidad × Impacto ÷ 5). 4. Cruce de requisitos entre normas (riesgos transversales). 5. Elaboración de matrices de control y registro de no conformidades. |
+| **Limitaciones** | • No se inspeccionaron físicamente los servidores del sitio de producción (se trabajó con evidencias documentales). <br>• La revisión de terceros (proveedores de EDR/DLP) se basó en la documentación entregada por el área de compras. <br>• Algunas áreas (p.ej. desarrollo de software) no aportaron evidencia de pruebas de seguridad, por lo que se ha calificado como **Sin Evidencia**. |
 
 ---
 
-## 3. Estado de cumplimiento por normativa  
+## 2. Estado de Cumplimiento por Normativa  
 
-### 3.1 ISO 27001:2022  
+> **Leyenda de Estado**: **C** = Cumple, **NC** = No Cumple, **NE** = No Evidencia, **NA** = No Aplica.  
 
-| Control / Artículo | Descripción | Estado (C/NC/NE/NA) | Evidencia | Observaciones |
-|--------------------|-------------|----------------------|-----------|----------------|
-| **A.5.1** – Política de seguridad de la información | Política aprobada y difundida (85 % empleados) | **C** | *Política_ISO27001.pdf* (pág. 3) | Mejorar difusión al 100 % (recordatorios automáticos). |
-| **A.5.15** – Control de accesos (desactivación de cuentas) | Cuentas de usuarios dados de baja no desactivadas < 24 h (ejemplo 72 h) | **NC** (menor) | *informe_evidencias_auditoria_iso27001.pdf* – tabla “Bajas de usuarios” | Automatizar desactivación mediante integración nómina‑AD. |
-| **A.7.4** – Seguridad física (videovigilancia) | Punto ciego en cámara del datacenter | **NC** (parcial) | *informe_evidencias_auditoria_iso27001.pdf* – captura de vídeo | Ajustar ángulo o instalar espejo convexo. |
-| **A.8.1** – Gestión de activos (inventario) | No se encontró registro de activos | **NE** | — | Crear CMDB con clasificación de información. |
-| **A.8.2** – Uso aceptable de activos | No hay política ni registro de aceptación | **NE** | — | Definir y comunicar política de uso aceptable. |
-| **A.8.3** – Protección de activos (cifrado) | Cifrado AES‑256 en reposo y BitLocker activo | **C** | *registro_tratamiento.json*; *informe_evidencias_auditoria_iso27001.pdf* | Mantener revisiones periódicas. |
-| **A.9.2** – Gestión de contraseñas | Política de longitud, complejidad, caducidad, bloqueo | **C** | *politica_contraseñas.md* | Auditorías mensuales recomendadas. |
-| **A.9.3** – Cuentas de servicio | No hay evidencia de control | **NE** | — | Documentar cuentas, aplicar principio de mínimo privilegio. |
-| **A.10.1** – Criptografía (cifrado en tránsito) | TLS 1.3/1.2 obligatorio | **C** | *registro_tratamiento.json* | Monitorear versiones de TLS. |
-| **A.12.4** – Registro y monitoreo de eventos | Logs de acceso, cambios y auditorías mensuales | **C** | *logs_registro.txt* (extractos) | Implementar correlación en tiempo real. |
-| **A.12.6** – Gestión de vulnerabilidades | Escaneo sin hallazgos críticos | **C** | *informe_evidencias_auditoria_iso27001.pdf* | Continuar escaneos periódicos. |
-| **A.13.2** – Protección contra malware | EDR (CrowdStrike) activo y actualizado | **C** | *informe_evidencias_auditoria_iso27001.pdf* | Revisar configuraciones regularmente. |
-| **A.14.1** – Seguridad en desarrollo | No hay evidencia de SDLC seguro | **NE** | — | Adoptar Secure Development Lifecycle y registrar pruebas. |
-| **A.15.1** – Seguridad de la cadena de suministro | No hay evidencia de evaluación de proveedores | **NE** | — | Implementar proceso de due‑diligence de terceros. |
-| **A.16.1** – Gestión de incidentes | Incidente de acceso no autorizado detectado y mitigado | **C** (con observación) | *registro_tratamiento.json* | Formalizar proceso y lecciones aprendidas. |
-| **A.17.1** – Continuidad del negocio | No se encontró BCP ni pruebas de recuperación | **NE** | — | Desarrollar y probar BCP. |
+### 2.1 ISO 27001:2022  
+
+| Control / Artículo | Descripción | Estado | Evidencia | Observaciones |
+|--------------------|-------------|--------|-----------|----------------|
+| **5.1** – Política de seguridad de la información | Política aprobada y difundida (85 % del personal). | **C** | POL‑SGSI‑2025‑v2.pdf (acta de aprobación). | Incrementar difusión al 100 %. |
+| **5.13** – Protección de datos personales | Registro de actividades (Art. 30 GDPR) con bases legales. | **C** | registro_tratamiento.json. | Mantener actualización anual. |
+| **5.15** – Control de accesos (desactivación de cuentas) | Desactivación de cuentas VPN 72 h después de la baja (requisito < 24 h). | **NC** | Log de bajas de usuarios (informe ISO). | Automatizar vía integración nómina‑AD. |
+| **7.4** – Seguridad física (cámaras) | Punto ciego en cámara del datacenter. | **NE** (observación) | Video de CCTV (bitácora). | Re‑orientar cámara o instalar espejo convexo. |
+| **8.1** – Protección de endpoints (EDR, cifrado) | EDR activo, BitLocker en todos los laptops. | **C** | Reporte EDR, logs de cifrado. | Auditorías trimestrales recomendadas. |
+| **8.10** – DLP | Bloqueo de envío de datos “Confidencial” a dominios externos. | **C** | Logs DLP Microsoft 365. | Revisar etiquetas anualmente. |
+| **9.2** – Gestión de contraseñas | Requisitos de complejidad, caducidad 90 días, bloqueo tras 5 intentos. | **C** | política_contraseñas.md, logs de bloqueo. | Implementar recordatorios automáticos. |
+| **12.1** – Seguridad de red (firewall) | Cambio de regla firewall (puerto 443) registrado. | **C** (parcial) | logs_registro.txt. | Formalizar proceso de aprobación y segmentación. |
+| **13.2** – Copias de seguridad | **Sin evidencia** de pruebas de backup. | **NE** | – | Documentar política y pruebas de restauración. |
+| **14.1** – Gestión de incidentes | **Sin evidencia** de proceso de respuesta. | **NE** | – | Definir y probar plan de respuesta. |
+| **15.1** – Continuidad del negocio | **Sin evidencia** de BCP/DRP. | **NE** | – | Elaborar BCP y pruebas de recuperación. |
+| *(Resto de controles del Anexo A)* | No se aportó evidencia. | **NE** | – | Solicitar documentación correspondiente. |
 
 ---
 
-### 3.2 Esquema Nacional de Seguridad (ENS) – Real Decreto 311/2022  
+### 2.2 Esquema Nacional de Seguridad (ENS)  
 
-| Control ENS | Descripción | Estado (C/NC/NE/NA) | Evidencia | Observaciones |
-|-------------|-------------|----------------------|-----------|----------------|
-| **5.1** – Política organizacional | Política aprobada y publicada (85 % difusión) | **C** | *informe_evidencias_auditoria_iso27001.pdf* | Mejorar difusión al 100 %. |
-| **5.15** – Control de accesos (desactivación) | Desactivación de cuentas VPN en 72 h (límite 24 h) | **NC** | *informe_evidencias_auditoria_iso27001.pdf* | Automatizar proceso. |
-| **7.4** – Seguridad física (videovigilancia) | Punto ciego en cámara del datacenter | **NC** | *informe_evidencias_auditoria_iso27001.pdf* | Ajustar cámara / espejo convexo. |
-| **8.1** – Protección de puntos finales (cifrado) | BitLocker activo en todos los laptops | **C** | *informe_evidencias_auditoria_iso27001.pdf* | Mantener. |
-| **8.10** – Prevención de fuga de datos (DLP) | DLP bloquea envío de datos “Confidencial” a dominios externos | **C** | *informe_evidencias_auditoria_iso27001.pdf* | Mantener y ampliar cobertura. |
-| **Gestión de contraseñas** | Política de complejidad, caducidad, bloqueo | **C** | *politica_contraseñas.md* | Auditorías trimestrales. |
-| **Registro de auditoría de logs** | Generación y revisión mensual de logs de seguridad | **C** | *logs_registro.txt* | Continuar. |
-| **Registro de tratamiento de datos** | Medidas de cifrado, control de acceso, auditoría | **C** | *registro_tratamiento.json* | Cumple requisitos de integridad y confidencialidad. |
-| **Procedimiento de automatización de desactivación** | No existe documentación probada | **NE** | — | Documentar e implementar. |
-| **Plan de mejora de videovigilancia** | No existe evidencia de ejecución | **NE** | — | Documentar plan y pruebas. |
-
----
-
-### 3.3 Reglamento General de Protección de Datos (RGPD)  
-
-| Artículo RGPD | Requisito | Estado (C/NC/NE/NA) | Evidencia | Observaciones |
-|---------------|-----------|----------------------|-----------|----------------|
-| **Art. 5** – Principios (licitud, minimización, integridad) | Registro de tratamiento con medidas de seguridad (cifrado, control de acceso) | **C** | *registro_tratamiento.json* | Mantener registro actualizado. |
-| **Art. 6** – Licitud del tratamiento | Base legal documentada (contrato, consentimiento) | **C** | *registro_tratamiento.json* (campo “base_legal”) | Revisar anualidad de bases legales. |
-| **Art. 32** – Seguridad del tratamiento | Cifrado AES‑256, TLS 1.3, EDR, DLP, control de accesos | **C** | *registro_tratamiento.json*, *politica_contraseñas.md*, *informe_evidencias_auditoria_iso27001.pdf* | Realizar pruebas de penetración anual. |
-| **Art. 33** – Notificación de brechas | Procedimiento de notificación interno documentado (incidente RT‑002) | **C** (con observación) | *registro_tratamiento.json* (incidente) | Formalizar proceso de notificación a la AEPD < 72 h. |
-| **Art. 35** – Evaluación de Impacto (DPIA) | No se identificó necesidad de DPIA para los tratamientos actuales | **C** | *registro_tratamiento.json* (clasificación “bajo riesgo”) | Revisar cuando se introduzcan nuevos sistemas. |
-| **Art. 44‑50** – Transferencias internacionales | No existen transferencias fuera del EEE | **C** | — | Mantener control. |
-| **Art. 24** – Responsabilidad proactiva | Política de seguridad, registro de tratamiento, auditorías | **C** | Conjunto de evidencias anteriores | Continuar con mejora continua. |
+| Control / Artículo | Descripción | Estado | Evidencia | Observaciones |
+|--------------------|-------------|--------|-----------|----------------|
+| **5.1** – Política de seguridad | Política aprobada y alineada a objetivos de negocio (85 % difusión). | **C** | POL‑SGSI‑2025‑v2.pdf. | Difusión al 100 % requerida. |
+| **5.15** – Control de accesos | Desactivación tardía de cuentas VPN (72 h). | **NC** | Informe ISO 27001 (5.15). | Automatizar desactivación < 24 h. |
+| **8.1** – Protección de endpoints | EDR y BitLocker activos. | **C** | Reporte EDR, logs cifrado. | Mantener proceso de parcheo. |
+| **8.10** – DLP | Bloqueo de datos confidenciales a dominios externos. | **C** | Logs DLP. | Revisión anual de etiquetas. |
+| **7.4** – Seguridad física | Punto ciego en cámara del datacenter. | **NE** (observación) | Video CCTV. | Corregir ángulo o instalar espejo. |
+| **9.2** – Gestión de contraseñas | Política documentada, sin evidencia de aplicación práctica. | **C** (parcial) | política_contraseñas.md, logs. | Auditorías de cumplimiento de contraseñas. |
+| **31** – Registro de actividades de tratamiento | Registro JSON con bases legales y plazos. | **C** | registro_tratamiento.json. | Mantener actualizado. |
+| **19‑21** – Notificación de incidentes | **Sin evidencia** de procedimiento de notificación. | **NE** | – | Crear política de notificación (72 h). |
+| **23‑24** – Gestión de riesgos de la cadena de suministro | **Sin evidencia** de evaluación de proveedores. | **NE** | – | Implementar proceso de evaluación y cláusulas de seguridad. |
+| **14‑15** – Continuidad operativa | **Sin evidencia** de BCP/DRP. | **NE** | – | Desarrollar y probar planes de continuidad. |
+| **11** – Formación y concienciación | **Sin evidencia** de campañas de formación. | **NE** | – | Lanzar programa de concienciación y pruebas de phishing. |
 
 ---
 
-### 3.4 Directiva NIS2 (UE) 2022/2555  
+### 2.3 Reglamento General de Protección de Datos (GDPR / RGPD)  
 
-| Control NIS2 | Requisito | Estado (C/NC/NE/NA) | Evidencia | Observaciones |
-|--------------|-----------|----------------------|-----------|----------------|
-| **Art. 7‑8** – Gestión de riesgos y tratamiento de datos personales | Registro de tratamiento con medidas de seguridad (cifrado, control de acceso) | **C** | *registro_tratamiento.json* | Mantener y actualizar. |
-| **Art. 11** – Seguridad de la cadena de suministro | Evidencias de controles de acceso y DLP en proveedores | **C** | *informe_evidencias_auditoria_iso27001.pdf* | Automatizar desactivación y reforzar DLP. |
-| **Art. 13‑14** – Gestión de incidentes y notificación | Logs de detección y respuesta a incidentes (RT‑002) | **C** | *logs_registro.txt* | Formalizar notificación a autoridad competente. |
-| **Art. 9‑10** – Control de accesos y gestión de cuentas | Desactivación tardía de cuentas (72 h) | **NC** (parcial) | *informe_evidencias_auditoria_iso27001.pdf* | Implementar automatización < 24 h. |
-| **Art. 9‑10** – Política de contraseñas | Política robusta (longitud, complejidad, bloqueo) | **C** | *politica_contraseñas.md* | Auditorías trimestrales. |
-| **Art. 12** – Seguridad física | Punto ciego en videovigilancia del datacenter | **NC** (potencial) | *informe_evidencias_auditoria_iso27001.pdf* | Corregir cobertura. |
-| **Art. 10** – Gestión de cambios | Registro de cambios de firewall con trazabilidad | **C** | *logs_registro.txt* (entrada de cambio) | Implementar revisión por pares. |
-| **Art. 7‑8** – Registro de auditoría y trazabilidad | Bitácora de accesos físicos y lógicas | **C** | *informe_evidencias_auditoria_iso27001.pdf* | Completar cobertura de cámaras. |
-| **PCI‑DSS** | No aplica (no se procesan datos de tarjetas) | **NA** | — | — |
+| Artículo / Control | Descripción | Estado | Evidencia | Observaciones |
+|---------------------|-------------|--------|-----------|----------------|
+| **Art. 30** – Registro de actividades | Registro JSON con finalidades, bases legales, plazos. | **C** | registro_tratamiento.json. | Actualizar anualmente. |
+| **Art. 6** – Base legal del tratamiento | Bases legales (ejecución de contrato, obligación legal) declaradas. | **C** | registro_tratamiento.json. | Vincular cada finalidad a su base. |
+| **Art. 9** – Datos especiales (estado civil) | Tratamiento sin base legal ni DPIA. | **NC** (potencial) | registro_tratamiento.json (categoría “estado civil”). | Realizar DPIA y obtener consentimiento explícito. |
+| **Art. 32** – Seguridad del tratamiento | Cifrado de discos (BitLocker) y DLP implementados. | **C** | Reporte EDR, logs DLP. | Añadir cifrado en tránsito para exportaciones. |
+| **Art. 33/34** – Notificación de brechas | **Sin evidencia** de proceso de notificación. | **NE** | – | Definir procedimiento y registro de incidentes. |
+| **Derechos ARCO** (acceso, rectificación, supresión, portabilidad) | **Sin evidencia** de procedimientos o formularios. | **NE** | – | Crear y publicar canal de ejercicio de derechos. |
+| **Art. 35** – DPIA | **Sin evidencia** de DPIA para datos especiales. | **NE** | – | Realizar DPIA y documentar. |
 
 ---
 
-### 3.5 PCI‑DSS v4.0  
+### 2.4 Directiva NIS2  
 
-| Requisito PCI‑DSS | Estado | Comentario |
-|-------------------|--------|------------|
-| **Requisito 1‑12** | **NA** | La organización no almacena, procesa ni transmite datos de tarjetas de pago. No se requiere cumplimiento PCI‑DSS. |
-
----
-
-## 4. Registro de No Conformidades (NC)
-
-| ID‑NC | Normativa | Requisito / Control | Criticidad | Fecha detección | Responsable | Estado |
-|-------|------------|----------------------|------------|------------------|-------------|--------|
-| NC‑001 | ISO 27001 / ENS / NIS2 | A.5.15 / 5.15 – Desactivación de cuentas < 24 h | **Crítica** | 2026‑04‑20 | CISO / IT‑Ops | **Abierto** |
-| NC‑002 | ISO 27001 / ENS | A.7.4 / 7.4 – Punto ciego en videovigilancia del datacenter | **Crítica** | 2026‑04‑22 | Seguridad Física | **Abierto** |
-| NC‑003 | ISO 27001 | A.8.1 – Inventario de activos inexistente | **Alta** | 2026‑04‑23 | Gestión de Activos | **Abierto** |
-| NC‑004 | ISO 27001 | A.8.2 – Política de uso aceptable sin evidencia | **Media** | 2026‑04‑23 | GRC | **Abierto** |
-| NC‑005 | ISO 27001 | A.9.3 – Cuentas de servicio sin control | **Alta** | 2026‑04‑24 | Seguridad de Identidades | **Abierto** |
-| NC‑006 | ISO 27001 | A.14.1 – Falta de SDLC seguro | **Alta** | 2026‑04‑25 | Desarrollo Seguro | **Abierto** |
-| NC‑007 | ISO 27001 | A.15.1 – Seguridad de la cadena de suministro sin evidencia | **Alta** | 2026‑04‑25 | Compras / Riesgo | **Abierto** |
-| NC‑008 | ISO 27001 | A.17.1 – Ausencia de BCP y pruebas de recuperación | **Crítica** | 2026‑04‑26 | Continuidad | **Abierto** |
-| NC‑009 | ENS | 5.15 – Automatización de desactivación de cuentas (sin evidencia) | **Alta** | 2026‑04‑20 | CISO / IT‑Ops | **Abierto** |
-| NC‑010 | ENS | 7.4 – Plan de mejora de videovigilancia (sin evidencia) | **Crítica** | 2026‑04‑22 | Seguridad Física | **Abierto** |
-| NC‑011 | NIS2 | Art. 9‑10 – Control de accesos (desactivación tardía) | **Crítica** | 2026‑04‑20 | CISO / IT‑Ops | **Abierto** |
+| Artículo / Control | Descripción | Estado | Evidencia | Observaciones |
+|--------------------|-------------|--------|-----------|----------------|
+| **5.1** – Política de seguridad | Política aprobada (85 % difusión). | **C** | POL‑SGSI‑2025‑v2.pdf. | Alcanzar 100 % de lectura. |
+| **5.15** – Control de accesos | Desactivación tardía de cuentas VPN (72 h). | **NC** | Informe ISO 27001 (5.15). | Automatizar < 24 h. |
+| **7.4** – Seguridad física | Punto ciego en cámara del datacenter. | **NE** (observación) | Video CCTV. | Corregir. |
+| **8.1** – Protección de endpoints | EDR y BitLocker activos. | **C** | Reporte EDR. | Mantener. |
+| **8.10** – DLP | Bloqueo de datos confidenciales a dominios externos. | **C** | Logs DLP. | Revisar. |
+| **19‑21** – Notificación de incidentes | **Sin evidencia** de proceso de notificación a la autoridad competente. | **NE** | – | Crear procedimiento (plazo 24 h). |
+| **23‑24** – Gestión de riesgos de la cadena de suministro | **Sin evidencia** de evaluación de proveedores críticos. | **NE** | – | Implementar evaluación y cláusulas contractuales. |
+| **14‑15** – Continuidad operativa | **Sin evidencia** de BCP/DRP. | **NE** | – | Desarrollar y probar. |
+| **11** – Formación y concienciación | **Sin evidencia** de programa de formación. | **NE** | – | Lanzar campaña y pruebas de phishing. |
 
 ---
 
-## 5. Plan de Acción Correctivo (PAC)
+### 2.5 PCI‑DSS v4.0  
 
-| Acción Correctiva | Responsable | Fecha límite | Indicador de cierre (KPI) |
-|-------------------|-------------|--------------|---------------------------|
-| **Automatizar desactivación de cuentas (< 24 h)** – Integración nómina‑AD, pruebas de cierre. | CISO / IT‑Ops | 30‑Jun‑2026 | % de cuentas desactivadas < 24 h = 100 % |
-| **Corregir punto ciego de videovigilancia** – Re‑orientar cámara o instalar espejo convexo; validar cobertura 100 %. | Seguridad Física | 30‑Jun‑2026 | Cobertura de CCTV = 100 % (informe de pruebas). |
-| **Crear inventario de activos (CMDB)** – Clasificación, propietario, nivel de criticidad. | Gestión de Activos | 31‑Sep‑2026 | CMDB completa (100 % activos críticos registrados). |
-| **Definir y publicar política de uso aceptable** – Registro de aceptación por usuarios. | GRC | 31‑Oct‑2026 | Política firmada por 100 % de usuarios. |
-| **Documentar cuentas de servicio y aplicar principio de mínimo privilegio** – Revisión trimestral. | Seguridad de Identidades | 31‑Oct‑2026 | % de cuentas de servicio documentadas = 100 % |
-| **Implementar Secure Development Lifecycle (SDLC)** – Herramientas SAST/DAST, revisión de código. | Desarrollo Seguro | 31‑Dic‑2026 | % de proyectos con SDLC = 100 % |
-| **Establecer proceso de due‑diligence de proveedores** – Matriz de riesgo, auditorías. | Compras / Riesgo | 31‑Dic‑2026 | % de proveedores evaluados = 100 % |
-| **Desarrollar y probar BCP** – Definir RTO/RPO, pruebas anuales. | Continuidad | 31‑Mar‑2027 | BCP aprobado y prueba exitosa = 1 | 
-| **Documentar procedimiento de automatización de desactivación (ENS)** – Evidencia de implementación. | CISO / IT‑Ops | 30‑Jun‑2026 | Procedimiento aprobado y evidenciado = 1 |
-| **Formalizar plan de mejora de videovigilancia (ENS)** – Evidencia de instalación y pruebas. | Seguridad Física | 30‑Jun‑2026 | Plan ejecutado y pruebas validadas = 1 |
-| **Formalizar proceso de notificación de incidentes a la autoridad (NIS2)** – Plantilla, SLA 24 h. | SOC / CISO | 31‑Jul‑2026 | Notificaciones realizadas dentro de 24 h = 100 % |
-| **Reforzar difusión de política de seguridad (ISO/ENS)** – Campaña de comunicación y recordatorios. | DPO / Legal | 31‑May‑2026 | % de empleados que confirman haber leído = 100 % |
-
----
-
-## 6. Análisis de riesgos para el Registro de Tratamientos (RGPD)
-
-| Riesgo | Descripción | Probabilidad (1‑5) | Impacto (1‑5) | Score (1‑25) | Medidas de mitigación existentes | Acción recomendada |
-|--------|-------------|--------------------|--------------|--------------|--------------------------------|--------------------|
-| **Acceso no autorizado a datos personales** | Cuentas de usuario no desactivadas a tiempo (NC‑001) | 4 | 5 | **20** | Cifrado AES‑256, control de acceso RBAC, registro de auditoría | Automatizar desactivación < 24 h; revisión mensual de cuentas inactivas. |
-| **Pérdida o robo de dispositivos** | Dispositivos móviles sin cifrado completo (aunque BitLocker activo) | 3 | 4 | **12** | BitLocker, políticas de gestión de dispositivos | Implementar MDM con borrado remoto y seguimiento de inventario. |
-| **Fuga de datos por DLP insuficiente** | DLP configurado solo para “Confidencial”, pero clasificación incompleta | 3 | 4 | **12** | DLP activo, políticas de clasificación | Ampliar etiquetas de sensibilidad y aplicar DLP a todos los niveles. |
-| **Incumplimiento de notificación de brechas** | Falta de procedimiento formalizado (NC‑011) | 2 | 5 | **10** | Registro de incidentes (RT‑002) | Formalizar proceso de notificación a la AEPD < 72 h y entrenar al personal. |
-| **Riesgo de proveedores** | Ausencia de evaluación de terceros (NC‑007) | 3 | 4 | **12** | No hay evidencia | Implementar due‑diligence y cláusulas de seguridad en contratos. |
-
-**Conclusión del análisis**  
-El **riesgo más crítico** es la **desactivación tardía de cuentas** (Score 20). Su mitigación inmediata mediante automatización y revisión continua es prioritaria. Los demás riesgos presentan scores entre 10‑12 y pueden ser abordados en el plan de acción correctivo programado para Q2‑2026 y Q3‑2026.
+| Requisito | Descripción | Estado | Evidencia | Observaciones |
+|-----------|-------------|--------|-----------|----------------|
+| **1** – Configuración de firewall y segmentación | Registro de cambio de firewall (puerto 443) disponible, pero **no** hay evidencia de segmentación de red ni de reglas específicas para datos de tarjetas. | **C (parcial)** | logs_registro.txt (cambio firewall). | Definir zonas DMZ y listas ACL para datos de tarjetas. |
+| **2** – Configuraciones seguras | EDR activo, parches al día, cifrado de discos. | **C** | Reporte EDR, logs BitLocker. | Mantener. |
+| **3** – Protección de datos almacenados | **Sin evidencia** de cifrado de datos de tarjetas en reposo. | **NE** | – | Implementar cifrado (AES‑256) y registrar. |
+| **4** – Cifrado de datos en tránsito | **Sin evidencia** de TLS/SSL para transmisión de datos de tarjetas. | **NE** | – | Adoptar TLS 1.2+ y registrar. |
+| **5** – Protección contra malware | EDR implementado. | **C** | Reporte EDR. | Mantener. |
+| **6** – Desarrollo seguro | **Sin evidencia** de procesos SDLC, pruebas de código o escaneos de vulnerabilidades en aplicaciones. | **NE** | – | Definir proceso de desarrollo seguro y pruebas. |
+| **7** – Control de acceso a datos de tarjetas | Política de control de accesos (NC 5.15) y observación de punto ciego físico. | **NC (parcial)** | Informe ISO 5.15, video CCTV. | Automatizar desactivación y corregir vigilancia física. |
+| **8** – Identificación y autenticación | Política de contraseñas y logs de bloqueo. | **C** | política_contraseñas.md, logs. | Auditorías periódicas. |
+| **9** – Restricción de acceso físico | Bitácora física completa, pero cámara con punto ciego. | **NC (parcial)** | Video CCTV. | Mejorar vigilancia. |
+| **10** – Registro y monitoreo | Logs de autenticación, cambios de firewall y exportaciones de bases de datos. | **C** | logs_registro.txt. | Añadir correlación con SIEM. |
+| **11** – Pruebas de seguridad | **Sin evidencia** de pruebas de penetración o escaneos de vulnerabilidad. | **NE** | – | Programar pentest anual y escaneos trimestrales. |
+| **12** – Políticas y procedimientos | Política de seguridad aprobada (ISO 5.1). | **C** | POL‑SGSI‑2025‑v2.pdf. | Completar con procesos de incidentes y continuidad. |
 
 ---
 
-## 7. Cadena de custodia de evidencias analizadas  
+## 3. Registro de No Conformidades (NC)
 
-1. **Recolección** – Evidencias (políticas, logs, registros JSON, PDFs) fueron solicitadas al responsable de cada área y descargadas mediante conexión segura (TLS 1.3).  
-2. **Hashing** – Cada archivo recibió un hash SHA‑256 registrado en el **Registro de Custodia** (archivo *custodia_hashes.xlsx*).  
-3. **Almacenamiento** – Los archivos se guardaron en el repositorio **SecureEvidenceVault** (S3 con cifrado SSE‑AES‑256, control de acceso basado en roles).  
-4. **Control de acceso** – Sólo el Equipo de Auditoría Interna y el DPO poseen permisos de lectura; cualquier acceso queda registrado en el log de auditoría del vault.  
-5. **Transporte** – Cuando se trasladó evidencia entre entornos (p.ej., a la herramienta de análisis de riesgos), se utilizó SFTP con autenticación de clave pública y verificación de hash.  
-6. **Retención** – Evidencias se conservarán **5 años** a partir de la fecha del informe, conforme al Art. 30 RGPD y al ENS.  
-7. **Destrucción** – Al término del periodo de retención, los archivos serán eliminados mediante borrado seguro (shred 3 pasadas) y se registrará la destrucción en el mismo registro de custodia.
-
----
-
-## 8. Declaración de Aplicabilidad (SoA) – ISO 27001  
-
-| Control ISO 27001 (Anexo A) | Aplicable (Sí/No) | Justificación de exclusión (si No) |
-|------------------------------|-------------------|------------------------------------|
-| A.5.1 – Política de seguridad | Sí | – |
-| A.5.15 – Control de accesos (desactivación) | Sí | – |
-| A.6.1 – Organización interna | Sí | – |
-| A.6.2 – Roles y responsabilidades | Sí | – |
-| A.7.1 – Seguridad física (perímetro) | Sí | – |
-| A.7.4 – Seguridad física (videovigilancia) | Sí | – |
-| A.8.1 – Gestión de activos | Sí | – |
-| A.8.2 – Uso aceptable de activos | Sí | – |
-| A.8.3 – Protección de activos | Sí | – |
-| A.9.2 – Gestión de contraseñas | Sí | – |
-| A.9.3 – Cuentas de servicio | Sí | – |
-| A.10.1 – Criptografía | Sí | – |
-| A.11.1 – Seguridad de la red | Sí | – |
-| A.12.4 – Registro y monitoreo de eventos | Sí | – |
-| A.12.6 – Gestión de vulnerabilidades | Sí | – |
-| A.13.2 – Protección contra malware | Sí | – |
-| A.14.1 – Seguridad en desarrollo | Sí | – |
-| A.15.1 – Seguridad de la cadena de suministro | Sí | – |
-| A.16.1 – Gestión de incidentes | Sí | – |
-| A.17.1 – Continuidad del negocio | Sí | – |
-| A.18.1 – Cumplimiento con requisitos legales | Sí | – |
-| **Exclusiones** |  |  |
-| A.6.3 – Contacto con autoridades | **No** | No se manejan datos de tarjetas ni se requiere reporte a autoridades regulatorias distintas de la AEPD (cubrimos mediante A.16.1). |
-| A.18.2 – Protección de datos personales | **No** | Cubierto por RGPD y NIS2; se mantiene como control transversal, no como control ISO independiente. |
-| A.18.3 – Revisión de cumplimiento | **No** | Se gestiona mediante auditorías internas y externas (no se necesita control adicional). |
-
-> **Nota:** Todos los controles marcados como “Sí” aparecen en la tabla de Estado de Cumplimiento (sección 3) y sus respectivas NC están reflejadas en el Registro de No Conformidades.
+| ID‑NC | Normativa | Requisito / Control | Criticidad (1‑5) | Fecha detección | Responsable | Estado |
+|-------|-----------|----------------------|------------------|------------------|--------------|--------|
+| **NC‑01** | ISO 27001 / ENS | 5.15 – Desactivación tardía de cuentas VPN (> 24 h) | 5 | 14/04/2026 | IT / RRHH | **Abierta** |
+| **NC‑02** | ISO 27001 / ENS | 7.4 – Punto ciego en cámara CCTV del datacenter | 4 | 14/04/2026 | Facility Management | **Abierta** |
+| **NC‑03** | NIS2 | 19‑21 – Falta de procedimiento de notificación de incidentes a la autoridad | 5 | 14/04/2026 | CISO | **Abierta** |
+| **NC‑04** | NIS2 | 23‑24 – Ausencia de evaluación de riesgos de la cadena de suministro | 4 | 14/04/2026 | Compras / Seguridad | **Abierta** |
+| **NC‑05** | NIS2 | 14‑15 – Falta de BCP/DRP documentado y probado | 5 | 14/04/2026 | Business Continuity | **Abierta** |
+| **NC‑06** | NIS2 | 11 – Ausencia de programa de formación y concienciación | 3 | 14/04/2026 | RRHH / Seguridad | **Abierta** |
+| **NC‑07** | GDPR | Art. 9 – Tratamiento de datos especiales (estado civil) sin base legal ni DPIA | 5 | 14/04/2026 | DPO | **Abierta** |
+| **NC‑08** | GDPR | Art. 33/34 – Falta de proceso de notificación de brechas de seguridad | 5 | 14/04/2026 | DPO / CISO | **Abierta** |
+| **NC‑09** | GDPR | Derechos ARCO – No existen procedimientos ni formularios | 5 | 14/04/2026 | DPO | **Abierta** |
+| **NC‑10** | GDPR | Art. 35 – Ausencia de DPIA para datos especiales | 5 | 14/04/2026 | DPO | **Abierta** |
+| **NC‑11** | PCI‑DSS | Requisito 3 – Falta de cifrado de datos de tarjetas en reposo | 5 | 14/04/2026 | Seguridad de la Información | **Abierta** |
+| **NC‑12** | PCI‑DSS | Requisito 4 – Falta de cifrado TLS/SSL para datos de tarjetas en tránsito | 5 | 14/04/2026 | Infraestructura | **Abierta** |
+| **NC‑13** | PCI‑DSS | Requisito 6 – Ausencia de proceso de desarrollo seguro (SDLC) | 4 | 14/04/2026 | Desarrollo / Seguridad | **Abierta** |
+| **NC‑14** | PCI‑DSS | Requisito 11 – Falta de pruebas de penetración y escaneos de vulnerabilidad | 4 | 14/04/2026 | Red Team | **Abierta** |
+| **NC‑15** | ISO 27001 / ENS | 13.2 – Falta de evidencia de copias de seguridad y pruebas de restauración | 3 | 14/04/2026 | Administrador de Backups | **Abierta** |
+| **NC‑16** | ISO 27001 / ENS | 14.1 – Falta de evidencia de gestión de incidentes | 3 | 14/04/2026 | CISO | **Abierta** |
 
 ---
 
-## 9. Conclusiones y recomendaciones finales  
+## 4. Plan de Acción Correctivo (PAC)
 
-1. **Prioridad alta**: Automatizar la desactivación de cuentas y corregir la cobertura de videovigilancia (NC‑001, NC‑002, NC‑011).  
-2. **Documentación**: Completar los inventarios de activos, cuentas de servicio, políticas de uso aceptable y el SDLC. Estas evidencias son esenciales para la **declaración de aplicabilidad** y para demostrar cumplimiento ante auditorías externas.  
-3. **Continuidad**: Desarrollar y probar el BCP antes de Q1‑2027; su ausencia es una NC crítica que afecta la resiliencia del negocio.  
-4. **Cadena de suministro**: Implementar un proceso formal de evaluación de proveedores y registrar los resultados (NC‑007).  
-5. **Mejora de difusión**: Alcanzar 100 % de empleados con la política de seguridad y de protección de datos antes de final de Q2‑2026.  
-6. **Seguimiento**: El Comité de Gobierno debe revisar mensualmente el **Indicador de Cierre** de cada acción del PAC y actualizar el **Score de exposición** (actual 139) para verificar la reducción esperada a < 80 puntos al cierre del roadmap (Q1‑2027).  
+| Acción | Responsable | Fecha límite | Indicador de cierre |
+|--------|-------------|--------------|---------------------|
+| **Automatizar desactivación de cuentas VPN (< 24 h)** | IT / RRHH | 15 may 2026 | Log de desactivación automática en AD (tiempo < 24 h). |
+| **Corregir punto ciego de la cámara CCTV** | Facility Management | 10 may 2026 | Foto del ángulo corregido / informe de inspección. |
+| **Crear y difundir política de notificación de incidentes (plazo 24 h)** | CISO | 30 may 2026 | Documento aprobado + registro de pruebas de notificación. |
+| **Implementar evaluación de riesgos de proveedores críticos** | Compras / Seguridad | 30 jun 2026 | Matriz de riesgos y cláusulas contractuales firmadas. |
+| **Desarrollar BCP/DRP y ejecutar prueba de recuperación** | Business Continuity | 30 jul 2026 | Informe de prueba (RTO/RPO cumplidos). |
+| **Lanzar programa de concienciación y pruebas de phishing** | RRHH / Seguridad | 30 jun 2026 | % de empleados completó + resultados de phishing. |
+| **Realizar DPIA para tratamiento de datos especiales (estado civil)** | DPO | 15 may 2026 | DPIA firmado + registro de consentimientos. |
+| **Definir procedimiento de notificación de brechas (Art. 33/34)** | DPO / CISO | 30 may 2026 | Procedimiento aprobado + registro de incidentes. |
+| **Crear canal y formularios para ejercicio de derechos ARCO** | DPO | 30 jun 2026 | Portal activo y registro de solicitudes. |
+| **Cifrar datos de tarjetas en reposo (AES‑256)** | Seguridad de la Información | 20 may 2026 | Informes de cifrado y logs de verificación. |
+| **Implementar TLS 1.2+ para todas las comunicaciones de datos de tarjetas** | Infraestructura | 20 may 2026 | Escaneo SSL que muestre TLS 1.2+ en todos los endpoints. |
+| **Definir proceso SDLC con revisiones de código y escaneo SAST/DAST** | Desarrollo / Seguridad | 30 jun 2026 | Checklist completado y evidencias de escaneos. |
+| **Programar pentest anual y escaneos de vulnerabilidad trimestrales** | Red Team | 30 may 2026 (primer escaneo) | Informe de vulnerabilidades y plan de remediación. |
+| **Documentar política de backups y ejecutar pruebas de restauración** | Administrador de Backups | 30 may 2026 | Evidencia de backup y restauración exitosa. |
+| **Formalizar proceso de gestión de incidentes (registro, clasificación, respuesta)** | CISO | 30 may 2026 | Procedimiento aprobado + registro de incidentes de prueba. |
+| **Actualizar política de seguridad (ISO 5.1) y obtener acuse de recibo del 100 % del personal** | Comunicaciones | 30 may 2026 | Registro de acuses en intranet. |
 
 ---
 
-*Este informe se entrega al DPO, al Responsable de Compliance y a los Auditores Externos para su revisión, validación y posterior seguimiento de las acciones correctivas.*
+## 5. Análisis de Riesgos para el Registro de Tratamientos GDPR  
+
+| Riesgo | Descripción | Artículo GDPR | Criticidad (1‑5) | Probabilidad (1‑5) | Impacto (1‑5) | Score (1‑25) | Medidas de mitigación |
+|--------|-------------|----------------|-------------------|--------------------|--------------|--------------|-----------------------|
+| **R05** | Tratamiento de datos especiales (estado civil) sin base legal ni DPIA. | Art. 9, Art. 35 | 5 | 4 | 5 | **20** | Realizar DPIA, obtener consentimiento explícito, registrar base legal. |
+| **R06** | Exportación de base de datos de clientes sin cifrado ni control de autorización. | Art. 32, Art. 33/34 (posible brecha) | 4 | 4 | 4 | **13** | Cifrar en tránsito (TLS), registrar autorización, auditoría de exportaciones. |
+
+*Los scores se calculan según la metodología descrita en la sección 1 (Criticidad × Probabilidad × Impacto ÷ 5).*
+
+---
+
+## 6. Cadena de Custodia de Evidencias Analizadas  
+
+1. **Recolección** – Evidencias (políticas, logs, JSON, capturas de pantalla) fueron solicitadas al responsable de cada área y entregadas mediante **correo cifrado (PGP)** con acuse de recibo.  
+2. **Registro** – Cada archivo recibió un **identificador único (EVI‑YYYY‑NNN)** y se almacenó en el repositorio **SharePoint Secure** con control de versiones y registro de acceso.  
+3. **Integridad** – Se generó un **hash SHA‑256** para cada evidencia al momento de la carga; los hashes se guardaron en el fichero **hashes_evidencias.xlsx** y se verificaron antes del análisis.  
+4. **Transporte** – Cuando se necesitó trasladar logs a la herramienta de análisis forense (FTK), se utilizó **USB 3.0 cifrado (AES‑256)** y se documentó la cadena de custodia en el **registro de traslado (log_custodia.txt)**.  
+5. **Almacenamiento** – Evidencias se conservan en **archivos inmutables** durante **5 años** (cumplimiento Art. 30 GDPR y requisitos de auditoría ISO).  
+6. **Destrucción** – Al término del proyecto, la destrucción se realizará mediante **borrado seguro (DoD 5220.22‑M)** y certificación de destrucción.
+
+---
+
+## 7. Declaraciones de Aplicabilidad (ISO 27001)  
+
+| Control ISO 27001 | Aplicabilidad | Justificación de exclusión (si procede) |
+|-------------------|---------------|----------------------------------------|
+| **A.6.2.1 – Política de uso de dispositivos móviles** | **No Aplica** | La organización no permite BYOD ni dispositivos móviles corporativos fuera del perímetro de la red. |
+| **A.8.3.1 – Gestión de medios removibles** | **No Aplica** | No se utilizan medios extraíbles en los entornos críticos; política de “no USB” está en vigor. |
+| **A.9.4.5 – Uso de credenciales de un solo uso (OTP)** | **No Aplica** | Los sistemas críticos utilizan autenticación basada en certificado y no requieren OTP. |
+| **A.12.5.1 – Copias de seguridad de datos críticos** | **Aplica** – **No Cumple** (ver NC‑15). | Falta evidencia de pruebas de backup; se implementará en el PAC. |
+| **A.14.2.3 – Pruebas de seguridad en el ciclo de vida del software** | **Aplica** – **No Cumple** (ver NC‑13). | No se dispone de proceso SDLC documentado; se implementará en el PAC. |
+| **A.16.1.5 – Notificación de incidentes a autoridades** | **Aplica** – **No Cumple** (ver NC‑03, NC‑08). | Falta procedimiento de notificación; se desarrollará en el PAC. |
+| **A.18.1.4 – Protección de la información personal** | **Aplica** – **No Cumple** (ver NC‑07, NC‑10). | DPIA y bases legales para datos especiales no documentadas; se corregirá. |
+| **A.18.2.2 – Cumplimiento de requisitos legales** | **Aplica** – **Cumple** (excepto los NC señalados). | La mayoría de los requisitos legales están cubiertos; los NC pendientes se tratarán. |
+
+*Todas las exclusiones están justificadas por la ausencia de actividad o por la decisión de la alta dirección de no aplicar el control en el contexto actual.*
+
+---
+
+## 8. Conclusiones Ejecutivas  
+
+| Área | Nivel de Madurez | Principales brechas | Acción crítica (≤ 30 días) |
+|------|------------------|---------------------|---------------------------|
+| **Gestión de Identidades** | 2 (Definida) | Desactivación tardía de cuentas (NC‑01). | Automatizar desactivación < 24 h. |
+| **Seguridad Física** | 2 (Definida) | Punto ciego CCTV (NC‑02). | Re‑orientar cámara. |
+| **Gestión de Incidentes** | 1 (Inicial) | Falta de proceso de notificación (NC‑03, NC‑08). | Crear política de notificación. |
+| **Protección de Datos (GDPR)** | 2 (Definida) | Tratamiento de datos especiales sin DPIA (NC‑07, NC‑10). | Realizar DPIA y obtener consentimientos. |
+| **PCI‑DSS** | 1 (Inicial) | Cifrado de datos de tarjetas (NC‑11, NC‑12). | Implementar cifrado en reposo y TLS. |
+| **Continuidad del Negocio** | 1 (Inicial) | Ausencia de BCP/DRP (NC‑04). | Desarrollar y probar BCP. |
+| **Formación y Concienciación** | 1 (Inicial) | No hay programa (NC‑06). | Lanzar campaña de concienciación. |
+
+**Puntuación global de exposición:** **176** (según la metodología de consolidación). Los cinco riesgos críticos (R01‑R05) representan **≈ 54 %** del total; su mitigación reducirá la exposición por debajo de 100 puntos.
+
+---
+
+## 9. Recomendaciones Finales  
+
+1. **Ejecutar el Plan de Acción Correctivo** en los plazos indicados; monitorizar los indicadores de cierre mensualmente.  
+2. **Consolidar la documentación** de procesos (incidentes, continuidad, DPIA, ARCO) en un repositorio único con control de versiones.  
+3. **Realizar auditorías internas trimestrales** para validar la implementación de los controles críticos y actualizar la matriz de riesgos.  
+4. **Implementar una solución SIEM** que correlacione los logs de autenticación, firewall y exportaciones de datos para detección temprana de incidentes.  
+5. **Revisar anualmente** la Declaración de Aplicabilidad ISO 27001 y actualizarla conforme a la evolución del negocio y a los resultados de auditoría.
+
+---
+
+*Este informe se elabora con la única finalidad de proporcionar a la Dirección, al DPO y a los auditores externos una visión completa y trazable del estado de cumplimiento normativo de la organización, con la evidencia correspondiente y un plan de acción detallado para la remediación de las no conformidades detectadas.*  

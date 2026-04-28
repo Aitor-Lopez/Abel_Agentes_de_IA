@@ -500,10 +500,12 @@ def markdown_to_html(md_text: str, subtitulo: str, tipo: str) -> str:
     --border: #21262d;
   }}
   * {{ box-sizing: border-box; margin: 0; padding: 0; }}
+  html {{ overflow-x: hidden; }}
   body {{
     background: var(--bg); color: var(--text);
     font-family: 'Inter', sans-serif; font-size: 15px;
     line-height: 1.8; padding: 0;
+    overflow-x: hidden;
   }}
   .page-wrap {{ max-width: 980px; margin: 0 auto; padding: 60px 40px 120px; }}
 
@@ -538,13 +540,15 @@ def markdown_to_html(md_text: str, subtitulo: str, tipo: str) -> str:
 
   /* TABLES */
   .table-wrap {{ overflow-x: auto; margin: 24px 0; border-radius: 12px;
-                  border: 1px solid var(--border); }}
-  table {{ width: 100%; border-collapse: collapse; font-size: 14px; }}
+                  border: 1px solid var(--border); max-width: 100%; }}
+  table {{ width: 100%; border-collapse: collapse; font-size: 13px; table-layout: auto; }}
   thead tr {{ background: var(--bg2); }}
-  th {{ padding: 12px 16px; text-align: left; color: var(--text2);
-        font-size: 11px; font-weight: 500; text-transform: uppercase;
+  th {{ padding: 10px 12px; text-align: left; color: var(--text2);
+        font-size: 10px; font-weight: 500; text-transform: uppercase;
         letter-spacing: 1px; white-space: nowrap; }}
-  td {{ padding: 12px 16px; border-top: 1px solid var(--border); vertical-align: top; }}
+  td {{ padding: 10px 12px; border-top: 1px solid var(--border); vertical-align: top;
+       overflow-wrap: break-word; word-break: normal; hyphens: auto; min-width: 80px; }}
+  td:first-child {{ min-width: 120px; max-width: 200px; }}
   tbody tr:hover {{ background: rgba(255,255,255,0.02); }}
 
   /* BADGES — criticidad */
@@ -710,6 +714,34 @@ async def estado_job(job_id: str):
     }
 
 
+# ── Rutas estáticas PRIMERO (antes que las dinámicas con {job_id}) ──
+# FastAPI resuelve rutas en orden de registro. Si las rutas con {job_id}
+# fueran primero, "ultimo" sería capturado como job_id y devolvería 404.
+
+@app.get("/api/informe/ultimo/{tipo}/html", response_class=HTMLResponse)
+async def ultimo_informe_html(tipo: str):
+    """Último informe guardado en disco. tipo: ciso | ceo | general"""
+    path = DB_DIR / f"informe_{tipo}.html"
+    if not path.exists():
+        raise HTTPException(404, f"No hay informe '{tipo}' generado todavía")
+    return HTMLResponse(path.read_text(encoding="utf-8"))
+
+
+@app.get("/api/informe/ultimo/{tipo}/descargar")
+async def descargar_informe(tipo: str):
+    """Descarga el informe HTML como archivo."""
+    path = DB_DIR / f"informe_{tipo}.html"
+    if not path.exists():
+        raise HTTPException(404, f"No hay informe '{tipo}' generado todavía")
+    fecha = datetime.now().strftime("%Y%m%d")
+    return FileResponse(
+        path, media_type="text/html",
+        filename=f"auditoria_{tipo}_{fecha}.html",
+    )
+
+
+# ── Rutas dinámicas con {job_id} DESPUÉS ──
+
 @app.get("/api/informe/{job_id}/{tipo}/html", response_class=HTMLResponse)
 async def obtener_informe_html(job_id: str, tipo: str):
     """Devuelve un informe específico como HTML. tipo: ciso | ceo | general"""
@@ -734,28 +766,6 @@ async def obtener_informe_md(job_id: str, tipo: str):
     if not job.get("informes_md") or tipo not in job["informes_md"]:
         raise HTTPException(404, f"Informe '{tipo}' no disponible")
     return {"markdown": job["informes_md"][tipo]}
-
-
-@app.get("/api/informe/ultimo/{tipo}/html", response_class=HTMLResponse)
-async def ultimo_informe_html(tipo: str):
-    """Último informe guardado en disco. tipo: ciso | ceo | general"""
-    path = DB_DIR / f"informe_{tipo}.html"
-    if not path.exists():
-        raise HTTPException(404, f"No hay informe '{tipo}' generado todavía")
-    return HTMLResponse(path.read_text(encoding="utf-8"))
-
-
-@app.get("/api/informe/ultimo/{tipo}/descargar")
-async def descargar_informe(tipo: str):
-    """Descarga el informe HTML como archivo."""
-    path = DB_DIR / f"informe_{tipo}.html"
-    if not path.exists():
-        raise HTTPException(404, f"No hay informe '{tipo}' generado todavía")
-    fecha = datetime.now().strftime("%Y%m%d")
-    return FileResponse(
-        path, media_type="text/html",
-        filename=f"auditoria_{tipo}_{fecha}.html",
-    )
 
 
 @app.get("/api/informes/disponibles")

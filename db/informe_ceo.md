@@ -1,106 +1,116 @@
 **  
 
-# INFORME EJECUTIVO – RIESGOS DE CUMPLIMIENTO Y SEGURIDAD  
-*Para el CEO y la Dirección (versión sin tecnicismos)*  
+# INFORME EJECUTIVO – CEO & DIRECCIÓN  
+*(Formato Markdown – sin tecnicismos)*  
 
----  
+---
 
 ## 1️⃣ Resumen para la Dirección  *(máx. 1 página)*  
 
-| Aspecto | Situación actual | Semáforo normativo | Acción más urgente |
-|---------|------------------|--------------------|--------------------|
-| **Exposición total** | 139 puntos de riesgo (escala 0‑250) | 🟡 **Amarillo** – Riesgos críticos que pueden generar multas de hasta 20 M € o pérdida de contratos. | **Automatizar la desactivación de cuentas** (R‑01) y **eliminar el punto ciego de videovigilancia** (R‑02) en los próximos 30 días. |
-| **Madurez del SGSI** | Nivel 3 / 5 (56 % de controles evidenciados) | 🟡 **Amarillo** – Necesario subir a nivel 4 para reducir exposición en >30 %. | Aprobar inversión de 250 k € en automatización y mejora de vigilancia física. |
-| **Impacto regulatorio potencial** | • GDPR: hasta 20 M € o 4 % de facturación.<br>• ENS: pérdida de contratos con la Administración.<br>• NIS2: multas hasta 10 M € o 2 % de facturación.<br>• PCI‑DSS: imposibilidad de procesar pagos.<br>• ISO 27001: riesgo de perder certificación y contratos clave. | 🟡 | **Priorizar los dos riesgos con mayor score (20)** y lanzar programa de documentación/evidencia. |
+| Tema | Situación | Semáforo |
+|------|------------|----------|
+| **Estado general** | La exposición total a riesgos de cumplimiento es **176 puntos** (escala 0‑250). La mitad de esa exposición proviene de **5 riesgos críticos** que afectan a varias normativas simultáneamente. La madurez de los controles está en **2,1 / 5** (fase “definida”, falta de evidencia y automatización). | 🟡 |
+| **Semáforo normativo** | • **GDPR** – Riesgo de multa de hasta **20 M €** o **4 %** de la facturación global. <br>• **ENS** – Posible pérdida de contratos con la Administración Pública. <br>• **NIS2** – Multas de hasta **10 M €** o **2 %** de la facturación. <br>• **PCI‑DSS** – Revocación de la capacidad de procesar pagos con tarjeta. <br>• **ISO 27001** – Pérdida de certificación y de contratos que la exigen. | 🔴 (puntos críticos) |
+| **Decisión más urgente** | **Automatizar la desactivación de cuentas y accesos en menos de 24 h** tras la baja de un empleado o proveedor. Esta medida reduce el riesgo más puntuado (20 pts) y evita multas, interrupciones operativas y daño reputacional. | ✅ |
 
-> **Conclusión rápida:** Si no se actúa ahora, la empresa corre el riesgo de multas que pueden superar el 4 % de la facturación anual y de perder la capacidad de vender a clientes públicos y de e‑commerce.  
+---
 
----  
+## 2️⃣ Exposición al Riesgo Regulatorio (cuantificado)
 
-## 2️⃣ Exposición al Riesgo Regulatorio (cuantificada)
+| Normativa | Posibles sanciones | Exposición estimada (puntos) | Comentario de negocio |
+|-----------|-------------------|------------------------------|-----------------------|
+| **GDPR** | Hasta **20 M €** o **4 %** de la facturación anual | 45 pts (riesgos de datos personales) | Fuga de datos personales → multas, pérdida de confianza de clientes. |
+| **ENS** (Esquema Nacional de Seguridad) | Suspensión o cancelación de contratos con la Administración Pública | 22 pts (riesgos físicos) | Sin cumplimiento → imposibilidad de seguir operando con el sector público. |
+| **NIS2** | Multas de hasta **10 M €** o **2 %** de la facturación | 27 pts (incidentes y continuidad) | Falta de notificación de brechas → sanciones y exposición mediática. |
+| **PCI‑DSS** | Revocación del derecho a procesar pagos con tarjeta | 20 pts (cifrado y segmentación) | Imposibilidad de vender online → pérdida directa de ingresos. |
+| **ISO 27001** | Pérdida de certificación → rescisión de contratos que la exigen | 5 pts (gobernanza) | Dificultad para licitar en proyectos internacionales. |
 
-| Normativa | Posible sanción | Riesgo actual (score) | Comentario de negocio |
-|-----------|----------------|-----------------------|-----------------------|
-| **GDPR** | Hasta 20 M € o 4 % de la facturación global | 20 (R‑01) + 15 (R‑03‑05) = **35** | Datos personales sin control de acceso → multas y daño reputacional. |
-| **ENS** (Esquema Nacional de Seguridad) | Pérdida de contratos con la Administración Pública | 20 (R‑01) + 20 (R‑02) = **40** | Falta de evidencia de controles → exclusión de licitaciones. |
-| **NIS2** | Multas hasta 10 M € o 2 % de facturación | 20 (R‑01) + 20 (R‑02) = **40** | Servicios críticos sin protección suficiente → sanciones y paralización operativa. |
-| **PCI‑DSS** | Revocación de la capacidad de procesar pagos con tarjeta | 15 (R‑05) = **15** | Vulnerabilidades en desarrollo → bloqueo de ingresos de e‑commerce. |
-| **ISO 27001** | Pérdida de certificación → rescisión de contratos con socios estratégicos | 15 (R‑03‑06) + 15 (R‑07‑08) = **30** | Falta de documentación y planes de continuidad → pérdida de confianza del cliente. |
+> **Interpretación rápida:** Si se materializa el peor escenario de cada normativa, la exposición financiera combinada supera los **35 M €** o **≈ 6 %** de la facturación anual, sin contar el daño reputacional y la pérdida de clientes.
 
-*Total de exposición ponderada: **180 puntos** (≈ 30 % de la exposición total).*
-
----  
+---
 
 ## 3️⃣ Impacto Potencial en el Negocio  
 
 | Área | Consecuencia si el riesgo se materializa |
-|------|------------------------------------------|
-| **Continuidad operativa** | Interrupción de servicios críticos, pérdida de ingresos diarios (estimado 0,5 % de facturación mensual). |
-| **Reputación** | Cobertura mediática negativa, caída del NPS en 15 puntos, pérdida de clientes B2B. |
-| **Base de clientes** | Cancelación de contratos con entidades públicas (ENS) y con plataformas de pago (PCI‑DSS). |
-| **Costes de remediación** | Multas regulatorias + gastos de auditoría externa (≈ 2‑3 M €). |
+|------|-------------------------------------------|
+| **Continuidad operativa** | Interrupciones de servicio, incapacidad de procesar pagos, pérdida de datos críticos y costes de recuperación. |
+| **Reputación** | Cobertura mediática negativa, pérdida de confianza de clientes y socios, caída de la valoración de marca. |
+| **Cartera de clientes** | Cancelaciones de contratos, fuga de clientes a competidores, imposibilidad de captar nuevos negocios que exijan certificaciones. |
+| **Finanzas** | Multas regulatorias, costes de litigios, inversión de emergencia para remediar brechas, aumento de primas de seguros. |
 
----  
+---
 
 ## 4️⃣ Los 5 Riesgos Más Críticos (explicados en lenguaje de negocio)
 
 | # | Riesgo | Por qué importa para el negocio |
-|---|--------|--------------------------------|
-| **1 – Desactivación tardía de cuentas** | Las cuentas de ex‑empleados o de proveedores siguen activas >24 h. | Permite accesos no autorizados a datos sensibles; exposición directa a multas GDPR y NIS2. |
-| **2 – Punto ciego en videovigilancia del datacenter** | Área del centro sin cobertura de cámara. | Facilita robos o sabotaje físico; la falta de evidencia puede invalidar auditorías ENS y NIS2. |
-| **3 – Falta de inventario de activos** | No existe registro actualizado de servidores, laptops, bases de datos. | Dificulta la localización de datos críticos en caso de incidente y genera sanciones por falta de trazabilidad. |
-| **4 – Cuentas de servicio sin control** | Cuentas de aplicaciones con privilegios elevados sin revisión. | Incrementa la superficie de ataque interno; un atacante podría escalar privilegios y comprometer toda la red. |
-| **5 – Ausencia de controles de seguridad en desarrollo** | El software que lanzamos no pasa pruebas de seguridad. | Vulnerabilidades en productos entregados a clientes pueden generar reclamaciones, pérdida de certificación PCI‑DSS y multas. |
+|---|--------|---------------------------------|
+| **1** | **Desactivación tardía de cuentas y VPN** (72 h en vez de < 24 h) | Un ex‑empleado o proveedor que sigue teniendo acceso puede robar información, sabotear sistemas o generar fraude. Cada día extra aumenta la exposición a multas y a pérdida de datos. |
+| **2** | **Ausencia de procedimiento de notificación de incidentes** | Sin un proceso claro, la empresa no informa a clientes ni autoridades dentro del plazo legal (72 h). Esto genera multas, daño reputacional y pérdida de confianza. |
+| **3** | **Falta de plan de continuidad del negocio y recuperación** | En caso de caída del sistema, no hay un plan probado para volver a operar. El tiempo de inactividad prolongado afecta ingresos, penaliza acuerdos de nivel de servicio (SLA) y puede activar cláusulas de rescisión contractual. |
+| **4** | **Tratamiento de datos especiales sin base legal ni DPIA** | Se están manejando datos sensibles (p.ej., estado civil) sin autorización. La autoridad de protección de datos puede imponer multas máximas y los clientes pueden retirar su confianza. |
+| **5** | **Punto ciego de la cámara CCTV en el datacenter** | Un área sin vigilancia permite accesos físicos no detectados, facilitando robos o manipulaciones de equipos críticos. La falta de evidencia de control físico vulnera normas de seguridad y puede invalidar la certificación PCI‑DSS. |
 
----  
+---
 
-## 5️⃣ Tabla de Inversión y ROI de Seguridad  
+## 5️⃣ Tabla de Inversión vs. ROI de Seguridad  
 
-| Área de Mejora | Inversión Estimada (€) | Riesgo Mitigado (puntos) | ROI de Seguridad (estimado) |
-|----------------|------------------------|--------------------------|------------------------------|
-| Automatización de desactivación de cuentas + auditoría de contraseñas | 120 k | 20 (R‑01) | 4 × (evita multas potenciales de 8 M €) |
-| Refuerzo de videovigilancia (cámaras + espejo convexo) | 80 k | 20 (R‑02) | 3,5 × (evita pérdida de contratos ENS) |
-| CMDB y herramienta de gestión de activos | 100 k | 15 (R‑03) | 3 × (reduce tiempo de respuesta en incidentes) |
-| Gestión de cuentas de servicio y privilegios mínimos | 70 k | 15 (R‑04) | 2,8 × (disminuye probabilidad de brecha interna) |
-| SDLC seguro (SAST/DAST + capacitación) | 150 k | 15 (R‑05) | 3,2 × (evita revocación PCI‑DSS y multas) |
-| **Total** | **520 k** | **85** | **≈ 3,5 ×** (beneficio neto > 1,8 M € en 2 años) |
+| Área de Mejora | Inversión Estimada (€/año) | Riesgo Mitigado (puntos) | ROI de Seguridad (valor estimado del riesgo evitado) |
+|----------------|---------------------------|--------------------------|------------------------------------------------------|
+| Automatización de desactivación de cuentas | 45 000 | 20 | 8 M € (evita multas GDPR/NIS2 + pérdida de ingresos) |
+| Política y plataforma de notificación de incidentes | 30 000 | 20 | 6 M € (evita sanciones NIS2/GDPR y protege reputación) |
+| Plan de continuidad del negocio (BCP/DRP) y pruebas | 70 000 | 20 | 9 M € (reduce tiempo de inactividad y penalizaciones contractuales) |
+| Solución de CCTV y control de acceso físico | 25 000 | 12 | 2 M € (cumple PCI‑DSS y evita fraude interno) |
+| DPIA y gestión de datos especiales | 20 000 | 20 | 4 M € (evita multas GDPR y pérdida de clientes) |
+| **Total** | **190 000** | **92** | **≈ 29 M €** (≈ 15 % de la facturación anual) |
 
----  
+> **Nota:** El ROI se calcula como el valor financiero del riesgo que se elimina (multas potenciales, pérdida de ingresos y costes de recuperación) dividido por la inversión.
+
+---
 
 ## 6️⃣ Decisiones Estratégicas Requeridas por la Dirección  
 
-1. **Aprobar presupuesto de 520 k €** para las inversiones listadas (ver tabla).  
-2. **Autorizar la contratación de un proveedor externo** para la automatización de desactivación de cuentas y auditoría de contraseñas.  
-3. **Definir un “Owner” ejecutivo** (ej. CFO o COO) que supervise el cumplimiento ENS y NIS2 y reporte mensualmente al Consejo.  
-4. **Establecer un “Commitment” de 30 días** para cerrar los dos riesgos críticos (R‑01 y R‑02).  
-5. **Alinear la política de uso aceptable y el BCP** con los requisitos de ISO 27001 y PCI‑DSS antes del Q4‑2026.  
+1. **Aprobar el presupuesto de 190 k €/año** para cubrir las cinco áreas críticas descritas.  
+2. **Autorizar la automatización de la gestión de identidades** (integración RRHH‑IT) como prioridad número 1.  
+3. **Nombrar un patrocinador ejecutivo** (p.ej., CFO o COO) que supervise la implantación del plan de continuidad del negocio.  
+4. **Adoptar un Marco Integrado de Gestión de Riesgos (ISO 31000 + FAIR)** para cuantificar futuros riesgos en términos financieros y priorizar inversiones.  
+5. **Establecer un Comité de Cumplimiento** que revise trimestralmente el avance de los controles y reporte a la Junta Directiva.
 
----  
+---
 
 ## 7️⃣ Hoja de Ruta Ejecutiva – Próximos 6 Meses  
 
-| Meses | Hito | Acción Clave |
-|------|------|--------------|
-| **0‑1** | **Arranque** | Nombrar Owner de Cumplimiento; lanzar proyecto de automatización de cuentas. |
-| **1‑2** | **Seguridad física** | Instalar espejo convexo y cámara adicional; validar cobertura 100 %. |
-| **2‑3** | **Inventario de activos** | Implementar CMDB; cargar 100 % de servidores y endpoints. |
-| **3‑4** | **Gestión de cuentas de servicio** | Documentar todas las cuentas; aplicar principio de mínimo privilegio; revisión trimestral. |
-| **4‑5** | **SDLC seguro** | Deploy de herramientas SAST/DAST; capacitación de devs; primera revisión de código. |
-| **5‑6** | **Políticas y BCP** | Publicar política de uso aceptable; elaborar y probar plan de continuidad (BCP). |
-| **Fin de mes 6** | **Revisión de madurez** | Medir avance a nivel 4/5; presentar informe de exposición actualizado al Consejo. |
+| Mes | Hito clave | Responsable |
+|-----|------------|--------------|
+| **M1** | Lanzamiento del proyecto y asignación de presupuesto. <br>Automatización de desactivación de cuentas (piloto). | CEO / CISO |
+| **M2** | Definición y difusión de la política de notificación de incidentes (incluye plantillas y simulacros). | CISO |
+| **M3** | Instalación y ajuste de la cámara CCTV en el datacenter. <br>Inicio del DPIA para datos especiales. | Facility Manager / DPO |
+| **M4** | Desarrollo del BCP/DRP (documentación) y primera prueba de recuperación parcial. | Business Continuity Manager |
+| **M5** | Implementación de segmentación de red y reglas de firewall para datos de tarjetas. | Infraestructura |
+| **M6** | Revisión integral de avances, auditoría interna de los cinco controles críticos y presentación de resultados al Consejo. | Auditoría Interna / Comité de Cumplimiento |
+
+> **Indicadores de éxito**: 100 % de cuentas desactivadas en < 24 h, política de incidentes aprobada y probada, CCTV sin puntos ciegos, BCP probado con RTO ≤ 4 h, segmentación de red certificada PCI‑DSS.
+
+---
+
+## 8️⃣ Top 3 Acciones Inmediatas (próximos 30 días)
+
+| Acción | Qué se hará | Resultado esperado |
+|--------|-------------|--------------------|
+| **1. Automatizar la desactivación de cuentas** | Integrar el sistema de nómina con Active Directory para que, al registrar una baja, la cuenta se bloquee automáticamente en < 24 h. | Reducción del riesgo crítico de 20 pts; evita acceso no autorizado. |
+| **2. Crear y difundir la política de notificación de incidentes** | Redactar documento, definir flujos de trabajo y realizar una simulación de brecha con el equipo de TI. | Cumplimiento de GDPR/NIS2; reducción de multas y mejora de reputación. |
+| **3. Corregir el punto ciego de la cámara CCTV** | Re‑orientar la cámara o instalar espejo convexo; validar con inspección física. | Eliminación del riesgo físico (12 pts); mantiene certificación PCI‑DSS. |
+
+---
+
+## 9️⃣ Conclusión Ejecutiva  
+
+- **Exposición alta** (176 pts) pero **concentrada** en cinco riesgos que pueden ser mitigados con inversiones relativamente modestas (≈ 190 k €/año).  
+- **Impacto financiero potencial** supera los **35 M €** en multas y pérdida de ingresos, sin contar el daño reputacional.  
+- **Acción inmediata** en la gestión de identidades, notificación de incidentes y control físico eliminará más de la mitad de la exposición total.  
+- **Decisión estratégica**: aprobar el plan de inversión y establecer un marco de gestión de riesgos que convierta cada punto de Score en una cifra monetaria, facilitando decisiones basadas en ROI.
+
+> **Próximo paso:** la Dirección aprueba el presupuesto y designa al patrocinador ejecutivo para iniciar la hoja de ruta.  
 
 ---  
 
-## 8️⃣ Top 3 Acciones Inmediatas (próximos 30 días)  
-
-1. **Implementar script de desactivación automática** de cuentas vinculadas a la nómina (objetivo < 24 h).  
-2. **Instalar cámara y espejo convexo** en el punto ciego del datacenter; validar con prueba de cobertura.  
-3. **Crear registro provisional de activos críticos** (servidores de producción y bases de datos) en una hoja de cálculo compartida y asignar responsable de actualización semanal.  
-
----  
-
-### Conclusión  
-
-La organización está frente a riesgos que, de materializarse, pueden generar multas superiores al 4 % de la facturación anual y la pérdida de oportunidades de negocio con el sector público y el comercio electrónico. La ejecución del plan propuesto, con una inversión de **≈ 520 k €**, reducirá la exposición en **≈ 60 %**, elevará la madurez del SGSI a nivel 4 y garantizará el cumplimiento de GDPR, ENS, NIS2, PCI‑DSS e ISO 27001.  
-
-**Se solicita la aprobación inmediata del presupuesto y la designación de un responsable ejecutivo** para garantizar la ejecución dentro del plazo de 30 días y evitar consecuencias financieras y reputacionales graves.
+*Este informe está pensado para la alta dirección y resume, en lenguaje de negocio, los riesgos, sus consecuencias y las decisiones que garantizan la continuidad, la reputación y la rentabilidad de la empresa.*

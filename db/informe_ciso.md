@@ -1,145 +1,178 @@
+**  
+
 # INFORME TÉCNICO – CISO  
-**Periodo:** Q2 2026 – Q1 2027  
-**Alcance:** Evaluación de cumplimiento ISO 27001:2022, ENS (Real Decreto 311/2022) y NIS2 (Directiva UE 2022/2555).  
+**Organización:** Ejemplo S.A. – Sede Central  
+**Ámbito:** Infraestructura IT, Desarrollo de Software, RRHH, Gestión de Datos Personales y Continuidad del Negocio  
+**Fecha:** 28 abril 2026  
+**Autor:** Redactor Senior de Informes Técnicos (CISO Consultor)  
 
 ---  
 
-## 1️⃣ Resumen Ejecutivo Técnico  
+## 1. Resumen Ejecutivo Técnico  
 
-| Norma | Cumplimiento | Semáforo | Indicador clave |
-|-------|--------------|----------|------------------|
-| **ISO 27001** | **56 %** (20/36 controles con evidencia) | 🔴 | Exposición total = 139 pts; Riesgos críticos = 2 × 20 pts (29 % del total) |
-| **ENS** | **60 %** (6/10 controles) | 🟡 | NC críticos = 2 (5.15, 7.4) → tiempo medio de desactivación = 72 h |
-| **NIS2** | **80 %** (8/10 controles) | 🟢 | Incidentes gestionados dentro de SLA = 90 %; Cámara cubierta = 0 % (punto ciego) |
+| Norma | Hallazgos críticos | % Cumplimiento estimado | Semáforo |
+|-------|-------------------|--------------------------|----------|
+| **ISO 27001** | 84 controles sin evidencia (solo 9 % evidenciados) | **9 %** | 🔴 |
+| **ENS** (Real Decreto 311/2022) | 2 de 5 controles críticos sin evidencia | **60 %** | 🟡 |
+| **GDPR** | 5 de 12 requisitos críticos sin evidencia (DPIA, ARCO+, Notificación) | **58 %** | 🟡 |
+| **NIS2** | 5 de 12 requisitos críticos sin evidencia (incidentes, cadena suministro, continuidad) | **58 %** | 🟡 |
+| **PCI‑DSS v4.0** | 5 de 12 requisitos críticos sin evidencia (cifrado datos, segmentación, pruebas) | **58 %** | 🟡 |
 
-> **Interpretación del semáforo**  
-> - 🔴 = riesgo de incumplimiento que afecta a la certificación y a la exposición regulatoria.  
-> - 🟡 = brechas moderadas que requieren acción en < 90 días.  
-> - 🟢 = cumplimiento aceptable, pero con oportunidades de mejora.
+**Exposición total (Σ Score):** **176 puntos** (rango 0‑250).  
+**Madurez media (1‑5):** **2.1** → fase *Definida* (CMMI‑style).  
 
----
-
-## 2️⃣ Análisis de Brechas por Norma  
-
-| Norma | % Cumplimiento | Controles con **Sin Evidencia** | Controles **Incumplidos** | Comentario de la brecha |
-|-------|----------------|-------------------------------|---------------------------|------------------------|
-| **ISO 27001** | 56 % | A.8.1, A.8.2, A.9.3, A.14.1, A.15.1, A.17.1 | A.5.15 (desactivación tardía), A.7.4 (cámara) | Falta de documentación y automatización en gestión de identidades, activos y continuidad. |
-| **ENS** | 60 % | 5.15 (automatización), 7.4 (cámara) | 5.15, 7.4 (NC crítico) | El plazo de 24 h para desactivar cuentas y la cobertura total de videovigilancia no se cumplen. |
-| **NIS2** | 80 % | Ninguno (todos los controles críticos tienen evidencia) | 9‑10 (desactivación de cuentas) – **parcial** | La normativa exige < 24 h; la organización aún depende de procesos manuales. |
-
-> **Referencia a controles**: los códigos entre paréntesis corresponden a los artículos/controles citados en los anexos de cada normativa.
-
----
-
-## 3️⃣ Tabla Completa de Hallazgos  
-
-| ID | Hallazgo | Normativas Afectadas | Criticidad (1‑5) | Score (1‑25) | Evidencia | Recomendación Técnica |
-|----|----------|----------------------|------------------|--------------|-----------|-----------------------|
-| **R‑01** | Desactivación tardía de cuentas (≤ 24 h) | ISO 27001 A.5.15, ENS 5.15, NIS2 Art. 9‑10 | 5 | 20 | Informe auditoría ISO 27001 (NC menor) – **logs_registro.txt** (no disponible) | Implementar **Workflow de desactivación automática** (HRIS → AD) con **PowerShell + Azure AD Connect**; validar con pruebas de penetración cada 30 días. |
-| **R‑02** | Punto ciego en videovigilancia del Datacenter | ISO 27001 A.7.4, ENS 7.4, NIS2 Art. 12 | 5 | 20 | Evidencia foto/video del ángulo (PDF auditoría) – **sin evidencia de corrección** | Re‑orientar cámara o instalar **espejo convexo** + **analítica de visión**; registrar cobertura 100 % en CMDB. |
-| **R‑03** | Falta de registro de activos (CMDB) | ISO 27001 A.8.1, ENS 5.1, NIS2 Art. 7‑8 | 5 | 15 | **Sin evidencia** (inventario no entregado) | Deploy **ServiceNow CMDB** o **OpenIT**; importar datos de AD, DHCP, inventario de hardware; sincronizar con **ITIL Change**. |
-| **R‑04** | Cuentas de servicio sin control | ISO 27001 A.9.3, ENS 5.15, NIS2 Art. 9‑10 | 5 | 15 | **Sin evidencia** | Inventariar todas las cuentas de servicio, aplicar **Principio de Mínimo Privilegio (PoLP)**, habilitar **Just‑In‑Time (JIT)** en Azure AD Privileged Identity Management. |
-| **R‑05** | Ausencia de Secure Development Lifecycle (SDLC) | ISO 27001 A.14.1, ENS 8.1, NIS2 Art. 11 | 5 | 15 | **Sin evidencia** | Adoptar **Microsoft SDL** + **SAST (Checkmarx)** + **DAST (OWASP ZAP)**; integrar en **Azure DevOps Pipelines**; generar **Informe de Seguridad** por release. |
-| **R‑06** | No se evalúan proveedores (cadena de suministro) | ISO 27001 A.15.1, ENS 8.10, NIS2 Art. 11 | 5 | 15 | **Sin evidencia** | Implementar **Vendor Risk Management (VRM)** con **ProcessUnity** o **Archer**; clasificación de riesgo (alto/medio/bajo); revisiones anuales. |
-| **R‑07** | Falta de Plan de Continuidad del Negocio (BCP) | ISO 27001 A.17.1, ENS 7.4, NIS2 Art. 17 | 5 | 15 | **Sin evidencia** | Crear BCP con **ISO 22301**; definir **RTO = 4 h**, **RPO = 2 h**; pruebas de recuperación semestrales. |
-| **R‑08** | Gestión de incidentes parcial (documentación) | ISO 27001 A.16.1, NIS2 Art. 13‑14 | 5 | 15 | Evidencia de incidente (RT‑002) en logs – **logs_registro.txt** (no leído) | Formalizar SOP, SLA = 24 h, **SOAR (Cortex XSOAR)** para orquestación; simulacros trimestrales. |
-| **R‑09** | Política de uso aceptable sin evidencia | ISO 27001 A.8.2, ENS 5.1 | 3 | 5 | **Sin evidencia** | Redactar política, publicar en **SharePoint**, registrar aceptación mediante **e‑signature**. |
-| **R‑10** | Gestión de contraseñas – auditorías esporádicas | ISO 27001 A.9.2, ENS Gestión de contraseñas, NIS2 Art. 9‑10 | 3 | 4 | Evidencia de política (markdown) | Programar **auditorías mensuales** con **PowerShell** + **Azure AD Password Protection**; generar KPI “% contraseñas no conformes”. |
-
-> **Score** = (Criticidad × Probabilidad × Impacto) / 5 (máx = 25).  
-
----
-
-## 4️⃣ Riesgos Transversales y su Impacto Amplificado  
-
-| Riesgo transversal | Controles afectados (normas) | Impacto global (escala 1‑5) | Comentario de amplificación |
-|-------------------|------------------------------|-----------------------------|------------------------------|
-| Desactivación tardía de cuentas | ISO 27001 A.5.15, ENS 5.15, NIS2 Art. 9‑10 | 5 | Cada día adicional aumenta la superficie de ataque en un **15 %** (según modelo CVSS interno). |
-| Punto ciego de videovigilancia | ISO 27001 A.7.4, ENS 7.4, NIS2 Art. 12 | 5 | Permite acceso físico no detectado → posible sabotaje que compromete **30 %** de los activos críticos. |
-| Falta de documentación de controles críticos | ISO 27001 A.8‑9, A.14‑15, A.17, ENS, NIS2 | 4 | Dificulta auditorías externas → riesgo de sanciones regulatorias de **€150 k** por incumplimiento. |
-| Gestión de incidentes incompleta | ISO 27001 A.16.1, NIS2 Art. 13‑14 | 4 | Retraso en notificación → aumento del **MTTR** en un **40 %**. |
-
----
-
-## 5️⃣ Gaps Arquitectónicos y Controles Compensatorios  
-
-| Área | Gap arquitectónico | Riesgo asociado | Control compensatorio (actual) |
-|------|-------------------|----------------|------------------------------|
-| **Identidad y Acceso (IAM)** | No existe integración automática HR‑AD; proceso manual de desactivación. | R‑01, R‑04 | Revisión manual semanal de cuentas inactivas (audit‑log). |
-| **Gestión de activos** | Ausencia de CMDB; inventario en hojas de cálculo. | R‑03 | Inventario ad‑hoc en Excel, revisiones trimestrales. |
-| **Seguridad de desarrollo** | No hay pipeline de pruebas de seguridad. | R‑05 | Escaneo puntual con **Qualys** en entornos de pre‑producción. |
-| **Cadena de suministro** | No hay proceso formal de due‑diligence. | R‑06 | Evaluación informal mediante checklist de proveedores. |
-| **Continuidad** | No hay BCP ni pruebas de recuperación. | R‑07 | Copias de seguridad diarias en Azure Blob, sin pruebas de restauración. |
-| **Seguridad física** | Cobertura de CCTV parcial. | R‑02 | Alarmas perimetrales y guardias de seguridad 24 h. |
-| **SIEM / SOAR** | Logs de seguridad centralizados, pero sin correlación automática. | R‑08 | Análisis manual de alertas en **Microsoft Sentinel**. |
-
----
-
-## 6️⃣ Roadmap de Remediación  
-
-| Acción | Responsable | Herramienta / Solución | Plazo | KPI | Normativas que remedia |
-|-------|-------------|------------------------|-------|-----|------------------------|
-| **Fase 1 (0‑30 d)** – *Quick‑wins críticos* |
-| 1.1 Automatizar desactivación de cuentas (HR‑AD workflow) | CISO / IT‑Ops | Azure AD Connect + PowerShell | 30 d | % cuentas desactivadas < 24 h = 100 % | ISO A.5.15, ENS 5.15, NIS2 9‑10 |
-| 1.2 Re‑orientar cámara CCTV o instalar espejo convexo | Seguridad Física | Cámara IP + espejo convexo | 30 d | Cobertura 100 % en zona crítica | ISO A.7.4, ENS 7.4, NIS2 12 |
-| 1.3 Publicar política de uso aceptable y registrar aceptación | GRC | SharePoint + e‑signature | 30 d | 100 % usuarios firmados | ISO A.8.2, ENS 5.1 |
-| **Fase 2 (30‑90 d)** – *Mejoras estructurales* |
-| 2.1 Implementar CMDB (ServiceNow) e integrar con AD, DHCP, inventario | Gestión de Activos | ServiceNow CMDB | 90 d | % activos inventariados = 95 % | ISO A.8.1, ENS 5.1 |
-| 2.2 Documentar y securizar cuentas de servicio (PoLP, JIT) | Seguridad de Identidades | Azure PIM + Azure AD | 90 d | % cuentas con privilegios mínimos = 100 % | ISO A.9.3, NIS2 9‑10 |
-| 2.3 Adoptar Secure Development Lifecycle (SDL) | Desarrollo Seguro | Azure DevOps + Checkmarx (SAST) + OWASP ZAP (DAST) | 90 d | % releases con informe de seguridad = 100 % | ISO A.14.1, NIS2 11 |
-| 2.4 Formalizar proceso de gestión de incidentes (SOP, SOAR) | SOC / CISO | Cortex XSOAR + Playbooks | 90 d | Tiempo medio de respuesta < 4 h, % notificaciones < 24 h = 100 % | ISO A.16.1, NIS2 13‑14 |
-| **Fase 3 (90‑180 d)** – *Madurez y automatización* |
-| 3.1 Desarrollar y probar BCP (ISO 22301) | Continuidad | DRaaS (Azure Site Recovery) | 180 d | RTO ≤ 4 h, RPO ≤ 2 h, pruebas exitosas = 100 % | ISO A.17.1, NIS2 17 |
-| 3.2 Implementar Vendor Risk Management (VRM) | Compras / Riesgo | ProcessUnity / Archer | 180 d | % proveedores evaluados = 100 % | ISO A.15.1, NIS2 11 |
-| 3.3 Integrar logs en SIEM con correlación automática y alertas de alta prioridad | SOC | Microsoft Sentinel + Logic Apps | 180 d | Reducción de falsos positivos 30 %, detección de amenazas críticas ≤ 5 min | ISO A.12.4, NIS2 7‑8 |
-| 3.4 Re‑evaluar madurez SGSI y actualizar métricas | CISO | Dashboard PowerBI | 180 d | Madurez ≥ 4/5, exposición total ≤ 80 pts | ISO 27001, ENS, NIS2 |
-
----
-
-## 7️⃣ KPIs de Seguimiento  
-
-| KPI | Fórmula | Umbral objetivo | Frecuencia de medición | Responsable |
-|-----|---------|-----------------|------------------------|-------------|
-| **% Cumplimiento normativo** | (Controles con evidencia / Total controles) × 100 | ISO ≥ 80 %, ENS ≥ 80 %, NIS2 ≥ 90 % | Mensual | GRC |
-| **MTTD (Mean Time to Detect)** | Σ(tiempo detección) / Nº incidentes | ≤ 5 min | Mensual | SOC |
-| **MTTR (Mean Time to Respond)** | Σ(tiempo respuesta) / Nº incidentes | ≤ 4 h | Mensual | SOC |
-| **% Cuentas desactivadas < 24 h** | (Cuentas desactivadas < 24 h / Total bajas) × 100 | 100 % | Diario | IT‑Ops |
-| **Cobertura CCTV** | (Áreas cubiertas / Áreas críticas) × 100 | 100 % | Trimestral | Seguridad Física |
-| **% Activos inventariados** | (Activos registrados / Total activos) × 100 | ≥ 95 % | Trimestral | Gestión de Activos |
-| **% Incidentes con notificación a autoridad ≤ 24 h** | (Incidentes notificados ≤ 24 h / Total incidentes) × 100 | 100 % | Mensual | CISO |
-| **% Proveedores evaluados** | (Proveedores con due‑diligence / Total críticos) × 100 | 100 % | Trimestral | Compras / Riesgo |
-| **Score de exposición total** | Σ(scores de riesgos) | ≤ 80 pts | Mensual | CISO |
-
----
-
-## 8️⃣ Estimación de Esfuerzo y Presupuesto  
-
-| Área | Personas‑días estimados | Coste estimado (€) | Comentario |
-|------|--------------------------|--------------------|------------|
-| Automatización desactivación cuentas | 20 pd | 12 k (licencias Azure AD Premium P2) | Incluye scripting y pruebas. |
-| Re‑orientación cámara + espejo | 10 pd | 8 k (hardware + instalación) | 1 cámara + espejo convexo. |
-| Implementación CMDB (ServiceNow) | 45 pd | 45 k (licencia módulo CMDB) | Integración con AD, DHCP, inventario. |
-| Secure Development Lifecycle (SDL) | 30 pd | 25 k (Checkmarx + ZAP licences) | Capacitación devs. |
-| Vendor Risk Management | 25 pd | 30 k (licencia ProcessUnity) | Configuración y onboarding. |
-| BCP / DRaaS | 35 pd | 40 k (Azure Site Recovery) | Pruebas de recuperación. |
-| SOAR (Cortex XSOAR) | 20 pd | 22 k (licencia) | Playbooks y entrenamiento. |
-| Integración SIEM (Sentinel) | 30 pd | 18 k (licencias y desarrollo) | Correlación y alertas automáticas. |
-| **Total** | **235 pd** | **≈ 210 k** | **+ 10 % contingencia** → **≈ 231 k** |
-
-> **Nota:** Los cálculos se basan en una plantilla de coste medio de mercado (2024‑2025) y asumen recursos internos disponibles al 50 % de su capacidad.
-
----
-
-## 9️⃣ Conclusiones y Recomendaciones al Consejo  
-
-1. **Prioridad absoluta** a los hallazgos R‑01 y R‑02 (score 20) – representan el 29 % de la exposición total y son críticos para ISO 27001, ENS y NIS2.  
-2. **Documentación y evidencia** son la mayor causa de incumplimiento (≈ 44 % de los controles sin evidencia). Se requiere un programa de “Documentación y Evidencia” con revisiones semanales.  
-3. **Automatización** de procesos de identidad y de gestión de activos reducirá la exposición en un 35 % estimado (cálculo basado en reducción de tiempo de exposición).  
-4. **Elevación de la madurez** del SGSI de 3 → 4/5 es factible en 180 d mediante la ejecución del roadmap.  
-5. **Presupuesto** de **≈ 230 k €** y **≈ 235 pd** permite cubrir todas las acciones críticas y estructurales sin necesidad de contratación externa adicional.  
-
-> **Acción solicitada al Consejo:** aprobar el presupuesto y autorizar la asignación de recursos humanos (2 FTE de GRC, 1 FTE de DevSecOps, 1 FTE de Infra) para ejecutar el roadmap en los plazos indicados.  
+> **Interpretación rápida**  
+> - 🔴 ISO 27001 → Urgente: 84 controles sin evidencia.  
+> - 🟡 Todas las demás normas → Riesgos críticos concentrados en pocos controles (desactivación de cuentas, notificación de incidentes, continuidad, cifrado de datos de tarjeta).  
 
 ---  
 
-*Este informe ha sido elaborado por el consultor senior de ciberseguridad, con base en la evidencia disponible y los resultados de la auditoría interna. Las recomendaciones son técnicas, medibles y alineadas con los requisitos regulatorios aplicables.*
+## 2. Análisis de Brechas por Normativa  
+
+| Norma | Controles evaluados | Controles con evidencia | Controles sin evidencia / NC | % Cumplimiento | Comentario clave |
+|-------|--------------------|------------------------|----------------------------|----------------|-------------------|
+| **ISO 27001** | 93 (Anexo A) | 9 (EDR, DLP, cifrado, política, logs) | 84 (incl. gestión de incidentes, continuidad, pruebas, segmentación) | **9 %** | Falta de evidencia en la mayoría de los controles críticos (incidentes, BCP, pruebas de penetración, gestión de terceros). |
+| **ENS** | 5 controles críticos (5.1, 5.15, 7.4, 9.2, 14) | 3 (Política, EDR, DLP) | 2 (Desactivación tardía de cuentas, punto ciego CCTV) | **60 %** | Los dos hallazgos son de alto impacto y transversales. |
+| **GDPR** | 12 requisitos críticos (Art. 30, 6, 9, 33‑34, 35) | 7 (Registro, bases legales, política, cifrado, DLP, EDR) | 5 (DPIA para datos especiales, ARCO+, Notificación de brechas, pruebas de seguridad, gestión de exportaciones) | **58 %** | Necesario DPIA y procesos de derechos ARCO+. |
+| **NIS2** | 12 requisitos críticos (Art. 19‑21, 23‑24, 14‑15, 31) | 7 (Política, logs, firewall, DLP, EDR, registro de actividades) | 5 (Notificación de incidentes, gestión de cadena suministro, BCP/DRP, formación, pruebas de penetración) | **58 %** | Falta de proceso formal de notificación y de gestión de riesgos de terceros. |
+| **PCI‑DSS v4.0** | 12 requisitos críticos (Req 1‑12) | 7 (Firewall logs, EDR, DLP, cifrado de discos, política de contraseñas, bloqueo) | 5 (Cifrado de datos de tarjeta en reposo y tránsito, segmentación de red, pruebas de penetración, desarrollo seguro, gestión de copias) | **58 %** | Riesgo de pérdida de certificación si no se corrige. |
+
+---  
+
+## 3. Registro Unificado de Hallazgos  
+
+| ID | Hallazgo | Normativas afectadas | Criticidad (1‑5) | Score (1‑25) | Evidencia | Recomendación Técnica |
+|----|----------|----------------------|-------------------|--------------|-----------|------------------------|
+| **R01** | Desactivación tardía de cuentas de usuario/VPN (> 24 h) | ISO 27001 5.15, ENS 5.15, NIS2 5.15, PCI‑DSS Req 7 | 5 (Crítico) | 20 | Log de desactivación 72 h (ISO 27001 evidencia) | Automatizar desactivación mediante integración nómina → AD (PowerShell / Azure AD Connect). |
+| **R02** | Punto ciego en cámara CCTV del Datacenter | ISO 27001 7.4, ENS 7.4, NIS2 7.4, PCI‑DSS Req 9 | 5 | 12 | Video y bitácora física (ISO 27001) | Re‑orientar cámara o instalar espejo convexo; actualizar mapa de cobertura. |
+| **R03** | Ausencia de procedimiento documentado de notificación de incidentes/brechas | NIS2 Art. 19‑21, GDPR Art. 33/34, ISO 27001 14.1, PCI‑DSS Req 12 | 5 | 20 | **Sin evidencia** | Definir política de notificación (plazo 72 h), plantilla de informe, flujo de aprobación (ServiceNow). |
+| **R04** | Falta de evidencia de continuidad del negocio y DRP | NIS2 Art. 14‑15, ISO 27001 15.1, PCI‑DSS Req 1 | 5 | 20 | **Sin evidencia** | Elaborar BCP/DRP, definir RTO ≤ 4 h, RPO ≤ 1 h; ejecutar pruebas de recuperación trimestrales. |
+| **R05** | Tratamiento de datos especiales (estado civil) sin base legal ni DPIA | GDPR Art. 9, ISO 27001 5.13, NIS2 Art. 31 | 5 | 20 | **Sin evidencia** | Realizar DPIA, obtener consentimiento explícito, registrar en Art. 30. |
+| **R06** | Exportación de base de datos de clientes sin cifrado ni control de autorización | ISO 27001 13.2, NIS2 31, PCI‑DSS Req 3/4 | 4 | 13 | Log de exportación (DataExport) sin cifrado | Implementar cifrado TLS 1.3 + firma HMAC; registro de autorización (workflow en ServiceNow). |
+| **R07** | Falta de segmentación de red y reglas de firewall para datos de tarjetas | PCI‑DSS Req 1, ISO 27001 12.1 | 4 | 10 | Log de cambio firewall (puerto 443) sin segmentación | Crear zona DMZ, ACLs “deny‑all” excepto tráfico necesario; usar firewalls de nueva generación (NGFW). |
+| **R08** | Política de contraseñas documentada pero sin evidencia de aplicación práctica | ISO 27001 9.2, PCI‑DSS Req 8, NIS2 11 | 4 | 7 | Política (MD) sin auditoría de hashes | Ejecutar auditoría trimestral de hashes (Nessus/Qualys) y generar informe de cumplimiento. |
+| **R09** | Ausencia de gestión de riesgos de la cadena de suministro | NIS2 Art. 23‑24, ISO 27001 15.1 | 4 | 13 | **Sin evidencia** | Evaluar proveedores críticos (EDR, DLP, Cloud) con cuestionario ISO 27005; incluir cláusulas de seguridad en contratos. |
+| **R10** | Falta de pruebas de penetración y escaneos de vulnerabilidad periódicos | PCI‑DSS Req 11, ISO 27001 12.6, NIS2 | 4 | 13 | **Sin evidencia** | Programar pentest anual (OWASP Top 10) y escaneos trimestrales (Nessus). |
+| **R11** | Cifrado de datos en reposo de tarjetas no evidenciado | PCI‑DSS Req 3, GDPR Art. 32 | 5 | 15 | **Sin evidencia** | Activar BitLocker/FDE en servidores de pago; validar con escáner de cumplimiento (CIS‑CIS). |
+| **R12** | Cifrado de datos en tránsito (TLS/SSL) no evidenciado | PCI‑DSS Req 4, GDPR Art. 32 | 5 | 15 | **Sin evidencia** | Forzar TLS 1.3 en todos los endpoints; escanear con SSL Labs. |
+| **R13** | Falta de evidencia de procesos de desarrollo seguro (SDLC) | PCI‑DSS Req 6, ISO 27001 14.2 | 4 | 10 | **Sin evidencia** | Adoptar Secure‑DevOps (SAST + DAST, OWASP Dependency‑Check) integrado en CI/CD (GitLab). |
+| **R14** | Ausencia de registro y control de accesos físicos a salas críticas (más allá del punto ciego) | ISO 27001 7.4, ENS 7.4, NIS2 | 4 | 10 | **Sin evidencia** | Instalar lectores de tarjetas + video‑analytics; registrar en SIEM. |
+| **R15** | Falta de evidencia de formación y concienciación en ciberseguridad | NIS2 Art. 11, ISO 27001 7.2 | 3 | 5 | **Sin evidencia** | Lanzar campaña de e‑learning (PhishMe) y medir % completado. |
+| **R16** | Gestión de copias de seguridad sin evidencia (control 13.2 ISO) | ISO 27001 13.2, NIS2 31 | 3 | 5 | **Sin evidencia** | Documentar política de backup, ejecutar pruebas de restauración mensuales. |
+| **R17** | Política de seguridad no leída por el 15 % restante del personal | ISO 27001 5.1, ENS 5.1 | 2 | 1 | Evidencia de 85 % lectura | Enviar recordatorio automático y requerir firma digital. |
+| **R18** | Control de cambios de firewall sin proceso formal de aprobación | ISO 27001 12.1, PCI‑DSS Req 1 | 3 | 4 | Log de cambio sin workflow | Implementar proceso de Change Management (ITIL) con aprobaciones. |
+| **R19** | Registro de actividades de tratamiento de datos personales incompleto | GDPR Art. 30, NIS2 31 | 3 | 4 | **Sin evidencia** | Completar registro con campos “destinatario”, “plazo de conservación”. |
+| **R20** | Política de gestión de incidentes sin evidencia de pruebas de respuesta | ISO 27001 14.1, NIS2 19‑21 | 4 | 7 | **Sin evidencia** | Simular incidente (table‑top) cada 6 meses; registrar resultados. |
+
+> **Nota:** 18 de 20 riesgos son **transversales** (afectan a ≥ 2 normativas) → oportunidad de remediación única que cubre varios marcos regulatorios.  
+
+---  
+
+## 4. Riesgos Transversales y Impacto Amplificado  
+
+| Riesgo | Normativas impactadas | Impacto combinado (Score × #normas) | Comentario de amplificación |
+|--------|------------------------|--------------------------------------|------------------------------|
+| **R01 – Desactivación tardía de cuentas** | ISO 27001, ENS, NIS2, PCI‑DSS | 20 × 4 = **80** | Cada norma exige control de acceso; la falta genera exposición prolongada a datos de tarjeta y a datos personales. |
+| **R03 – Falta de proceso de notificación de incidentes** | NIS2, GDPR, ISO 27001, PCI‑DSS | 20 × 4 = **80** | Sin notificación, la organización incurre en multas (hasta 20 M € GDPR) y pérdida de reputación. |
+| **R04 – Ausencia de BCP/DRP** | NIS2, ISO 27001, PCI‑DSS | 20 × 3 = **60** | Interrupción de servicios críticos → daño financiero y sanciones regulatorias. |
+| **R05 – Tratamiento de datos especiales sin DPIA** | GDPR, ISO 27001, NIS2 | 20 × 3 = **60** | Multas GDPR (hasta 20 M €) y riesgo de sanciones ENS. |
+| **R06 – Exportación de bases sin cifrado** | ISO 27001, NIS2, PCI‑DSS | 13 × 3 = **39** | Posible fuga de datos personales y de tarjetas → exposición a fraude. |
+| **R07 – Falta de segmentación de red** | PCI‑DSS, ISO 27001 | 10 × 2 = **20** | Un atacante que comprometa la red interna puede acceder a datos de tarjeta. |
+| **R10 – Falta de pruebas de vulnerabilidad** | PCI‑DSS, ISO 27001, NIS2 | 13 × 3 = **39** | Vulnerabilidades sin descubrir → explotación y brechas. |
+
+**Total de Score de riesgos transversales:** **378** (≈ 55 % del Score total).  
+
+---  
+
+## 5. Gaps Arquitectónicos y Controles Compensatorios  
+
+| Área arquitectónica | Gap detectado | Impacto | Control compensatorio provisional | Comentario |
+|----------------------|--------------|----------|--------------------------------|------------|
+| **Gestión de identidades** | Desactivación tardía de cuentas, falta de MFA en VPN | Acceso no autorizado prolongado | MFA obligatoria + **Just‑In‑Time** (JIT) provisioning (Azure AD Privileged Identity Management) | Reduce ventana de exposición mientras se implementa automatización completa. |
+| **Seguridad perimetral** | Falta de segmentación de red y reglas de firewall específicas para datos de tarjetas | Movimiento lateral | **Micro‑segmentación** con VLANs y políticas de Zero‑Trust (Cisco ISE + NGFW) | Compensa ausencia de segmentación formal. |
+| **Protección de datos en tránsito** | No hay TLS/SSL evidenciado | Intercepción de datos | **TLS‑Termination** en load balancer con certificados gestionados por **HashiCorp Vault** | Garantiza cifrado de extremo a extremo. |
+| **Protección de datos en reposo** | No hay cifrado de datos de tarjetas | Robo de datos físicos | **Full‑Disk Encryption** (BitLocker/LUKS) + **Database‑level encryption** (Transparent Data Encryption – TDE) | Cumple PCI‑DSS Req 3 y GDPR Art. 32. |
+| **Continuidad del negocio** | Ausencia de BCP/DRP | Interrupción prolongada | **Backup‑as‑a‑Service** (Veeam Cloud Connect) + pruebas de recuperación automatizadas (PowerShell / Azure Automation) | Reduce RTO/RPO a niveles aceptables. |
+| **Gestión de terceros** | No hay evaluación de riesgos de proveedores | Cadena de suministro vulnerable | **Vendor Risk Management Platform** (ProcessUnity) con cuestionario ISO 27005 y cláusulas de seguridad en contratos. | Cumple NIS2 Art. 23‑24. |
+| **Desarrollo seguro** | Falta de SDLC seguro | Vulnerabilidades en código | **Secure‑DevOps pipeline** (GitLab CI + SAST (Checkmarx) + DAST (OWASP ZAP) + Dependency‑Check) | Compensa ausencia de procesos de desarrollo seguro (PCI‑DSS Req 6). |
+| **Formación y concienciación** | 15 % del personal no ha leído la política; falta de e‑learning | Riesgo de error humano | **Plataforma de concienciación** (KnowBe4) con métricas de completitud y simulaciones de phishing. | Mejora postura humana. |
+
+---  
+
+## 6. Roadmap de Remediación  
+
+| Acción | Responsable | Herramienta / Solución | Plazo | KPI (medida) | Normativas que remedia |
+|--------|-------------|------------------------|-------|--------------|------------------------|
+| **Fase 1 – 0‑30 días (quick‑wins críticos)** |
+| 1.1 Automatizar desactivación de cuentas (< 24 h) | IT / RRHH | Azure AD Connect + PowerShell | 15 d | % de cuentas desactivadas < 24 h (objetivo 100 %) | ISO 27001 5.15, ENS 5.15, NIS2, PCI‑DSS |
+| 1.2 Definir política de notificación de incidentes (plazo 72 h) | CISO | ServiceNow Incident Management | 30 d | Tiempo medio de notificación (≤ 72 h) | NIS2, GDPR, ISO 27001, PCI‑DSS |
+| 1.3 Corregir punto ciego CCTV | Facility Mgmt | Cámara PTZ + espejo convexo | 10 d | % de zona cubierta 100 % | ISO 27001 7.4, ENS 7.4, NIS2 |
+| 1.4 Implementar MFA + JIT para VPN | Seguridad de Accesos | Azure AD MFA + PIM | 30 d | % de accesos VPN con MFA (≥ 95 %) | ISO 27001 5.15, ENS 5.15, NIS2 |
+| **Fase 2 – 30‑90 días (mejoras estructurales)** |
+| 2.1 Elaborar BCP/DRP y ejecutar prueba de recuperación | Business Continuity | Veeam + Azure Site Recovery | 60 d | RTO ≤ 4 h, RPO ≤ 1 h | NIS2 14‑15, ISO 27001 15.1, PCI‑DSS Req 1 |
+| 2.2 Implementar segmentación de red y NGFW | Infraestructura | Cisco Firepower NGFW + ISE | 45 d | Número de zonas aisladas (≥ 3) | PCI‑DSS Req 1, ISO 27001 12.1 |
+| 2.3 Cifrado de datos en reposo y en tránsito (TLS 1.3, TDE) | Seguridad de Datos | HashiCorp Vault + SQL Server TDE | 45 d | % de bases cifradas (100 %) | PCI‑DSS Req 3‑4, GDPR Art. 32 |
+| 2.4 DPIA para datos especiales (estado civil) | DPO / Legal | OneTrust DPIA | 45 d | DPIA completada y aprobada | GDPR Art. 9, ISO 27001 5.13 |
+| 2.5 Implementar proceso de gestión de riesgos de terceros | Compras / Seguridad | ProcessUnity Vendor Risk | 60 d | % de proveedores críticos evaluados (100 %) | NIS2 23‑24, ISO 27001 15.1 |
+| 2.6 Lanzar campaña de concienciación y pruebas de phishing | RRHH / Seguridad | KnowBe4 | 60 d | % de empleados completado (≥ 95 %) | NIS2 Art. 11, ISO 27001 7.2 |
+| **Fase 3 – 90‑180 días (madurez y automatización)** |
+| 3.1 Integrar Secure‑DevOps en CI/CD | Desarrollo | GitLab CI + SAST/DAST | 120 d | % de builds con escáneres (≥ 100 %) | PCI‑DSS Req 6, ISO 27001 14.2 |
+| 3.2 Automatizar pruebas de vulnerabilidad trimestrales | Red Team | Nessus + Tenable.io | 150 d | Nº de vulnerabilidades críticas < 5 | PCI‑DSS Req 11, ISO 27001 12.6 |
+| 3.3 Implementar proceso de backup con pruebas de restauración automatizadas | Backup Admin | Veeam + PowerShell | 180 d | % de backups restaurados con éxito (≥ 95 %) | ISO 27001 13.2, NIS2 31 |
+| 3.4 Formalizar Change Management para firewall y otros activos críticos | ITSM | ServiceNow Change | 180 d | % de cambios con aprobación (100 %) | ISO 27001 12.1, PCI‑DSS Req 1 |
+| 3.5 Consolidar métricas de cumplimiento en Dashboard ejecutivo | CISO | PowerBI / Grafana | 180 d | Score de exposición < 100 | Todas las normativas |
+
+---  
+
+## 7. KPIs de Seguimiento y Estimación de Esfuerzo / Presupuesto  
+
+| KPI | Valor objetivo | Frecuencia de medición | Herramienta de medición |
+|-----|----------------|------------------------|------------------------|
+| **% de cuentas VPN desactivadas < 24 h** | 100 % | Diario | Azure AD Log Analytics |
+| **Tiempo medio de notificación de brecha** | ≤ 72 h | Por incidente | ServiceNow Incident |
+| **Cobertura CCTV del Datacenter** | 100 % | Mensual | Informe de auditoría física |
+| **% de datos de tarjeta cifrados (reposo y tránsito)** | 100 % | Mensual | Veeam / SSL Labs |
+| **RTO / RPO de los servicios críticos** | ≤ 4 h / ≤ 1 h | Trimestral (pruebas BCP) | Azure Site Recovery |
+| **% de proveedores críticos evaluados** | 100 % | Trimestral | ProcessUnity |
+| **% de empleados con MFA habilitado** | ≥ 95 % | Mensual | Azure AD Conditional Access |
+| **% de builds con SAST/DAST exitosos** | 100 % | Cada commit | GitLab CI |
+| **Número de vulnerabilidades críticas abiertas** | < 5 | Semanal | Tenable.io |
+| **Score de exposición total** | < 100 | Mensual | Dashboard PowerBI (Σ Score) |
+
+### Estimación de esfuerzo y presupuesto (primeros 180 días)
+
+| Área | Horas estimadas | Coste (€) | Comentario |
+|------|----------------|-----------|------------|
+| **Automatización desactivación cuentas + MFA** | 200 h | 30 000 | Licencias Azure AD Premium P2 incluidas. |
+| **CCTV y seguridad física** | 120 h | 15 000 | Compra cámara PTZ + instalación. |
+| **Política de notificación y BCP/DRP** | 250 h | 35 000 | Consultoría externa (ISO 27001/NIS2). |
+| **Segmentación de red + NGFW** | 300 h | 80 000 | NGFW (Cisco Firepower) + licencias. |
+| **Cifrado datos (TLS, TDE, Vault)** | 180 h | 25 000 | Licencias HashiCorp Vault, certificados. |
+| **DPIA y gestión de datos especiales** | 100 h | 12 000 | Herramienta OneTrust. |
+| **Gestión de terceros** | 150 h | 20 000 | Plataforma ProcessUnity. |
+| **Formación y concienciación** | 80 h | 10 000 | Licencias KnowBe4. |
+| **Secure‑DevOps pipeline** | 200 h | 30 000 | Herramientas SAST/DAST (Checkmarx, ZAP). |
+| **Pruebas de vulnerabilidad y pentest** | 120 h | 18 000 | Contrato con empresa externa. |
+| **Total** | **1 900 h** | **≈ 305 000 €** | Incluye licencias, consultoría y horas internas. |
+
+> **Nota:** Los costes son estimaciones basadas en tarifas de mercado (2026) y pueden ajustarse tras la fase de detalle de proyecto.  
+
+---  
+
+## 8. Conclusiones y Recomendaciones Ejecutivas  
+
+1. **Exposición crítica concentrada** – Los 5 riesgos con Score ≥ 20 representan **≈ 55 %** del total de exposición (R01‑R05). Su remediación inmediata (Fase 1) reducirá el Score total por debajo de 100, pasando la organización a un nivel de riesgo **moderado**.  
+2. **Cumplimiento normativo bajo** – Solo **≈ 10 %** de los controles ISO 27001 están evidenciados; el resto requiere documentación, pruebas o automatización. Las demás normas presentan brechas críticas (notificación de incidentes, DPIA, BCP).  
+3. **Arquitectura insuficiente** – Falta de segmentación de red, cifrado de datos de tarjeta y de tránsito, y de controles de acceso físico. Los controles compensatorios propuestos (Zero‑Trust, MFA, micro‑segmentación) deben implementarse antes de la fase 2.  
+4. **Prioridad de inversión** – La mayor parte del presupuesto (≈ 45 %) se destina a **segmentación de red y cifrado**, que son requisitos de PCI‑DSS y GDPR y reducen el riesgo de exposición de datos de tarjeta.  
+5. **Beneficio esperado** – Al cumplir con los requisitos de notificación de incidentes y BCP, la organización evita multas potenciales de **hasta 20 M €** (GDPR) y mantiene la certificación PCI‑DSS, lo que protege ingresos y reputación.  
+
+### Próximos pasos  
+
+- **Aprobación del presupuesto** (≈ 300 k €) y asignación de recursos internos.  
+- **Kick‑off del proyecto** con comité de seguridad (CISO, DPO, CTO, RRHH).  
+- **Seguimiento semanal** de los KPIs críticos (desactivación de cuentas, notificación de incidentes, cifrado).  
+
+---  
+
+**Fin del informe**

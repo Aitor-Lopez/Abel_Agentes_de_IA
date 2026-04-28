@@ -26,9 +26,10 @@
 
   /* ── HEADER ── */
   header {
-    position: relative; z-index: 10; padding: 22px 48px;
+    position: sticky; top: 0; z-index: 10; padding: 22px 48px;
     display: flex; align-items: center; justify-content: space-between;
     border-bottom: 1px solid var(--border);
+    background: var(--bg);
   }
   .logo { font-family: var(--font-head); font-size: 20px; font-weight: 800; letter-spacing: -0.5px; display: flex; align-items: center; gap: 10px; }
   .logo-dot { width: 9px; height: 9px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 10px var(--accent); animation: blink 2s ease-in-out infinite; }
@@ -38,9 +39,9 @@
   .chip.green { border-color: rgba(0,229,160,0.4); color: var(--accent); background: rgba(0,229,160,0.06); }
 
   /* ── LAYOUT ── */
-  .layout { display: grid; grid-template-columns: 380px 1fr; min-height: calc(100vh - 65px); position: relative; z-index: 5; }
-  .sidebar { border-right: 1px solid var(--border); padding: 36px 32px; display: flex; flex-direction: column; gap: 28px; overflow-y: auto; }
-  .main { padding: 36px 40px; overflow-y: auto; }
+  .layout { display: grid; grid-template-columns: 380px 1fr; min-height: calc(100vh - 65px); position: relative; z-index: 5; align-items: start; }
+  .sidebar { border-right: 1px solid var(--border); padding: 36px 32px; display: flex; flex-direction: column; gap: 28px; position: sticky; top: 65px; height: calc(100vh - 65px); overflow-y: auto; }
+  .main { padding: 36px 40px; }
 
   /* ── SECTION TITLES ── */
   .section-title {
@@ -157,8 +158,9 @@
     display: flex; align-items: center; gap: 6px; white-space: nowrap;
   }
   .btn-dl:hover { background: rgba(0,229,160,0.1); }
-  .report-frame-wrap { border: 1px solid var(--border); border-radius: 14px; overflow: hidden; background: #fff; }
-  #report-frame { width: 100%; border: none; min-height: 500px; display: block; }
+  .report-frame-wrap { border: 1px solid var(--border); border-radius: 14px; overflow: hidden; background: #0d1117; }
+  .report-frame-wrap iframe { width: 100%; border: none; min-height: 600px; display: block; transition: height 0.2s ease; overflow: hidden; scrollbar-width: none; }
+  .report-frame-wrap iframe::-webkit-scrollbar { display: none; width: 0; }
 
   /* ── ERROR ── */
   .error-bar {
@@ -538,6 +540,63 @@ async function loadLastReport() {
 
 let lastReportHtmls = {};
 
+// ── Altura de iframes via postMessage (funciona aunque carguen ocultos) ──
+// Cada iframe inyecta un script que mide su propio body y notifica al padre.
+// El padre escucha y actualiza la altura del iframe correcto.
+window.addEventListener('message', (e) => {
+  if (e.data && e.data.type === 'iframeHeight') {
+    const iframe = document.getElementById('report-frame-' + e.data.tipo);
+    if (iframe) iframe.style.height = Math.max(e.data.height, 600) + 'px';
+  }
+});
+
+function injectHeightScript(htmlContent, tipo) {
+  // Inyecta estilo para eliminar scrollbars del iframe + script que reporta su altura al padre
+  const noScroll = `<style>
+    html, body {
+      overflow: hidden !important;
+      scrollbar-width: none !important; /* Firefox */
+    }
+    html::-webkit-scrollbar, body::-webkit-scrollbar {
+      display: none !important; /* Chrome/Safari */
+      width: 0 !important;
+    }
+  </style>`;
+
+  const script = `<script>
+    (function() {
+      function reportHeight() {
+        // Medir ANTES de ocultar overflow para obtener altura real
+        var h = Math.max(
+          document.documentElement.scrollHeight,
+          document.documentElement.offsetHeight,
+          document.body ? document.body.scrollHeight : 0,
+          document.body ? document.body.offsetHeight : 0
+        );
+        window.parent.postMessage({ type: 'iframeHeight', tipo: '${tipo}', height: h }, '*');
+      }
+      if (document.readyState === 'complete') { reportHeight(); }
+      else { window.addEventListener('load', reportHeight); }
+      setTimeout(reportHeight, 500);
+      setTimeout(reportHeight, 1500);
+    })();
+  <\/script>`;
+
+  // Insertar el estilo en <head> si existe, y el script antes de </body>
+  let result = htmlContent;
+  if (result.includes('</head>')) {
+    result = result.replace('</head>', noScroll + '</head>');
+  } else {
+    result = noScroll + result;
+  }
+  if (result.includes('</body>')) {
+    result = result.replace('</body>', script + '</body>');
+  } else {
+    result = result + script;
+  }
+  return result;
+}
+
 function displayReport(htmls, fecha) {
   lastReportHtmls = htmls;
   showState('report');
@@ -554,19 +613,26 @@ function displayReport(htmls, fecha) {
       ${LABELS[t] || t}
     </button>`).join('');
 
+  // Todos los iframes se renderizan en el DOM desde el principio,
+  // pero los no activos se ocultan con visibility+position para que
+  // el browser calcule su layout (y el postMessage de altura funcione).
   framesEl.innerHTML = tipos.map((t, i) => `
-    <div class="report-frame-wrap" id="frame-wrap-${t}" style="display:${i===0?'block':'none'}">
+    <div class="report-frame-wrap" id="frame-wrap-${t}"
+         style="${i===0 ? '' : 'position:absolute;visibility:hidden;pointer-events:none;top:0;left:0;width:100%;z-index:-1;'}">
       <iframe id="report-frame-${t}" sandbox="allow-scripts allow-same-origin"
-              style="width:100%;border:none;min-height:500px;display:block"></iframe>
+              style="width:100%;border:none;display:block;min-height:600px;overflow:hidden"></iframe>
     </div>`).join('');
+
+  // Hacer el contenedor de frames relativo para que los absolutos se anclen bien
+  framesEl.style.position = 'relative';
 
   tipos.forEach(t => {
     const iframe = document.getElementById(`report-frame-${t}`);
-    iframe.srcdoc = htmls[t] || '<p style="padding:40px;color:#888">Informe no disponible</p>';
-    iframe.onload = () => {
-      try { iframe.style.height = (iframe.contentDocument.body.scrollHeight + 40) + 'px'; }
-      catch { iframe.style.height = '800px'; }
-    };
+    const injected = injectHeightScript(
+      htmls[t] || '<p style="padding:40px;color:#888;font-family:sans-serif">Informe no disponible</p>',
+      t
+    );
+    iframe.srcdoc = injected;
   });
 
   // Botón descargar — descarga el tab activo
@@ -585,7 +651,26 @@ function displayReport(htmls, fecha) {
 function switchTab(tipo) {
   document.querySelectorAll('.report-tab').forEach(b => b.classList.toggle('active', b.dataset.tipo === tipo));
   document.querySelectorAll('[id^="frame-wrap-"]').forEach(w => {
-    w.style.display = w.id === `frame-wrap-${tipo}` ? 'block' : 'none';
+    const isActive = w.id === `frame-wrap-${tipo}`;
+    if (isActive) {
+      // Traer al frente: posición normal en el flujo
+      w.style.position = '';
+      w.style.visibility = '';
+      w.style.pointerEvents = '';
+      w.style.top = '';
+      w.style.left = '';
+      w.style.width = '';
+      w.style.zIndex = '';
+    } else {
+      // Sacar del flujo pero mantener renderizado para que postMessage funcione
+      w.style.position = 'absolute';
+      w.style.visibility = 'hidden';
+      w.style.pointerEvents = 'none';
+      w.style.top = '0';
+      w.style.left = '0';
+      w.style.width = '100%';
+      w.style.zIndex = '-1';
+    }
   });
 }
 
