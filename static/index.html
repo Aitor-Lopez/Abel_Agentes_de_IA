@@ -177,6 +177,24 @@
   }
   .last-report-btn:hover { background: rgba(91,159,255,0.07); }
 
+  /* ── BOTÓN GENERAR PPT ── */
+  .btn-ppt {
+    width: 100%; padding: 10px; font-family: var(--font-mono); font-size: 11px;
+    background: transparent; color: #ff4757; border: 1px solid rgba(255,71,87,0.4);
+    border-radius: 8px; cursor: pointer; transition: background 0.2s;
+    display: flex; align-items: center; justify-content: center; gap: 7px;
+  }
+  .btn-ppt:hover:not(:disabled) { background: rgba(255,71,87,0.1); }
+  .btn-ppt:disabled { opacity: 0.4; cursor: not-allowed; }
+  .btn-ppt.generating { opacity: 0.7; cursor: wait; }
+
+  /* PPT progress inline */
+  .ppt-status {
+    display: none; font-family: var(--font-mono); font-size: 10px;
+    color: var(--text3); text-align: center; padding: 4px 0;
+  }
+  .ppt-status.visible { display: block; }
+
   /* ── REPORT TABS ── */
   .report-tabs-bar {
     display: flex; gap: 6px; margin-bottom: 14px; flex-wrap: wrap;
@@ -246,6 +264,10 @@
       <button class="last-report-btn" id="last-report-btn" style="display:none">
         Ver último informe guardado
       </button>
+      <button class="btn-ppt" id="ppt-btn" style="display:none" disabled>
+        ⚠️ Generar PPT de Riesgos
+      </button>
+      <div class="ppt-status" id="ppt-status"></div>
     </div>
 
     <!-- Guía -->
@@ -297,10 +319,16 @@
           <h2>Informes de auditoría</h2>
           <p id="report-meta"></p>
         </div>
-        <button class="btn-dl" id="dl-btn">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-          Descargar HTML
-        </button>
+        <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+          <button class="btn-dl" id="dl-pptx-btn" style="display:none;color:#ff4757;border-color:rgba(255,71,87,0.5)">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Descargar PPTX
+          </button>
+          <button class="btn-dl" id="dl-btn">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Descargar HTML
+          </button>
+        </div>
       </div>
       <div class="report-tabs-bar" id="report-tabs"></div>
       <div id="report-frames"></div>
@@ -521,6 +549,7 @@ async function loadReport(jobId, fecha) {
     } catch {}
   }));
   displayReport(htmls, fecha);
+  enablePptBtn();
 }
 
 async function loadLastReport() {
@@ -535,6 +564,15 @@ async function loadLastReport() {
     }));
     if (!Object.keys(htmls).length) throw new Error('Sin informes');
     displayReport(htmls, null);
+    enablePptBtn();
+    // Si ya hay un PPT generado, cargarlo también
+    try {
+      const rHtml = await fetch(`${API}/api/riesgos/html`);
+      if (rHtml.ok) {
+        const htmlContent = await rHtml.text();
+        addRiesgoTab(htmlContent);
+      }
+    } catch {}
   } catch { showError('No se pudo cargar el último informe.'); }
 }
 
@@ -689,6 +727,128 @@ function showError(msg) {
 }
 
 document.getElementById('last-report-btn').addEventListener('click', loadLastReport);
+
+// ────────────────────────────────────────────────
+//  PPT DE RIESGOS
+// ────────────────────────────────────────────────
+
+let pptJobId = null;
+let pptPollInterval = null;
+
+// Muestra el botón PPT una vez que hay informes disponibles
+function enablePptBtn() {
+  const btn = document.getElementById('ppt-btn');
+  btn.style.display = 'flex';
+  btn.disabled = false;
+}
+
+// Añade la pestaña de Riesgos al panel de informes con el HTML ya generado
+function addRiesgoTab(htmlContent) {
+  const tabsEl = document.getElementById('report-tabs');
+  const framesEl = document.getElementById('report-frames');
+
+  // Evitar duplicados
+  if (document.getElementById('frame-wrap-riesgos')) return;
+
+  // Añadir pestaña
+  const tab = document.createElement('button');
+  tab.className = 'report-tab';
+  tab.dataset.tipo = 'riesgos';
+  tab.textContent = '⚠️ Riesgos — PPT';
+  tab.onclick = () => switchTab('riesgos');
+  tabsEl.appendChild(tab);
+
+  // Añadir iframe oculto (mismo patrón que los otros)
+  const wrap = document.createElement('div');
+  wrap.className = 'report-frame-wrap';
+  wrap.id = 'frame-wrap-riesgos';
+  wrap.style.cssText = 'position:absolute;visibility:hidden;pointer-events:none;top:0;left:0;width:100%;z-index:-1';
+  wrap.innerHTML = `<iframe id="report-frame-riesgos" sandbox="allow-scripts allow-same-origin"
+    style="width:100%;border:none;display:block;min-height:600px"></iframe>`;
+  framesEl.appendChild(wrap);
+
+  const iframe = document.getElementById('report-frame-riesgos');
+  iframe.srcdoc = injectHeightScript(htmlContent, 'riesgos');
+  iframe.onload = () => autoResizeIframe(iframe);
+
+  // Mostrar botón descarga PPTX
+  document.getElementById('dl-pptx-btn').style.display = 'flex';
+}
+
+async function generarPPT() {
+  const btn = document.getElementById('ppt-btn');
+  const statusEl = document.getElementById('ppt-status');
+
+  btn.disabled = true;
+  btn.classList.add('generating');
+  btn.textContent = '⏳ Generando…';
+  statusEl.textContent = 'El agente está analizando los riesgos…';
+  statusEl.classList.add('visible');
+
+  try {
+    const r = await fetch(`${API}/api/riesgos/generar-ppt`, { method: 'POST' });
+    if (!r.ok) {
+      let msg = 'Error al lanzar el agente PPT';
+      try { const e = await r.json(); msg = e.detail || msg; } catch { msg = await r.text() || msg; }
+      throw new Error(msg);
+    }
+    let respData;
+    try { respData = await r.json(); } catch { throw new Error('Respuesta inválida del servidor'); }
+    const { job_id } = respData;
+    pptJobId = job_id;
+
+    // Polling
+    pptPollInterval = setInterval(async () => {
+      try {
+        const s = await fetch(`${API}/api/riesgos/estado/${pptJobId}`);
+        if (!s.ok) return; // seguir intentando
+        let estado;
+        try { estado = await s.json(); } catch { return; }
+
+        if (estado.estado === 'done') {
+          clearInterval(pptPollInterval);
+          // Cargar HTML de preview
+          const htmlR = await fetch(`${API}/api/riesgos/html`);
+          const htmlContent = await htmlR.text();
+
+          // Asegurarse de que el panel de informe esté visible
+          showState('report');
+          addRiesgoTab(htmlContent);
+          // Activar la pestaña de riesgos
+          switchTab('riesgos');
+
+          btn.textContent = '✅ PPT generado';
+          btn.disabled = false;
+          btn.classList.remove('generating');
+          statusEl.textContent = '¡Descarga el PPTX con el botón de arriba!';
+
+        } else if (estado.estado === 'error') {
+          clearInterval(pptPollInterval);
+          btn.textContent = '⚠️ Generar PPT de Riesgos';
+          btn.disabled = false;
+          btn.classList.remove('generating');
+          statusEl.textContent = 'Error: ' + (estado.error || 'desconocido');
+
+        } else {
+          // running / starting
+          statusEl.textContent = estado.mensaje || 'Procesando…';
+        }
+      } catch { /* sigue intentando */ }
+    }, 3000);
+
+  } catch (e) {
+    btn.textContent = '⚠️ Generar PPT de Riesgos';
+    btn.disabled = false;
+    btn.classList.remove('generating');
+    statusEl.textContent = 'Error: ' + e.message;
+  }
+}
+
+document.getElementById('ppt-btn').addEventListener('click', generarPPT);
+
+document.getElementById('dl-pptx-btn').addEventListener('click', () => {
+  window.open(`${API}/api/riesgos/descargar`, '_blank');
+});
 
 // ── Init ──
 showState('empty');

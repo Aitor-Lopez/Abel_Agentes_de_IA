@@ -9,6 +9,7 @@ pysqlite3-binary
 pdfplumber
 pypdf
 python-docx
+python-pptx>=0.6.23
 openpyxl
 
 # Servidor web

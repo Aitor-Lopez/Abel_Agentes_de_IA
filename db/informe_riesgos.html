@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Análisis de Riesgos — AuditAI</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Inter:wght@400;500&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root { --bg:#0d1117;--bg2:#161b22;--bg3:#21262d;--red:#ff4757;--accent:#ff4757;
+           --text:#e8eaf0;--text2:#8892a4;--text3:#4a5568;--border:#21262d; }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{overflow-x:hidden}
+  body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;font-size:15px;line-height:1.7}
+  .page-wrap{max-width:1100px;margin:0 auto;padding:50px 40px 100px}
+  .report-header{background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:36px 40px;margin-bottom:48px;position:relative;overflow:hidden}
+  .report-header::before{content:'⚠️';position:absolute;right:36px;top:50%;transform:translateY(-50%);font-size:80px;opacity:0.12}
+  .report-type{font-family:'IBM Plex Mono',monospace;font-size:11px;color:#ff4757;letter-spacing:2px;text-transform:uppercase;margin-bottom:10px}
+  h1{font-family:'Syne',sans-serif;font-size:36px;font-weight:800;color:#ff4757;margin-bottom:6px}
+  .report-meta{display:flex;gap:20px;flex-wrap:wrap;margin-top:14px}
+  .report-meta span{font-size:12px;color:var(--text3);font-family:'IBM Plex Mono',monospace}
+  .report-meta span b{color:var(--text2)}
+  .nivel-badge{display:inline-block;padding:4px 16px;border-radius:4px;font-size:13px;font-weight:700;letter-spacing:1px;background:#ff4757;color:#0d1117;margin-bottom:12px}
+  .score-wrap{display:flex;align-items:baseline;gap:6px;margin:10px 0}
+  .score-num{font-size:56px;font-weight:800;color:#ff4757;font-family:'Syne',sans-serif}
+  .score-label{font-size:14px;color:var(--text2)}
+  .frase{font-style:italic;color:#ff4757;font-size:16px;margin-top:8px;padding:12px 18px;background:rgba(255,71,87,0.07);border-left:3px solid #ff4757;border-radius:0 8px 8px 0}
+  h2{font-family:'Syne',sans-serif;font-size:20px;font-weight:700;color:#fff;margin:48px 0 18px;padding-bottom:10px;border-bottom:2px solid var(--border)}
+  .badge{display:inline-block;padding:2px 10px;border-radius:20px;font-size:11px;font-weight:600;white-space:nowrap}
+  /* Métricas */
+  .metrics-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:16px}
+  .metric-card{background:var(--bg2);border-radius:12px;padding:20px;}
+  .metric-val{font-size:36px;font-weight:800;font-family:'Syne',sans-serif;margin-bottom:4px}
+  .metric-name{font-size:13px;font-weight:600;color:var(--text);margin-bottom:4px}
+  .metric-ctx{font-size:11px;color:var(--text2)}
+  /* Riesgos */
+  .risk-card{background:var(--bg2);border-radius:12px;padding:20px 24px;margin-bottom:12px;border-left:4px solid #ff4757}
+  .risk-header{display:flex;align-items:center;gap:12px;margin-bottom:10px;flex-wrap:wrap}
+  .risk-id{font-family:'IBM Plex Mono',monospace;font-size:12px;color:#ff4757;font-weight:700;background:rgba(255,71,87,0.12);padding:2px 10px;border-radius:4px}
+  .risk-title{font-weight:700;font-size:15px;color:#fff;flex:1}
+  .risk-desc{color:var(--text2);font-size:13px;margin-bottom:10px}
+  .risk-meta{display:flex;gap:20px;flex-wrap:wrap;margin-bottom:6px}
+  .risk-impact{font-size:12px;font-weight:600;color:#ffa502}
+  .risk-conseq{font-size:12px;color:var(--text2)}
+  .risk-norms{font-size:11px;color:var(--text3);font-family:'IBM Plex Mono',monospace;margin-top:6px}
+  /* Normativas */
+  .norms-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+  .norm-card{background:var(--bg2);border-radius:12px;padding:18px}
+  .norm-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;padding-top:12px}
+  .norm-name{font-weight:700;font-size:16px;color:#fff}
+  .norm-multa{font-size:12px;font-weight:600;margin-bottom:4px}
+  .norm-inc{font-size:11px;color:var(--text2);margin-bottom:8px}
+  .norm-desc{font-size:12px;color:var(--text2)}
+  /* Plan */
+  .plan-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+  .fase-card{background:var(--bg2);border-radius:12px;overflow:hidden}
+  .fase-header{padding:10px 16px;font-size:13px;font-weight:700;text-align:center}
+  .fase-acciones{padding:16px 16px 0;list-style:none}
+  .fase-acciones li{font-size:12px;color:var(--text2);padding:6px 0;border-bottom:1px solid var(--border);padding-left:14px;position:relative}
+  .fase-acciones li::before{content:'→';position:absolute;left:0;color:var(--text3)}
+  .fase-inv{padding:12px 16px 4px;font-size:13px;font-weight:700}
+  .fase-mit{padding:0 16px 16px;font-size:11px;color:var(--text2)}
+  .cta-box{background:linear-gradient(135deg,#1a0a0a,#0d1117);border:1px solid #ff4757;border-radius:16px;padding:40px;text-align:center;margin-top:48px}
+  .cta-text{font-family:'Syne',sans-serif;font-size:22px;font-weight:800;color:#ff4757;margin-bottom:8px}
+  @media(max-width:800px){.metrics-grid,.norms-grid,.plan-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="page-wrap">
+  <div class="report-header">
+    <div class="report-type">AuditAI — Análisis de Riesgos</div>
+    <div class="nivel-badge">NIVEL: CRÍTICO</div>
+    <h1>Análisis de Riesgos de Ciberseguridad</h1>
+    <p style="color:var(--text2);margin:4px 0 10px">Informe de Exposición y Riesgos Críticos</p>
+    <div class="score-wrap">
+      <div class="score-num">70</div>
+      <div class="score-label">/100 — Score de Riesgo Global</div>
+    </div>
+    <div class="frase">Exposición crítica que amenaza la continuidad del negocio y la confidencialidad de datos de clientes</div>
+    <div class="report-meta">
+      <span><b>Sistema:</b> AuditAI Multi-Agente (CrewAI + Ollama)</span>
+      <span><b>Fecha:</b> Abril 2026</span>
+    </div>
+  </div>
+
+  <h2>📊 Métricas Clave</h2>
+  <div class="metrics-grid">
+      <div class="metric-card" style="border-top:3px solid #ff4757">
+        <div class="metric-val" style="color:#ff4757">176</div>
+        <div class="metric-name">Exposición total (Σ Score)</div>
+        <div class="metric-ctx">Valor máximo posible 250; indica alta exposición global</div>
+      </div>
+      <div class="metric-card" style="border-top:3px solid #ffa502">
+        <div class="metric-val" style="color:#ffa502">2.1</div>
+        <div class="metric-name">Madurez media</div>
+        <div class="metric-ctx">Escala 1‑5; la organización está en fase "Definida" y necesita avanzar a "Gestionada"</div>
+      </div>
+      <div class="metric-card" style="border-top:3px solid #5b9fff">
+        <div class="metric-val" style="color:#5b9fff">35 %</div>
+        <div class="metric-name">Porcentaje de riesgos críticos</div>
+        <div class="metric-ctx">7 de 20 riesgos con criticidad 5 representan la mayor amenaza</div>
+      </div>
+      <div class="metric-card" style="border-top:3px solid #00e5a0">
+        <div class="metric-val" style="color:#00e5a0">70</div>
+        <div class="metric-name">Score global (0‑100)</div>
+        <div class="metric-ctx">Conversión de exposición total; sitúa el riesgo en nivel crítico</div>
+      </div></div>
+
+  <h2>🔴 Top 5 Riesgos Críticos</h2>
+  
+      <div class="risk-card">
+        <div class="risk-header">
+          <span class="risk-id">R01</span>
+          <span class="risk-title">Desactivación tardía de cuentas/VPN</span>
+          <span class="badge" style="background:rgba(0,0,0,0.3);border:1px solid #ff4757;color:#ff4757">Crítico</span>
+        </div>
+        <p class="risk-desc">Las cuentas de usuarios y accesos VPN permanecen activas hasta 72 h tras la baja, duplicando la ventana de ataque. La falta de automatización expone a la empresa a accesos no autorizados y posibles filtraciones.</p>
+        <div class="risk-meta">
+          <span class="risk-impact">💰 Hasta 5 % de la facturación anual (~€2 M)</span>
+          <span class="risk-conseq">⚡ Robo de credenciales y acceso a sistemas críticos con posible pérdida de datos sensibles</span>
+        </div>
+        <div class="risk-norms">ISO 27001 · ENS · NIS2 · PCI-DSS</div>
+      </div>
+      <div class="risk-card">
+        <div class="risk-header">
+          <span class="risk-id">R03</span>
+          <span class="risk-title">Ausencia de procedimiento de notificación de incidentes</span>
+          <span class="badge" style="background:rgba(0,0,0,0.3);border:1px solid #ff4757;color:#ff4757">Crítico</span>
+        </div>
+        <p class="risk-desc">No existe un proceso documentado ni pruebas de notificación de brechas, incumpliendo NIS2 y GDPR. La empresa no podría comunicar incidentes dentro del plazo legal de 72 h.</p>
+        <div class="risk-meta">
+          <span class="risk-impact">💰 Multas de hasta €20 M o 4 % de facturación</span>
+          <span class="risk-conseq">⚡ Sanciones regulatorias y daño reputacional irreversible</span>
+        </div>
+        <div class="risk-norms">NIS2 · GDPR · ISO 27001 · PCI-DSS</div>
+      </div>
+      <div class="risk-card">
+        <div class="risk-header">
+          <span class="risk-id">R04</span>
+          <span class="risk-title">Falta de evidencia de continuidad del negocio y DRP</span>
+          <span class="badge" style="background:rgba(0,0,0,0.3);border:1px solid #ff4757;color:#ff4757">Crítico</span>
+        </div>
+        <p class="risk-desc">No se dispone de planes de continuidad ni pruebas de recuperación, vulnerando NIS2, ISO 27001 y PCI‑DSS. Ante una interrupción, la empresa carece de capacidad de restaurar servicios críticos rápidamente.</p>
+        <div class="risk-meta">
+          <span class="risk-impact">💰 Pérdida de ingresos estimada en €3 M por día de inactividad</span>
+          <span class="risk-conseq">⚡ Interrupción prolongada del negocio y pérdida de confianza de clientes</span>
+        </div>
+        <div class="risk-norms">NIS2 · ISO 27001 · PCI-DSS</div>
+      </div>
+      <div class="risk-card">
+        <div class="risk-header">
+          <span class="risk-id">R05</span>
+          <span class="risk-title">Tratamiento de datos especiales sin base legal ni DPIA</span>
+          <span class="badge" style="background:rgba(0,0,0,0.3);border:1px solid #ff4757;color:#ff4757">Crítico</span>
+        </div>
+        <p class="risk-desc">Se procesan datos de estado civil sin consentimiento ni Evaluación de Impacto, vulnerando GDPR Art. 9 y NIS2. La exposición puede derivar en reclamaciones de derechos ARCO y sanciones.</p>
+        <div class="risk-meta">
+          <span class="risk-impact">💰 Multas de €10 M o 2 % de facturación</span>
+          <span class="risk-conseq">⚡ Sanciones regulatorias y demandas de los titulares de datos</span>
+        </div>
+        <div class="risk-norms">GDPR · ISO 27001 · NIS2</div>
+      </div>
+      <div class="risk-card">
+        <div class="risk-header">
+          <span class="risk-id">R11</span>
+          <span class="risk-title">Cifrado de datos de tarjetas en reposo no evidenciado</span>
+          <span class="badge" style="background:rgba(0,0,0,0.3);border:1px solid #ffa502;color:#ffa502">Alto</span>
+        </div>
+        <p class="risk-desc">Los datos de tarjetas de pago no están cifrados según PCI‑DSS y GDPR, aumentando el riesgo de robo de información financiera. La ausencia de evidencia impide demostrar cumplimiento ante auditorías.</p>
+        <div class="risk-meta">
+          <span class="risk-impact">💰 Multas de $100 k por violación y pérdida de confianza de clientes</span>
+          <span class="risk-conseq">⚡ Robo de datos de tarjetas, fraude y sanciones financieras</span>
+        </div>
+        <div class="risk-norms">PCI-DSS · GDPR</div>
+      </div>
+
+  <h2>⚖️ Exposición Normativa</h2>
+  <div class="norms-grid">
+      <div class="norm-card">
+        <div class="norm-top" style="border-top:3px solid #ff4757">
+          <span class="norm-name">ISO 27001</span>
+          <span class="badge" style="background:#ff4757;color:#0d1117">CRÍTICO</span>
+        </div>
+        <div class="norm-multa" style="color:#ff4757">Multa máx: No aplica (sanciones contractuales y reputacionales)</div>
+        <div class="norm-inc">84 incumplimientos</div>
+        <p class="norm-desc">Solo el 9 % de los controles están evidenciados, exponiendo a la organización a fallos de seguridad críticos.</p>
+      </div>
+      <div class="norm-card">
+        <div class="norm-top" style="border-top:3px solid #ffa502">
+          <span class="norm-name">ENS</span>
+          <span class="badge" style="background:#ffa502;color:#0d1117">ALTO</span>
+        </div>
+        <div class="norm-multa" style="color:#ffa502">Multa máx: Sanciones administrativas según legislación española</div>
+        <div class="norm-inc">2 incumplimientos</div>
+        <p class="norm-desc">Dos controles críticos (desactivación de cuentas y punto ciego CCTV) no cumplen los requisitos mínimos del ENS.</p>
+      </div>
+      <div class="norm-card">
+        <div class="norm-top" style="border-top:3px solid #ffa502">
+          <span class="norm-name">GDPR</span>
+          <span class="badge" style="background:#ffa502;color:#0d1117">ALTO</span>
+        </div>
+        <div class="norm-multa" style="color:#ffa502">Multa máx: €20 M o 4 % de la facturación anual</div>
+        <div class="norm-inc">5 incumplimientos</div>
+        <p class="norm-desc">Faltan DPIA, bases legales para datos especiales y procesos de notificación, generando alto riesgo de sanciones.</p>
+      </div>
+      <div class="norm-card">
+        <div class="norm-top" style="border-top:3px solid #ffa502">
+          <span class="norm-name">NIS2</span>
+          <span class="badge" style="background:#ffa502;color:#0d1117">ALTO</span>
+        </div>
+        <div class="norm-multa" style="color:#ffa502">Multa máx: Hasta €10 M o 2 % de la facturación anual</div>
+        <div class="norm-inc">5 incumplimientos</div>
+        <p class="norm-desc">Ausencia de notificación de incidentes, gestión de cadena de suministro y planes de continuidad comprometen la resiliencia operativa.</p>
+      </div>
+      <div class="norm-card">
+        <div class="norm-top" style="border-top:3px solid #ffa502">
+          <span class="norm-name">PCI-DSS</span>
+          <span class="badge" style="background:#ffa502;color:#0d1117">ALTO</span>
+        </div>
+        <div class="norm-multa" style="color:#ffa502">Multa máx: $100 k por violación y posible pérdida de certificación</div>
+        <div class="norm-inc">5 incumplimientos</div>
+        <p class="norm-desc">Cifrado de datos de tarjeta, segmentación de red y pruebas de penetración no están evidenciados, amenazando la certificación.</p>
+      </div></div>
+
+  <h2>🗓️ Plan de Acción</h2>
+  <div class="plan-grid">
+      <div class="fase-card" style="border-top:3px solid #ff4757">
+        <div class="fase-header" style="background:#ff4757;color:#0d1117">Inmediato (0-30 días)</div>
+        <ul class="fase-acciones"><li>Automatizar desactivación de cuentas y VPN mediante integración nómina‑AD</li><li>Definir y publicar procedimiento de notificación de incidentes (plazo 72 h)</li><li>Crear BCP básico y ejecutar prueba de recuperación de servicios críticos</li></ul>
+        <div class="fase-inv" style="color:#ff4757">💶 €50.000‑100.000</div>
+        <div class="fase-mit">R01, R03, R04</div>
+      </div>
+      <div class="fase-card" style="border-top:3px solid #ffa502">
+        <div class="fase-header" style="background:#ffa502;color:#0d1117">Corto plazo (30-90 días)</div>
+        <ul class="fase-acciones"><li>Implementar segmentación de red y reglas de firewall para zona de datos de tarjetas</li><li>Cifrar datos de tarjetas en reposo y en tránsito (TLS 1.3, AES‑256)</li><li>Establecer programa de gestión de riesgos de terceros y firmar cláusulas de seguridad</li></ul>
+        <div class="fase-inv" style="color:#ffa502">💶 €100.000‑200.000</div>
+        <div class="fase-mit">R07, R11, R12, R09</div>
+      </div>
+      <div class="fase-card" style="border-top:3px solid #5b9fff">
+        <div class="fase-header" style="background:#5b9fff;color:#0d1117">Medio plazo (90-180 días)</div>
+        <ul class="fase-acciones"><li>Contratar pruebas de penetración anual y auditoría de desarrollo seguro (SDLC)</li><li>Lanzar programa de concienciación y simulacros de phishing para todo el personal</li><li>Realizar auditoría integral ISO 27001 y cerrar brechas de evidencia</li></ul>
+        <div class="fase-inv" style="color:#5b9fff">💶 €150.000‑250.000</div>
+        <div class="fase-mit">R10, R13, R15, R16, R18, R20</div>
+      </div></div>
+
+  <div class="cta-box">
+    <div class="cta-text">⚠ Actúe ahora o arriesgue la continuidad y la reputación de la empresa.</div>
+    <p style="color:var(--text2);margin-top:10px;font-size:14px">Descarga la presentación PowerPoint para presentar ante la dirección.</p>
+  </div>
+</div>
+</body>
+</html>
